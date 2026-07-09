@@ -422,38 +422,6 @@ class Program
                                         }
                                     }
 
-                                    bool menu1_2_2_6 = true;
-                                    string credencialTutor = "";
-
-                                    while (menu1_2_2_6)
-                                    {
-                                        Console.WriteLine("Ingrese su credencial");
-
-                                        credencialTutor = Console.ReadLine();
-                                        Linea();
-                                        Console.WriteLine("Su credencial es " + credencialTutor);
-                                        Linea();
-                                        Console.WriteLine("¿Desea confirmar su credencial?");
-                                        Console.WriteLine("1- si");
-                                        Console.WriteLine("2- no");
-                                        Linea();
-                                        var opc1_2_2_6 = Console.ReadLine();
-
-                                        switch (opc1_2_2_6)
-                                        {
-                                            case "1":
-                                                menu1_2_2_6 = false;
-                                                break;
-
-                                            case "2":
-                                                break;
-
-                                            default:
-                                                Console.WriteLine("Opcion incorrecta");
-                                                break;
-                                        }
-                                    }
-
                                     bool menu1_2_2_7 = true;
                                     string nombreUsuario = "";
 
