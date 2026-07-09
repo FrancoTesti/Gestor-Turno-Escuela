@@ -174,6 +174,11 @@ class Program
                                         switch (opc1_2_1_3)
                                         {
                                             case "1":
+                                                if (await UsuarioDAO.NombreUsuarioExisteAsync(nombreUsuario))
+                                                {
+                                                    Console.WriteLine("Ese nombre de usuario ya está en uso. Ingrese otro.");
+                                                    break;
+                                                }
                                                 menu1_2_1_3 = false;
                                                 break;
 
@@ -217,26 +222,32 @@ class Program
                                         }
                                     }
 
-                                    /*Create*/
-                                    Usuario usuario = new Usuario
-                                    (
-                                        nombreUsuario,
-                                        contraseñaUsuario
-                                    );
-                                    /*Save a DAO de Usuario*/
-                                    await UsuarioDAO.AddAsync(usuario); /*genera id usuario*/
+                                    try
+                                    {
+                                        /*Create*/
+                                        Usuario usuario = new Usuario
+                                        (
+                                            nombreUsuario,
+                                            contraseñaUsuario
+                                        );
 
-                                    /*Add a Portero*/
-                                    Portero portero = new Portero(
-                                        nombrePortero,
-                                        puertaPortero,
-                                        usuario
-                                    );
+                                        /*Add a Portero*/
+                                        Portero portero = new Portero(
+                                            nombrePortero,
+                                            puertaPortero,
+                                            usuario
+                                        );
 
-                                    /*Save a DAO de portero*/
-                                    await PorteroDAO.AddAsync(portero); /*genera id portero*/
+                                        /*Save recién si las dos construcciones sobrevivieron*/
+                                        await UsuarioDAO.AddAsync(usuario); /*genera id usuario*/
+                                        await PorteroDAO.AddAsync(portero); /*genera id portero*/
 
-                                    menu1_2_1 = false;
+                                        menu1_2_1 = false;
+                                    }
+                                    catch (ArgumentException ex)
+                                    {
+                                        Console.WriteLine($"No se pudo registrar: {ex.Message}");
+                                    }
                                 }
 
                                 break;
@@ -330,6 +341,11 @@ class Program
                                         switch (opc1_2_2_3)
                                         {
                                             case "1":
+                                                if (await TutorDAO.DniExisteAsync(dniTutor))
+                                                {
+                                                    Console.WriteLine("Ya existe un tutor registrado con ese DNI. Ingrese otro.");
+                                                    break;
+                                                }
                                                 menu1_2_2_3 = false;
                                                 break;
 
@@ -458,6 +474,11 @@ class Program
                                         switch (opc1_2_2_7)
                                         {
                                             case "1":
+                                                if (await UsuarioDAO.NombreUsuarioExisteAsync(nombreUsuario))
+                                                {
+                                                    Console.WriteLine("Ese nombre de usuario ya está en uso. Ingrese otro.");
+                                                    break;
+                                                }
                                                 menu1_2_2_7 = false;
                                                 break;
 
@@ -502,30 +523,36 @@ class Program
                                         }
                                     }
 
-                                    /*Create*/
-                                    Usuario usuario = new Usuario
-                                    (
-                                        nombreUsuario,
-                                        contraseñaUsuario
-                                    );
-                                    /*Save a DAO*/
-                                    await UsuarioDAO.AddAsync(usuario);
+                                    try
+                                    {
+                                        /*Create*/
+                                        Usuario usuario = new Usuario
+                                        (
+                                            nombreUsuario,
+                                            contraseñaUsuario
+                                        );
 
-                                    /*Añadir a tutor*/
-                                    Tutor tutor = new Tutor
-                                    (
-                                        nombreTutor,
-                                        apellidoTutor,
-                                        dniTutor,
-                                        parentescoTutor,
-                                        telefonoTutor,
-                                        usuario
-                                    );
+                                        /*Añadir a tutor*/
+                                        Tutor tutor = new Tutor
+                                        (
+                                            nombreTutor,
+                                            apellidoTutor,
+                                            dniTutor,
+                                            parentescoTutor,
+                                            telefonoTutor,
+                                            usuario
+                                        );
 
-                                    /*Save al dao Tutor*/
-                                    await TutorDAO.AddAsync(tutor); /*genera id portero*/
+                                        /*Save recién si las dos construcciones sobrevivieron*/
+                                        await UsuarioDAO.AddAsync(usuario);
+                                        await TutorDAO.AddAsync(tutor); /*genera id tutor*/
 
-                                    menu1_2_2 = false;
+                                        menu1_2_2 = false;
+                                    }
+                                    catch (ArgumentException ex)
+                                    {
+                                        Console.WriteLine($"No se pudo registrar: {ex.Message}");
+                                    }
                                 }
 
                                 break;
@@ -620,6 +647,11 @@ class Program
                                         switch (opc1_2_3_3)
                                         {
                                             case "1":
+                                                if (await UsuarioDAO.NombreUsuarioExisteAsync(nombreUsuario))
+                                                {
+                                                    Console.WriteLine("Ese nombre de usuario ya está en uso. Ingrese otro.");
+                                                    break;
+                                                }
                                                 menu1_2_3_3 = false;
                                                 break;
 
@@ -664,25 +696,31 @@ class Program
                                         }
                                     }
 
-                                    /*Create*/
-                                    Usuario usuario = new Usuario
-                                    (
-                                        nombreUsuario,
-                                        contraseñaUsuario
-                                    );
-                                    /*Save a DAO*/
-                                    await UsuarioDAO.AddAsync(usuario);
+                                    try
+                                    {
+                                        /*Create*/
+                                        Usuario usuario = new Usuario
+                                        (
+                                            nombreUsuario,
+                                            contraseñaUsuario
+                                        );
 
-                                    Secretario secretario = new Secretario(
-                                        nombreSecretario,
-                                        nivelAcceso,
-                                        usuario
-                                    );
+                                        Secretario secretario = new Secretario(
+                                            nombreSecretario,
+                                            nivelAcceso,
+                                            usuario
+                                        );
 
-                                    /*Save al dao Secretario*/
-                                    await SecretarioDAO.AddAsync(secretario); /*genera id portero*/
+                                        /*Save recién si las dos construcciones sobrevivieron*/
+                                        await UsuarioDAO.AddAsync(usuario);
+                                        await SecretarioDAO.AddAsync(secretario); /*genera id secretario*/
 
-                                    menu1_2_3 = false;
+                                        menu1_2_3 = false;
+                                    }
+                                    catch (ArgumentException ex)
+                                    {
+                                        Console.WriteLine($"No se pudo registrar: {ex.Message}");
+                                    }
                                 }
 
                                 break;
