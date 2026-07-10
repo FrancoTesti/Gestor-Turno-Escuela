@@ -17,21 +17,24 @@ namespace GTE.Dominio
         public string Curso { get; private set; }
         public string Estado { get; private set; }
 
-        public Alumno(int id, string nombre, string apellido, string grado, string curso)
+        public Alumno(string nombre, string apellido, string grado, string curso)
         {
-            SetIdAlumno(id);
             SetNombre(nombre);
             SetApellido(apellido);
             SetGrado(grado);
             SetCurso(curso);
             SetEstado("Presente");
+            IdAlumno = 0;
         }
 
-        public void SetIdAlumno(int id)
+        public void AsignarIdGenerado(int nuevoId)
         {
-            if (id < 0)
-                throw new ArgumentException("El Id debe ser mayor o igual a 0.", nameof(id));
-            IdAlumno = id;
+            if (IdAlumno != 0)
+                throw new InvalidOperationException("El Id ya ha sido asignado y no puede ser modificado.");
+            if (nuevoId <= 0)
+                throw new ArgumentException("El Id generado debe ser mayor que 0.", nameof(nuevoId));
+
+            IdAlumno = nuevoId;
         }
 
         public void SetNombre(string nombre)
