@@ -1,0 +1,626 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Franco\\Desktop\\ide\\TP_IDE\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{EC97004F-D974-459D-ABA9-07FDBDC1416E}|GTE.Consola.csproj|c:\\users\\franco\\desktop\\ide\\tp_ide\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EC97004F-D974-459D-ABA9-07FDBDC1416E}|GTE.Consola.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1733349B-8B9D-4B93-85F2-E54E1C7A3D37}|..\\Libreria de clases\\GTE.Dominio.csproj|c:\\users\\franco\\desktop\\ide\\libreria de clases\\tutor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1733349B-8B9D-4B93-85F2-E54E1C7A3D37}|..\\Libreria de clases\\GTE.Dominio.csproj|c:\\users\\franco\\desktop\\ide\\libreria de clases\\alumno.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1733349B-8B9D-4B93-85F2-E54E1C7A3D37}|..\\Libreria de clases\\GTE.Dominio.csproj|c:\\users\\franco\\desktop\\ide\\libreria de clases\\cursoescolar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{90DC609D-E8CC-4E8A-BA4F-A2F7503243D0}|..\\GTE.DTOs\\GTE.DTOs.csproj|c:\\users\\franco\\desktop\\ide\\gte.dtos\\tutordto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6244EE7B-6305-4CB5-BF83-6410F62681D2}|..\\GTE.Data\\GTE.Data.csproj|c:\\users\\franco\\desktop\\ide\\gte.data\\ihorarioespecialrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{90DC609D-E8CC-4E8A-BA4F-A2F7503243D0}|..\\GTE.DTOs\\GTE.DTOs.csproj|c:\\users\\franco\\desktop\\ide\\gte.dtos\\retirodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{90DC609D-E8CC-4E8A-BA4F-A2F7503243D0}|..\\GTE.DTOs\\GTE.DTOs.csproj|c:\\users\\franco\\desktop\\ide\\gte.dtos\\puertadto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6244EE7B-6305-4CB5-BF83-6410F62681D2}|..\\GTE.Data\\GTE.Data.csproj|c:\\users\\franco\\desktop\\ide\\gte.data\\icursoescolarrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FF7A9F56-69BB-43FE-97C9-8D4B8195F3EA}|..\\Servicio\\GTE.Application.Services.csproj|c:\\users\\franco\\desktop\\ide\\servicio\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6244EE7B-6305-4CB5-BF83-6410F62681D2}|..\\GTE.Data\\GTE.Data.csproj|c:\\users\\franco\\desktop\\ide\\gte.data\\usuariorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6244EE7B-6305-4CB5-BF83-6410F62681D2}|..\\GTE.Data\\GTE.Data.csproj|c:\\users\\franco\\desktop\\ide\\gte.data\\isecretariorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6244EE7B-6305-4CB5-BF83-6410F62681D2}|..\\GTE.Data\\GTE.Data.csproj|c:\\users\\franco\\desktop\\ide\\gte.data\\ialumnorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6244EE7B-6305-4CB5-BF83-6410F62681D2}|..\\GTE.Data\\GTE.Data.csproj|c:\\users\\franco\\desktop\\ide\\gte.data\\puertarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1733349B-8B9D-4B93-85F2-E54E1C7A3D37}|..\\Libreria de clases\\GTE.Dominio.csproj|c:\\users\\franco\\desktop\\ide\\libreria de clases\\puerta.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6244EE7B-6305-4CB5-BF83-6410F62681D2}|..\\GTE.Data\\GTE.Data.csproj|c:\\users\\franco\\desktop\\ide\\gte.data\\iusuariorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6244EE7B-6305-4CB5-BF83-6410F62681D2}|..\\GTE.Data\\GTE.Data.csproj|c:\\users\\franco\\desktop\\ide\\gte.data\\iporterorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6244EE7B-6305-4CB5-BF83-6410F62681D2}|..\\GTE.Data\\GTE.Data.csproj|c:\\users\\franco\\desktop\\ide\\gte.data\\horarioespecialrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6244EE7B-6305-4CB5-BF83-6410F62681D2}|..\\GTE.Data\\GTE.Data.csproj|c:\\users\\franco\\desktop\\ide\\gte.data\\cursoescolarrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6244EE7B-6305-4CB5-BF83-6410F62681D2}|..\\GTE.Data\\GTE.Data.csproj|c:\\users\\franco\\desktop\\ide\\gte.data\\autorizacionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6244EE7B-6305-4CB5-BF83-6410F62681D2}|..\\GTE.Data\\GTE.Data.csproj|c:\\users\\franco\\desktop\\ide\\gte.data\\alumnorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6244EE7B-6305-4CB5-BF83-6410F62681D2}|..\\GTE.Data\\GTE.Data.csproj|c:\\users\\franco\\desktop\\ide\\gte.data\\itutorrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6244EE7B-6305-4CB5-BF83-6410F62681D2}|..\\GTE.Data\\GTE.Data.csproj|c:\\users\\franco\\desktop\\ide\\gte.data\\iautorizacionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6244EE7B-6305-4CB5-BF83-6410F62681D2}|..\\GTE.Data\\GTE.Data.csproj|c:\\users\\franco\\desktop\\ide\\gte.data\\secretariorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1733349B-8B9D-4B93-85F2-E54E1C7A3D37}|..\\Libreria de clases\\GTE.Dominio.csproj|c:\\users\\franco\\desktop\\ide\\libreria de clases\\secretario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1733349B-8B9D-4B93-85F2-E54E1C7A3D37}|..\\Libreria de clases\\GTE.Dominio.csproj|c:\\users\\franco\\desktop\\ide\\libreria de clases\\retiro.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1733349B-8B9D-4B93-85F2-E54E1C7A3D37}|..\\Libreria de clases\\GTE.Dominio.csproj|c:\\users\\franco\\desktop\\ide\\libreria de clases\\personal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6244EE7B-6305-4CB5-BF83-6410F62681D2}|..\\GTE.Data\\GTE.Data.csproj|c:\\users\\franco\\desktop\\ide\\gte.data\\porterorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6244EE7B-6305-4CB5-BF83-6410F62681D2}|..\\GTE.Data\\GTE.Data.csproj|c:\\users\\franco\\desktop\\ide\\gte.data\\tutorrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1733349B-8B9D-4B93-85F2-E54E1C7A3D37}|..\\Libreria de clases\\GTE.Dominio.csproj|c:\\users\\franco\\desktop\\ide\\libreria de clases\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6244EE7B-6305-4CB5-BF83-6410F62681D2}|..\\GTE.Data\\GTE.Data.csproj|c:\\users\\franco\\desktop\\ide\\gte.data\\retirorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6244EE7B-6305-4CB5-BF83-6410F62681D2}|..\\GTE.Data\\GTE.Data.csproj|c:\\users\\franco\\desktop\\ide\\gte.data\\iretirorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1733349B-8B9D-4B93-85F2-E54E1C7A3D37}|..\\Libreria de clases\\GTE.Dominio.csproj|c:\\users\\franco\\desktop\\ide\\libreria de clases\\autorizacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1733349B-8B9D-4B93-85F2-E54E1C7A3D37}|..\\Libreria de clases\\GTE.Dominio.csproj|c:\\users\\franco\\desktop\\ide\\libreria de clases\\horarioespecial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1733349B-8B9D-4B93-85F2-E54E1C7A3D37}|..\\Libreria de clases\\GTE.Dominio.csproj|c:\\users\\franco\\desktop\\ide\\libreria de clases\\portero.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PC\\Desktop\\ide\\Servicio\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1733349B-8B9D-4B93-85F2-E54E1C7A3D37}|..\\Libreria de clases\\GTE.Dominio.csproj|c:\\users\\franco\\desktop\\ide\\libreria de clases\\gte.dominio.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6244EE7B-6305-4CB5-BF83-6410F62681D2}|..\\GTE.Data\\GTE.Data.csproj|c:\\users\\franco\\desktop\\ide\\gte.data\\ipuertarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EC97004F-D974-459D-ABA9-07FDBDC1416E}|GTE.Consola.csproj|c:\\users\\franco\\desktop\\ide\\tp_ide\\gte.consola.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{EC97004F-D974-459D-ABA9-07FDBDC1416E}|GTE.Consola.csproj|solutionrelative:gte.consola.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PC\\Desktop\\ide\\Libreria de clases\\Class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "UsuarioRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\UsuarioRepository.cs",
+              "RelativeDocumentMoniker": "..\\GTE.Data\\UsuarioRepository.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\UsuarioRepository.cs",
+              "RelativeToolTip": "..\\GTE.Data\\UsuarioRepository.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAQwA4AAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:09:57.068Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\TP_IDE\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\TP_IDE\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAALcAAAAAAAAAAAAYwOEAAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "OverriddenGroupName": "",
+              "WhenOpened": "2026-07-07T13:12:06.959Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "IAlumnoRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\IAlumnoRepository.cs",
+              "RelativeDocumentMoniker": "..\\GTE.Data\\IAlumnoRepository.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\IAlumnoRepository.cs",
+              "RelativeToolTip": "..\\GTE.Data\\IAlumnoRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:03:25.661Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Alumno.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\Alumno.cs",
+              "RelativeDocumentMoniker": "..\\Libreria de clases\\Alumno.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\Alumno.cs",
+              "RelativeToolTip": "..\\Libreria de clases\\Alumno.cs",
+              "ViewState": "AgIAAEEAAAAAAAAAAAAAABMAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:16:54.943Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "CursoEscolar.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\CursoEscolar.cs",
+              "RelativeDocumentMoniker": "..\\Libreria de clases\\CursoEscolar.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\CursoEscolar.cs",
+              "RelativeToolTip": "..\\Libreria de clases\\CursoEscolar.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:45:53.843Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ISecretarioRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\ISecretarioRepository.cs",
+              "RelativeDocumentMoniker": "..\\GTE.Data\\ISecretarioRepository.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\ISecretarioRepository.cs",
+              "RelativeToolTip": "..\\GTE.Data\\ISecretarioRepository.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAwBAAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:04:46.167Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "IHorarioEspecialRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\IHorarioEspecialRepository.cs",
+              "RelativeDocumentMoniker": "..\\GTE.Data\\IHorarioEspecialRepository.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\IHorarioEspecialRepository.cs",
+              "RelativeToolTip": "..\\GTE.Data\\IHorarioEspecialRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:02:46.956Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Tutor.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\Tutor.cs",
+              "RelativeDocumentMoniker": "..\\Libreria de clases\\Tutor.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\Tutor.cs",
+              "RelativeToolTip": "..\\Libreria de clases\\Tutor.cs",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAAwEMAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:20:52.411Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "PuertaDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\GTE.DTOs\\PuertaDTO.cs",
+              "RelativeDocumentMoniker": "..\\GTE.DTOs\\PuertaDTO.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\GTE.DTOs\\PuertaDTO.cs",
+              "RelativeToolTip": "..\\GTE.DTOs\\PuertaDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T14:47:59.718Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "RetiroDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\GTE.DTOs\\RetiroDTO.cs",
+              "RelativeDocumentMoniker": "..\\GTE.DTOs\\RetiroDTO.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\GTE.DTOs\\RetiroDTO.cs",
+              "RelativeToolTip": "..\\GTE.DTOs\\RetiroDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T14:48:01.967Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "TutorDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\GTE.DTOs\\TutorDTO.cs",
+              "RelativeDocumentMoniker": "..\\GTE.DTOs\\TutorDTO.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\GTE.DTOs\\TutorDTO.cs",
+              "RelativeToolTip": "..\\GTE.DTOs\\TutorDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T14:48:05.829Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ICursoEscolarRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\ICursoEscolarRepository.cs",
+              "RelativeDocumentMoniker": "..\\GTE.Data\\ICursoEscolarRepository.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\ICursoEscolarRepository.cs",
+              "RelativeToolTip": "..\\GTE.Data\\ICursoEscolarRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:02:47.916Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\Servicio\\Program.cs",
+              "RelativeDocumentMoniker": "..\\Servicio\\Program.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\Servicio\\Program.cs",
+              "RelativeToolTip": "..\\Servicio\\Program.cs",
+              "ViewState": "AgIAACUAAAAAAAAAAAAuwA0AAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-07T13:42:53.069Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "PuertaRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\PuertaRepository.cs",
+              "RelativeDocumentMoniker": "..\\GTE.Data\\PuertaRepository.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\PuertaRepository.cs",
+              "RelativeToolTip": "..\\GTE.Data\\PuertaRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:26:35.269Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Puerta.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\Puerta.cs",
+              "RelativeDocumentMoniker": "..\\Libreria de clases\\Puerta.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\Puerta.cs",
+              "RelativeToolTip": "..\\Libreria de clases\\Puerta.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T14:38:42.468Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "IUsuarioRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\IUsuarioRepository.cs",
+              "RelativeDocumentMoniker": "..\\GTE.Data\\IUsuarioRepository.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\IUsuarioRepository.cs",
+              "RelativeToolTip": "..\\GTE.Data\\IUsuarioRepository.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAgAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:04:36.431Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "IPorteroRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\IPorteroRepository.cs",
+              "RelativeDocumentMoniker": "..\\GTE.Data\\IPorteroRepository.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\IPorteroRepository.cs",
+              "RelativeToolTip": "..\\GTE.Data\\IPorteroRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:04:53.568Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "HorarioEspecialRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\HorarioEspecialRepository.cs",
+              "RelativeDocumentMoniker": "..\\GTE.Data\\HorarioEspecialRepository.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\HorarioEspecialRepository.cs",
+              "RelativeToolTip": "..\\GTE.Data\\HorarioEspecialRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T14:23:49.306Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "CursoEscolarRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\CursoEscolarRepository.cs",
+              "RelativeDocumentMoniker": "..\\GTE.Data\\CursoEscolarRepository.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\CursoEscolarRepository.cs",
+              "RelativeToolTip": "..\\GTE.Data\\CursoEscolarRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:16:59.069Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "AutorizacionRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\AutorizacionRepository.cs",
+              "RelativeDocumentMoniker": "..\\GTE.Data\\AutorizacionRepository.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\AutorizacionRepository.cs",
+              "RelativeToolTip": "..\\GTE.Data\\AutorizacionRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T14:37:32.764Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "AlumnoRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\AlumnoRepository.cs",
+              "RelativeDocumentMoniker": "..\\GTE.Data\\AlumnoRepository.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\AlumnoRepository.cs",
+              "RelativeToolTip": "..\\GTE.Data\\AlumnoRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:02:50.021Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "ITutorRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\ITutorRepository.cs",
+              "RelativeDocumentMoniker": "..\\GTE.Data\\ITutorRepository.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\ITutorRepository.cs",
+              "RelativeToolTip": "..\\GTE.Data\\ITutorRepository.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAkAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:04:42.92Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "SecretarioRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\SecretarioRepository.cs",
+              "RelativeDocumentMoniker": "..\\GTE.Data\\SecretarioRepository.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\SecretarioRepository.cs",
+              "RelativeToolTip": "..\\GTE.Data\\SecretarioRepository.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAQwCoAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:26:37.103Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "Retiro.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\Retiro.cs",
+              "RelativeDocumentMoniker": "..\\Libreria de clases\\Retiro.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\Retiro.cs",
+              "RelativeToolTip": "..\\Libreria de clases\\Retiro.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAxwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T14:33:59.811Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "HorarioEspecial.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\HorarioEspecial.cs",
+              "RelativeDocumentMoniker": "..\\Libreria de clases\\HorarioEspecial.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\HorarioEspecial.cs",
+              "RelativeToolTip": "..\\Libreria de clases\\HorarioEspecial.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:45:52.868Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "Autorizacion.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\Autorizacion.cs",
+              "RelativeDocumentMoniker": "..\\Libreria de clases\\Autorizacion.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\Autorizacion.cs",
+              "RelativeToolTip": "..\\Libreria de clases\\Autorizacion.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:45:55.187Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "PorteroRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\PorteroRepository.cs",
+              "RelativeDocumentMoniker": "..\\GTE.Data\\PorteroRepository.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\PorteroRepository.cs",
+              "RelativeToolTip": "..\\GTE.Data\\PorteroRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC0AAABMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:26:33.774Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "Secretario.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\Secretario.cs",
+              "RelativeDocumentMoniker": "..\\Libreria de clases\\Secretario.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\Secretario.cs",
+              "RelativeToolTip": "..\\Libreria de clases\\Secretario.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAA1wBoAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:20:51.739Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "Usuario.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\Usuario.cs",
+              "RelativeDocumentMoniker": "..\\Libreria de clases\\Usuario.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\Usuario.cs",
+              "RelativeToolTip": "..\\Libreria de clases\\Usuario.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAAB4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:20:30.643Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "Personal.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\Personal.cs",
+              "RelativeDocumentMoniker": "..\\Libreria de clases\\Personal.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\Personal.cs",
+              "RelativeToolTip": "..\\Libreria de clases\\Personal.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAzwA4AAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:17:51.936Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "Portero.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\Portero.cs",
+              "RelativeDocumentMoniker": "..\\Libreria de clases\\Portero.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\Portero.cs",
+              "RelativeToolTip": "..\\Libreria de clases\\Portero.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:17:51.049Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "IPuertaRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\IPuertaRepository.cs",
+              "RelativeDocumentMoniker": "..\\GTE.Data\\IPuertaRepository.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\IPuertaRepository.cs",
+              "RelativeToolTip": "..\\GTE.Data\\IPuertaRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:04:50.92Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "TutorRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\TutorRepository.cs",
+              "RelativeDocumentMoniker": "..\\GTE.Data\\TutorRepository.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\TutorRepository.cs",
+              "RelativeToolTip": "..\\GTE.Data\\TutorRepository.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAmwDEAAABFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:08:27.107Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "IAutorizacionRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\IAutorizacionRepository.cs",
+              "RelativeDocumentMoniker": "..\\GTE.Data\\IAutorizacionRepository.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\IAutorizacionRepository.cs",
+              "RelativeToolTip": "..\\GTE.Data\\IAutorizacionRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:02:48.868Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "IRetiroRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\IRetiroRepository.cs",
+              "RelativeDocumentMoniker": "..\\GTE.Data\\IRetiroRepository.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\IRetiroRepository.cs",
+              "RelativeToolTip": "..\\GTE.Data\\IRetiroRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:02:36.644Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "RetiroRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\RetiroRepository.cs",
+              "RelativeDocumentMoniker": "..\\GTE.Data\\RetiroRepository.cs",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\GTE.Data\\RetiroRepository.cs",
+              "RelativeToolTip": "..\\GTE.Data\\RetiroRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T13:02:28.003Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "GTE.Dominio.csproj",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\GTE.Dominio.csproj",
+              "RelativeDocumentMoniker": "..\\Libreria de clases\\GTE.Dominio.csproj",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\Libreria de clases\\GTE.Dominio.csproj",
+              "RelativeToolTip": "..\\Libreria de clases\\GTE.Dominio.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-07-07T13:54:02.069Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "GTE.Consola.csproj",
+              "DocumentMoniker": "C:\\Users\\Franco\\Desktop\\ide\\TP_IDE\\GTE.Consola.csproj",
+              "RelativeDocumentMoniker": "GTE.Consola.csproj",
+              "ToolTip": "C:\\Users\\Franco\\Desktop\\ide\\TP_IDE\\GTE.Consola.csproj",
+              "RelativeToolTip": "GTE.Consola.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-07-07T13:54:00.404Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Desktop\\ide\\Libreria de clases\\Class1.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\PC\\Desktop\\ide\\Libreria de clases\\Class1.cs",
+              "ToolTip": "C:\\Users\\PC\\Desktop\\ide\\Libreria de clases\\Class1.cs",
+              "RelativeToolTip": "..\\..\\..\\..\\PC\\Desktop\\ide\\Libreria de clases\\Class1.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-07T13:12:05.891Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Desktop\\ide\\Servicio\\Program.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\PC\\Desktop\\ide\\Servicio\\Program.cs",
+              "ToolTip": "C:\\Users\\PC\\Desktop\\ide\\Servicio\\Program.cs",
+              "RelativeToolTip": "..\\..\\..\\..\\PC\\Desktop\\ide\\Servicio\\Program.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-07T13:12:06.955Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

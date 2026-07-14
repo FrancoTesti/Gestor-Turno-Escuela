@@ -1,0 +1,11 @@
+C:\Users\Franco\Desktop\ide\Libreria de clases\bin\Debug\net8.0\GTE.Dominio.deps.json
+C:\Users\Franco\Desktop\ide\Libreria de clases\bin\Debug\net8.0\GTE.Dominio.dll
+C:\Users\Franco\Desktop\ide\Libreria de clases\bin\Debug\net8.0\GTE.Dominio.pdb
+C:\Users\Franco\Desktop\ide\Libreria de clases\obj\Debug\net8.0\GTE.Dominio.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Franco\Desktop\ide\Libreria de clases\obj\Debug\net8.0\GTE.Dominio.AssemblyInfoInputs.cache
+C:\Users\Franco\Desktop\ide\Libreria de clases\obj\Debug\net8.0\GTE.Dominio.AssemblyInfo.cs
+C:\Users\Franco\Desktop\ide\Libreria de clases\obj\Debug\net8.0\GTE.Dominio.csproj.CoreCompileInputs.cache
+C:\Users\Franco\Desktop\ide\Libreria de clases\obj\Debug\net8.0\GTE.Dominio.dll
+C:\Users\Franco\Desktop\ide\Libreria de clases\obj\Debug\net8.0\refint\GTE.Dominio.dll
+C:\Users\Franco\Desktop\ide\Libreria de clases\obj\Debug\net8.0\GTE.Dominio.pdb
+C:\Users\Franco\Desktop\ide\Libreria de clases\obj\Debug\net8.0\ref\GTE.Dominio.dll
