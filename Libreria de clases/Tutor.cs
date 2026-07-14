@@ -35,7 +35,7 @@ namespace GTE.Dominio
             if (IdTutor != 0)
                 throw new InvalidOperationException("El Id ya ha sido asignado y no puede ser modificado.");
             if (nuevoId <= 0)
-                throw new ArgumentException("El Id generado debe ser mayor que 0.", nameof(nuevoId));
+                throw new ArgumentException("El Id generado debe ser mayor que 0.");
 
             IdTutor = nuevoId;
         }
@@ -43,35 +43,35 @@ namespace GTE.Dominio
         public void SetNombre(string nombre)
         {
             if (string.IsNullOrWhiteSpace(nombre))
-                throw new ArgumentException("El nombre no puede ser nulo o vacío.", nameof(nombre));
+                throw new ArgumentException("El nombre no puede ser nulo o vacío.");
             Nombre = nombre;
         }
 
         public void SetApellido(string apellido)
         {
             if (string.IsNullOrWhiteSpace(apellido))
-                throw new ArgumentException("El apellido no puede ser nulo o vacío.", nameof(apellido));
+                throw new ArgumentException("El apellido no puede ser nulo o vacío.");
             Apellido = apellido;
         }
 
         public void SetDni(string dni)
         {
             if (!Regex.IsMatch(dni ?? string.Empty, @"^\d{7,8}$"))
-                throw new ArgumentException("El DNI debe tener entre 7 y 8 dígitos numéricos.", nameof(dni));
+                throw new ArgumentException("El DNI debe tener entre 7 y 8 dígitos numéricos.");
             Dni = dni!;
         }
 
         public void SetParentesco(string parentesco)
         {
             if (string.IsNullOrWhiteSpace(parentesco))
-                throw new ArgumentException("El parentesco no puede ser nulo o vacío.", nameof(parentesco));
+                throw new ArgumentException("El parentesco no puede ser nulo o vacío.");
             Parentesco = parentesco;
         }
 
         public void SetTelefono(string telefono)
         {
             if (string.IsNullOrWhiteSpace(telefono))
-                throw new ArgumentException("El teléfono no puede ser nulo o vacío.", nameof(telefono));
+                throw new ArgumentException("El teléfono no puede ser nulo o vacío.");
             Telefono = telefono;
         }
 

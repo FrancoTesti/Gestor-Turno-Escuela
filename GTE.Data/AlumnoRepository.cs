@@ -13,14 +13,14 @@ namespace GTE.Data
 
         public Task AddAsync(Alumno alumno)
         {
-            alumno.SetIdAlumno(_nextId++);
+            alumno.AsignarIdGenerado(_nextId++);
             _alumnos.Add(alumno);
             return Task.CompletedTask;
         }
 
         public Task<IEnumerable<Alumno>> GetAllAsync()
         {
-            return Task.FromResult(_alumnos.AsEnumerable());
+            return Task.FromResult<IEnumerable<Alumno>>(_alumnos.ToList());
         }
     }
 }

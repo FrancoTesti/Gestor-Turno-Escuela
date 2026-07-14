@@ -1,7 +1,6 @@
 using GTE.Dominio;
 using GTE.Data;
-using GTE.DTOs;
-using GTE.Application.Services;
+
 class Program
 {
     public static void Linea()
@@ -168,55 +167,7 @@ class Program
             }
         }
     }
-    static async Task LoginAsync(IUsuarioRepository usuarioDAO, ITutorRepository tutorDAO, ISecretarioRepository secretarioDAO, IPorteroRepository porteroDAO)
-    {
-        IAuthService authService =
-            new AuthService(usuarioDAO, tutorDAO, porteroDAO, secretarioDAO);
-        Linea();
-        Console.WriteLine("Ingrese su nombre de usuario");
-        string nombreUsuario = Console.ReadLine() ?? "";
-        Console.WriteLine("Ingrese su contraseña");
-        string contrasena = Console.ReadLine() ?? "";
 
-        LoginResponse resultado = await authService.LoginAsync(nombreUsuario, contrasena);
-        Linea();
-        if (!resultado.Exito)
-        {
-            Console.WriteLine($"[X] {resultado.Mensaje}");
-            Linea();
-            return;
-        }
-        Console.WriteLine($"[OK] Bienvenido/a {resultado.NombreCompleto} ({resultado.Rol})");
-        Linea();
-
-        string[] opciones = resultado.Rol switch
-        {
-            "Secretario" => new[] { "Gestionar autorizaciones", "Gestionar alumnos", "Ver reportes" },
-            "Tutor" => new[] { "Ver mis alumnos autorizados", "Ver historial de retiros" },
-            "Portero" => new[] { "Registrar retiro de alumno", "Ver retiros del día" },
-            _ => Array.Empty<string>()
-        };
-
-        bool sesionActiva = true;
-        while (sesionActiva)
-        {
-            Linea();
-            Console.WriteLine($"Sesión: {resultado.NombreUsuario} ({resultado.Rol})");
-            for (int i = 0; i < opciones.Length; i++)
-                Console.WriteLine($"{i + 1}- {opciones[i]}");
-            Console.WriteLine($"{opciones.Length + 1}- Cerrar sesión");
-            Linea();
-
-            var opcion = Console.ReadLine();
-            if (int.TryParse(opcion, out int n) && n >= 1 && n <= opciones.Length)
-                Console.WriteLine($"[{opciones[n - 1]}] - En construcción.");
-            else if (int.TryParse(opcion, out int m) && m == opciones.Length + 1)
-                sesionActiva = false;
-            else
-                Console.WriteLine("Opción incorrecta.");
-        }
-    }
-    
     static async Task Main(string[] args)
     {
         IUsuarioRepository UsuarioDAO = new UsuarioRepository();
@@ -240,7 +191,7 @@ class Program
             switch (opc1)
             {
                 case "1":
-                    await LoginAsync(UsuarioDAO, TutorDAO, SecretarioDAO, PorteroDAO);
+                    Console.WriteLine("en construccion");
                     break;
 
                 case "2":
@@ -263,17 +214,14 @@ class Program
                         {
                             case "1":
                                 await RegistrarPorteroAsync(UsuarioDAO, PorteroDAO);
-                                menu1_2 = false;
                                 break;
 
                             case "2":
                                 await RegistrarTutorAsync(UsuarioDAO, TutorDAO);
-                                menu1_2 = false;
                                 break;
 
                             case "3":
                                 await RegistrarSecretarioAsync(UsuarioDAO, SecretarioDAO);
-                                menu1_2 = false;
                                 break;
 
                             case "4":

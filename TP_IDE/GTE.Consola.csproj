@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GTE.Data\GTE.Data.csproj" />
+    <ProjectReference Include="..\GTE.DTOs\GTE.DTOs.csproj" />
     <ProjectReference Include="..\Libreria de clases\GTE.Dominio.csproj" />
     <ProjectReference Include="..\Servicio\GTE.Application.Services.csproj" />
   </ItemGroup>
