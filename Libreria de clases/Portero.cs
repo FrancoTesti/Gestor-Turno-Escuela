@@ -18,7 +18,7 @@ namespace GTE.Dominio
         public void SetPuertaAsignada(string puerta)
         {
             if (string.IsNullOrWhiteSpace(puerta))
-                throw new ArgumentException("La puerta asignada no puede ser nula o vacía.");
+                throw new ArgumentException("La puerta asignada no puede ser nula o vacía.", nameof(puerta));
             PuertaAsignada = puerta;
         }
 

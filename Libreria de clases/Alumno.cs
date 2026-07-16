@@ -17,58 +17,55 @@ namespace GTE.Dominio
         public string Curso { get; private set; }
         public string Estado { get; private set; }
 
-        public Alumno(string nombre, string apellido, string grado, string curso)
+        public Alumno(int id, string nombre, string apellido, string grado, string curso)
         {
+            SetIdAlumno(id);
             SetNombre(nombre);
             SetApellido(apellido);
             SetGrado(grado);
             SetCurso(curso);
             SetEstado("Presente");
-            IdAlumno = 0;
         }
 
-        public void AsignarIdGenerado(int nuevoId)
+        public void SetIdAlumno(int id)
         {
-            if (IdAlumno != 0)
-                throw new InvalidOperationException("El Id ya ha sido asignado y no puede ser modificado.");
-            if (nuevoId <= 0)
-                throw new ArgumentException("El Id generado debe ser mayor que 0.");
-
-            IdAlumno = nuevoId;
+            if (id < 0)
+                throw new ArgumentException("El Id debe ser mayor o igual a 0.", nameof(id));
+            IdAlumno = id;
         }
 
         public void SetNombre(string nombre)
         {
             if (string.IsNullOrWhiteSpace(nombre))
-                throw new ArgumentException("El nombre no puede ser nulo o vacío.");
+                throw new ArgumentException("El nombre no puede ser nulo o vacío.", nameof(nombre));
             Nombre = nombre;
         }
 
         public void SetApellido(string apellido)
         {
             if (string.IsNullOrWhiteSpace(apellido))
-                throw new ArgumentException("El apellido no puede ser nulo o vacío.");
+                throw new ArgumentException("El apellido no puede ser nulo o vacío.", nameof(apellido));
             Apellido = apellido;
         }
 
         public void SetGrado(string grado)
         {
             if (string.IsNullOrWhiteSpace(grado))
-                throw new ArgumentException("El grado no puede ser nulo o vacío.");
+                throw new ArgumentException("El grado no puede ser nulo o vacío.", nameof(grado));
             Grado = grado;
         }
 
         public void SetCurso(string curso)
         {
             if (string.IsNullOrWhiteSpace(curso))
-                throw new ArgumentException("El curso no puede ser nulo o vacío.");
+                throw new ArgumentException("El curso no puede ser nulo o vacío.", nameof(curso));
             Curso = curso;
         }
 
         public void SetEstado(string estado)
         {
             if (!EstadosValidos.Contains(estado))
-                throw new ArgumentException($"Estado inválido. Valores permitidos: {string.Join(", ", EstadosValidos)}.");
+                throw new ArgumentException($"Estado inválido. Valores permitidos: {string.Join(", ", EstadosValidos)}.", nameof(estado));
             Estado = estado;
         }
     }

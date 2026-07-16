@@ -18,7 +18,7 @@ namespace GTE.Dominio
         public void SetNivelAccesoSistema(int nivelAcceso)
         {
             if (nivelAcceso <= 0)
-                throw new ArgumentException("El nivel de acceso debe ser mayor que 0.");
+                throw new ArgumentException("El nivel de acceso debe ser mayor que 0.", nameof(nivelAcceso));
             NivelAccesoSistema = nivelAcceso;
         }
 

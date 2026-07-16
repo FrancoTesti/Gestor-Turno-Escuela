@@ -24,7 +24,7 @@ namespace GTE.Dominio
             if (IdPersonal != 0)
                 throw new InvalidOperationException("El Id ya ha sido asignado y no puede ser modificado.");
             if (nuevoId <= 0)
-                throw new ArgumentException("El Id generado debe ser mayor que 0.");
+                throw new ArgumentException("El Id generado debe ser mayor que 0.", nameof(nuevoId));
 
             IdPersonal = nuevoId;
         }

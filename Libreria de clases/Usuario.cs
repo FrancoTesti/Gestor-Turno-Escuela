@@ -27,21 +27,21 @@ namespace GTE.Dominio
             if (IdUsuario != 0)
                 throw new InvalidOperationException("El Id ya ha sido asignado y no puede ser modificado.");
             if (nuevoId <= 0)
-                throw new ArgumentException("El Id generado debe ser mayor que 0."));
+                throw new ArgumentException("El Id generado debe ser mayor que 0.", nameof(nuevoId));
 
             IdUsuario = nuevoId;
         }
         public void SetNombreUsuario(string nombreUsuario)
         {
             if (string.IsNullOrWhiteSpace(nombreUsuario))
-                throw new ArgumentException("El nombre de usuario no puede ser nulo o vacío.");
+                throw new ArgumentException("El nombre de usuario no puede ser nulo o vacío.", nameof(nombreUsuario));
             NombreUsuario = nombreUsuario;
         }
 
         public void SetContrasena(string contrasena)
         {
             if (string.IsNullOrWhiteSpace(contrasena) || contrasena.Length < 4)
-                throw new ArgumentException("La contraseña debe tener al menos 4 caracteres.");
+                throw new ArgumentException("La contraseña debe tener al menos 4 caracteres.", nameof(contrasena));
             Contrasena = contrasena;
         }
 

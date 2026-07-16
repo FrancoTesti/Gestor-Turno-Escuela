@@ -216,7 +216,7 @@ class Program
                 Console.WriteLine("Opción incorrecta.");
         }
     }
-    
+
     static async Task Main(string[] args)
     {
         IUsuarioRepository UsuarioDAO = new UsuarioRepository();
