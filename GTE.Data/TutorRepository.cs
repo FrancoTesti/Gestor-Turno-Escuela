@@ -9,7 +9,7 @@ namespace GTE.Data
 {
     public class TutorRepository : ITutorRepository
     {
-        private static readonly List<Tutor> _tutores = new List<Tutor>();
+        private static List<Tutor> _tutores = new List<Tutor>();
         private static int _nextId = 1;
 
         public Task AddAsync(Tutor tutor)
