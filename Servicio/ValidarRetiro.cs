@@ -13,7 +13,6 @@ namespace GTE.Application.Services
         {   
             bool existeVinculo = false;
 
-            // verificar autorización
             foreach (var aut in autorizaciones)
             {
                 if (aut.AlumnoId == alumno.IdAlumno &&
@@ -24,7 +23,6 @@ namespace GTE.Application.Services
                 }
             }
 
-            // si no existe autorización
             if (!existeVinculo)
                 return false;
 

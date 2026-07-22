@@ -8,7 +8,7 @@ namespace GTE.Dominio
 {
     public class Alumno
     {
-        private static readonly string[] EstadosValidos = { "Presente", "Retirado", "Ausente" };
+        private static string[] EstadosValidos = { "Presente", "Retirado", "Ausente" };
 
         public int IdAlumno { get; private set; }
         public string Nombre { get; private set; }

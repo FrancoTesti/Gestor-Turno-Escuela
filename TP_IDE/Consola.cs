@@ -99,9 +99,8 @@ class Program
                 Usuario usuario = new Usuario(nombreUsuario, contraseñaUsuario);
                 Portero portero = new Portero(nombrePortero, puertaPortero, usuario);
 
-                /*Save recién si las dos construcciones sobrevivieron*/
-                await usuarioDAO.AddAsync(usuario); /*genera id usuario*/
-                await porteroDAO.AddAsync(portero); /*genera id portero*/
+                await usuarioDAO.AddAsync(usuario);
+                await porteroDAO.AddAsync(portero);
                 return;
             }
             catch (ArgumentException ex)
