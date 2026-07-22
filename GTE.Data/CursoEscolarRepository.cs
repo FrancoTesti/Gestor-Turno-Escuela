@@ -8,7 +8,7 @@ namespace GTE.Data
 {
     public class CursoEscolarRepository : ICursoEscolarRepository
     {
-        private static readonly List<CursoEscolar> _cursos = new List<CursoEscolar>();
+        private static List<CursoEscolar> _cursos = new List<CursoEscolar>();
         private static int _nextId = 1;
 
         public Task AddAsync(CursoEscolar curso)

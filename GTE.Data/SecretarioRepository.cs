@@ -8,7 +8,7 @@ namespace GTE.Data
 {
     public class SecretarioRepository : ISecretarioRepository
     {
-        private static readonly List<Secretario> _secretarios = new List<Secretario>();
+        private static List<Secretario> _secretarios = new List<Secretario>();
         private static int _nextId = 1;
 
         public Task AddAsync(Secretario secretario)

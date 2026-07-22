@@ -8,7 +8,7 @@ namespace GTE.Data
 {
     public class PorteroRepository : IPorteroRepository
     {
-        private static readonly List<Portero> _porteros = new List<Portero>();
+        private static List<Portero> _porteros = new List<Portero>();
         private static int _nextId = 1;
 
         public Task AddAsync(Portero portero)

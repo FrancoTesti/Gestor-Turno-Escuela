@@ -9,7 +9,7 @@ namespace GTE.Data
 {
     public class UsuarioRepository : IUsuarioRepository
     {
-        private static readonly List<Usuario> _usuarios = new List<Usuario>();
+        private static List<Usuario> _usuarios = new List<Usuario>();
         private static int _nextId = 1;
 
         public Task AddAsync(Usuario usuario)
