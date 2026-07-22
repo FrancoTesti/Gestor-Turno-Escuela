@@ -10,7 +10,7 @@ namespace GTE.Dominio
     {
         public int IdHorarioEspecial { get; set; }
         public int IdAlumno { get; set; }
-        public string DescripcionActividad { get; set; } = string.Empty; //representa a vacio string s = ""; 
+        public string DescripcionActividad { get; set; } = string.Empty;
         public TimeSpan HoraSalidaEspecial { get; set; }
 
         public HorarioEspecial(int idHorario, int idAlu, string desc, TimeSpan horaSalidaEsp)

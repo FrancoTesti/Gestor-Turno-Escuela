@@ -33,12 +33,10 @@ namespace GTE.Application.Services
 
             if (usuario == null || !usuario.ValidarCredenciales(nombreUsuario, contrasena))
             {
-                // Si coinciden nombre y contraseña pero el usuario está inactivo, damos un mensaje más claro.
                 if (usuario != null && !usuario.EstaActivo &&
                     usuario.NombreUsuario == nombreUsuario && usuario.Contrasena == contrasena)
                     return Fallo("El usuario está inactivo. Contacte al administrador.");
 
-                // Mismo mensaje para "no existe" o "contraseña incorrecta": no revelamos cuál falló.
                 return Fallo("Usuario o contraseña incorrectos.");
             }
             

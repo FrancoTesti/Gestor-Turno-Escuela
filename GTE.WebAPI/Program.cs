@@ -16,7 +16,6 @@ builder.Services.AddScoped<ICursoEscolarService, CursoEscolarService>();
 
 var app = builder.Build();
 
-// Swagger habilitado siempre (es la interfaz de pruebas de la Entrega 1).
 app.UseSwagger();
 app.UseSwaggerUI();
 

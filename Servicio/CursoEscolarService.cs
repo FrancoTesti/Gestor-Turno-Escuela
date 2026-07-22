@@ -19,7 +19,6 @@ namespace GTE.Application.Services
 
         public async Task<CursoEscolarDTO> AddAsync(CursoEscolarDTO dto)
         {
-            // Id en 0: el repositorio le asigna el número al agregar
             CursoEscolar curso = new CursoEscolar(0, dto.Grado, dto.Curso, dto.HorarioSalida);
             await cursoRepository.AddAsync(curso);
 
@@ -67,7 +66,6 @@ namespace GTE.Application.Services
             if (existing == null)
                 return false;
 
-            // CursoEscolar usa propiedades públicas (no tiene métodos Set)
             existing.Grado = dto.Grado;
             existing.Curso = dto.Curso;
             existing.HorarioSalida = dto.HorarioSalida;

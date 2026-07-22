@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34316.72
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTE.Consola", "GTE.Consola.csproj", "{EC97004F-D974-459D-ABA9-07FDBDC1416E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTE.Consola", "TP_IDE\GTE.Consola.csproj", "{EC97004F-D974-459D-ABA9-07FDBDC1416E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTE.Dominio", "..\Libreria de clases\GTE.Dominio.csproj", "{1733349B-8B9D-4B93-85F2-E54E1C7A3D37}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTE.Dominio", "Libreria de clases\GTE.Dominio.csproj", "{1733349B-8B9D-4B93-85F2-E54E1C7A3D37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTE.Application.Services", "..\Servicio\GTE.Application.Services.csproj", "{FF7A9F56-69BB-43FE-97C9-8D4B8195F3EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTE.Application.Services", "Servicio\GTE.Application.Services.csproj", "{FF7A9F56-69BB-43FE-97C9-8D4B8195F3EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTE.DTOs", "..\GTE.DTOs\GTE.DTOs.csproj", "{90DC609D-E8CC-4E8A-BA4F-A2F7503243D0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTE.DTOs", "GTE.DTOs\GTE.DTOs.csproj", "{90DC609D-E8CC-4E8A-BA4F-A2F7503243D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTE.Data", "..\GTE.Data\GTE.Data.csproj", "{6244EE7B-6305-4CB5-BF83-6410F62681D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTE.Data", "GTE.Data\GTE.Data.csproj", "{6244EE7B-6305-4CB5-BF83-6410F62681D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTE.WebAPI", "..\GTE.WebAPI\GTE.WebAPI.csproj", "{0FF6E345-2E2C-4F2B-B19E-32EF7D4470DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTE.WebAPI", "GTE.WebAPI\GTE.WebAPI.csproj", "{0FF6E345-2E2C-4F2B-B19E-32EF7D4470DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
