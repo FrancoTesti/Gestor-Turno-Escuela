@@ -10,6 +10,11 @@ namespace GTE.Dominio
     {
         public int NivelAccesoSistema { get; private set; }
 
+<<<<<<< HEAD
+        private Secretario() : base() { }
+
+=======
+>>>>>>> 1194efef233d2fe95e39f88eb2d8ef8f1afabda0
         public Secretario(string nombre, int nivelAcceso, Usuario usuario) : base(nombre, usuario)
         {
             SetNivelAccesoSistema(nivelAcceso);

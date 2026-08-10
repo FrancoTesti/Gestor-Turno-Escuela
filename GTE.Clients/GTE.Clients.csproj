@@ -6,11 +6,17 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-<<<<<<< HEAD
   <ItemGroup>
-    <None Remove="NewFile1.txt" />
+    <Compile Remove="Class1.cs" />
   </ItemGroup>
 
-=======
->>>>>>> 1194efef233d2fe95e39f88eb2d8ef8f1afabda0
+  <ItemGroup>
+    <None Remove="NewFile1.txt" />
+    <None Remove="NewFile2.txt" />
+    <None Remove="NewFile3.txt" />
+    <None Remove="NewFile4.txt" />
+    <None Remove="NewFile5.txt" />
+    <None Remove="NewFile6.txt" />
+  </ItemGroup>
+
 </Project>
