@@ -78,6 +78,7 @@ namespace GTE.WindowsForms
             {
                 dgvAlumnos.Columns["IdAlumno"].HeaderText = "ID";
                 dgvAlumnos.Columns["IdAlumno"].Width = 60;
+                dgvAlumnos.Columns["IdCurso"].Visible = false;
                 dgvAlumnos.Columns["Nombre"].HeaderText = "Nombre";
                 dgvAlumnos.Columns["Nombre"].Width = 150;
                 dgvAlumnos.Columns["Apellido"].HeaderText = "Apellido";
@@ -86,6 +87,8 @@ namespace GTE.WindowsForms
                 dgvAlumnos.Columns["Grado"].Width = 100;
                 dgvAlumnos.Columns["Curso"].HeaderText = "Curso";
                 dgvAlumnos.Columns["Curso"].Width = 100;
+                dgvAlumnos.Columns["Turno"].HeaderText = "Turno";
+                dgvAlumnos.Columns["Turno"].Width = 100;
                 dgvAlumnos.Columns["Estado"].HeaderText = "Estado";
                 dgvAlumnos.Columns["Estado"].Width = 120;
             }

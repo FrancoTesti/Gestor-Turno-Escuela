@@ -55,9 +55,12 @@ namespace GTE.Data
                 entity.Property(e => e.IdAlumno).ValueGeneratedOnAdd();
                 entity.Property(e => e.Nombre).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Apellido).IsRequired().HasMaxLength(100);
-                entity.Property(e => e.Grado).IsRequired().HasMaxLength(50);
-                entity.Property(e => e.Curso).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.IdCurso).IsRequired();
                 entity.Property(e => e.Estado).IsRequired().HasMaxLength(50);
+                entity.HasOne(e => e.CursoEscolar)
+                      .WithMany()
+                      .HasForeignKey(e => e.IdCurso)
+                      .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<CursoEscolar>(entity =>
@@ -66,7 +69,9 @@ namespace GTE.Data
                 entity.Property(e => e.IdCurso).ValueGeneratedOnAdd();
                 entity.Property(e => e.Grado).IsRequired().HasMaxLength(50);
                 entity.Property(e => e.Curso).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.Turno).IsRequired().HasMaxLength(20);
                 entity.Property(e => e.HorarioSalida).IsRequired();
+                entity.HasIndex(e => new { e.Grado, e.Curso, e.Turno }).IsUnique();
             });
 
             // Mapeo de Tutor
@@ -150,16 +155,16 @@ namespace GTE.Data
             );
 
             modelBuilder.Entity<Alumno>().HasData(
-                new { IdAlumno = 1, Nombre = "Juan", Apellido = "Perez", Grado = "1°", Curso = "A", Estado = "Presente" },
-                new { IdAlumno = 2, Nombre = "Maria", Apellido = "Gomez", Grado = "2°", Curso = "B", Estado = "Presente" },
-                new { IdAlumno = 3, Nombre = "Lautaro", Apellido = "Martinez", Grado = "1°", Curso = "A", Estado = "Presente" },
-                new { IdAlumno = 4, Nombre = "Sofia", Apellido = "Rodriguez", Grado = "3°", Curso = "A", Estado = "Presente" }
+                new { IdAlumno = 1, Nombre = "Juan", Apellido = "Perez", IdCurso = 1, Estado = "Presente" },
+                new { IdAlumno = 2, Nombre = "Maria", Apellido = "Gomez", IdCurso = 2, Estado = "Presente" },
+                new { IdAlumno = 3, Nombre = "Lautaro", Apellido = "Martinez", IdCurso = 1, Estado = "Presente" },
+                new { IdAlumno = 4, Nombre = "Sofia", Apellido = "Rodriguez", IdCurso = 3, Estado = "Presente" }
             );
 
             modelBuilder.Entity<CursoEscolar>().HasData(
-                new { IdCurso = 1, Grado = "1°", Curso = "A", HorarioSalida = new TimeSpan(12, 0, 0) },
-                new { IdCurso = 2, Grado = "2°", Curso = "B", HorarioSalida = new TimeSpan(12, 15, 0) },
-                new { IdCurso = 3, Grado = "3°", Curso = "A", HorarioSalida = new TimeSpan(12, 30, 0) }
+                new { IdCurso = 1, Grado = "1°", Curso = "A", Turno = "Mañana", HorarioSalida = new TimeSpan(12, 0, 0) },
+                new { IdCurso = 2, Grado = "2°", Curso = "B", Turno = "Mañana", HorarioSalida = new TimeSpan(12, 15, 0) },
+                new { IdCurso = 3, Grado = "3°", Curso = "A", Turno = "Tarde", HorarioSalida = new TimeSpan(17, 30, 0) }
             );
 
             modelBuilder.Entity<Secretario>().HasData(

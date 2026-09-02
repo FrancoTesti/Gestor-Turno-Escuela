@@ -12,19 +12,24 @@ namespace GTE.Application.Services
     public class AlumnoService : IAlumnoService
     {
         private readonly IAlumnoRepository alumnoRepository;
+        private readonly ICursoEscolarRepository cursoRepository;
 
-        public AlumnoService(IAlumnoRepository alumnoRepository)
+        public AlumnoService(IAlumnoRepository alumnoRepository, ICursoEscolarRepository cursoRepository)
         {
             this.alumnoRepository = alumnoRepository;
+            this.cursoRepository = cursoRepository;
         }
 
         public async Task<AlumnoDTO> AddAsync(AlumnoDTO dto)
         {
-            Alumno alumno = new Alumno(dto.IdAlumno, dto.Nombre, dto.Apellido, dto.Grado, dto.Curso);
+            var curso = await cursoRepository.GetAsync(dto.IdCurso)
+                ?? throw new ArgumentException("El curso seleccionado no existe.", nameof(dto.IdCurso));
+            Alumno alumno = new Alumno(dto.IdAlumno, dto.Nombre, dto.Apellido, curso.IdCurso);
             await alumnoRepository.AddAsync(alumno);
 
             dto.IdAlumno = alumno.IdAlumno;
             dto.Estado = alumno.Estado;
+            CompletarDatosCurso(dto, curso);
             return dto;
         }
 
@@ -45,8 +50,10 @@ namespace GTE.Application.Services
                 IdAlumno = alumno.IdAlumno,
                 Nombre = alumno.Nombre,
                 Apellido = alumno.Apellido,
-                Grado = alumno.Grado,
-                Curso = alumno.Curso,
+                IdCurso = alumno.IdCurso,
+                Grado = alumno.CursoEscolar.Grado,
+                Curso = alumno.CursoEscolar.Curso,
+                Turno = alumno.CursoEscolar.Turno,
                 Estado = alumno.Estado
             };
         }
@@ -60,8 +67,10 @@ namespace GTE.Application.Services
                 IdAlumno = alumno.IdAlumno,
                 Nombre = alumno.Nombre,
                 Apellido = alumno.Apellido,
-                Grado = alumno.Grado,
-                Curso = alumno.Curso,
+                IdCurso = alumno.IdCurso,
+                Grado = alumno.CursoEscolar.Grado,
+                Curso = alumno.CursoEscolar.Curso,
+                Turno = alumno.CursoEscolar.Turno,
                 Estado = alumno.Estado
             }).ToList();
         }
@@ -74,8 +83,9 @@ namespace GTE.Application.Services
 
             existing.SetNombre(dto.Nombre);
             existing.SetApellido(dto.Apellido);
-            existing.SetGrado(dto.Grado);
-            existing.SetCurso(dto.Curso);
+            if (await cursoRepository.GetAsync(dto.IdCurso) == null)
+                throw new ArgumentException("El curso seleccionado no existe.", nameof(dto.IdCurso));
+            existing.SetCurso(dto.IdCurso);
 
             if (!string.IsNullOrEmpty(dto.Estado))
             {
@@ -96,10 +106,20 @@ namespace GTE.Application.Services
                 IdAlumno = a.IdAlumno,
                 Nombre = a.Nombre,
                 Apellido = a.Apellido,
-                Grado = a.Grado,
-                Curso = a.Curso,
+                IdCurso = a.IdCurso,
+                Grado = a.CursoEscolar.Grado,
+                Curso = a.CursoEscolar.Curso,
+                Turno = a.CursoEscolar.Turno,
                 Estado = a.Estado,
             });
+        }
+
+        private static void CompletarDatosCurso(AlumnoDTO dto, CursoEscolar curso)
+        {
+            dto.IdCurso = curso.IdCurso;
+            dto.Grado = curso.Grado;
+            dto.Curso = curso.Curso;
+            dto.Turno = curso.Turno;
         }
     }
 }

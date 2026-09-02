@@ -33,6 +33,7 @@ namespace GTE.WindowsForms
             lblTitle.ForeColor = Color.White;
             lblGrado.ForeColor = Color.FromArgb(206, 212, 218);
             lblCurso.ForeColor = Color.FromArgb(206, 212, 218);
+            lblTurno.ForeColor = Color.FromArgb(206, 212, 218);
             lblHorario.ForeColor = Color.FromArgb(206, 212, 218);
 
             txtGrado.BackColor = Color.FromArgb(49, 53, 56);
@@ -42,6 +43,10 @@ namespace GTE.WindowsForms
             txtCurso.BackColor = Color.FromArgb(49, 53, 56);
             txtCurso.ForeColor = Color.White;
             txtCurso.BorderStyle = BorderStyle.FixedSingle;
+
+            cmbTurno.BackColor = Color.FromArgb(49, 53, 56);
+            cmbTurno.ForeColor = Color.White;
+            cmbTurno.DropDownStyle = ComboBoxStyle.DropDownList;
 
             txtHorario.BackColor = Color.FromArgb(49, 53, 56);
             txtHorario.ForeColor = Color.White;
@@ -65,6 +70,7 @@ namespace GTE.WindowsForms
                 lblTitle.Text = "Editar Curso Escolar";
                 txtGrado.Text = _cursoExistente.Grado;
                 txtCurso.Text = _cursoExistente.Curso;
+                cmbTurno.SelectedItem = _cursoExistente.Turno;
                 txtHorario.Text = _cursoExistente.HorarioSalida.ToString(@"hh\:mm");
             }
         }
@@ -75,6 +81,7 @@ namespace GTE.WindowsForms
             {
                 lblTitle.Text = "Nuevo Curso Escolar";
                 txtHorario.Text = "12:00";
+                cmbTurno.SelectedIndex = 0;
             }
         }
 
@@ -82,9 +89,10 @@ namespace GTE.WindowsForms
         {
             string grado = txtGrado.Text.Trim();
             string curso = txtCurso.Text.Trim();
+            string turno = cmbTurno.SelectedItem?.ToString() ?? string.Empty;
             string horarioText = txtHorario.Text.Trim();
 
-            if (string.IsNullOrEmpty(grado) || string.IsNullOrEmpty(curso) || string.IsNullOrEmpty(horarioText))
+            if (string.IsNullOrEmpty(grado) || string.IsNullOrEmpty(curso) || string.IsNullOrEmpty(turno) || string.IsNullOrEmpty(horarioText))
             {
                 MessageBox.Show("Por favor complete todos los campos.", "Campos vacíos",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -107,6 +115,7 @@ namespace GTE.WindowsForms
                         IdCurso = _cursoExistente.IdCurso,
                         Grado = grado,
                         Curso = curso,
+                        Turno = turno,
                         HorarioSalida = horario
                     };
                     bool ok = await _apiClient.UpdateAsync(dto);
@@ -128,6 +137,7 @@ namespace GTE.WindowsForms
                         IdCurso = 0,
                         Grado = grado,
                         Curso = curso,
+                        Turno = turno,
                         HorarioSalida = horario
                     };
                     var creado = await _apiClient.AddAsync(dto);

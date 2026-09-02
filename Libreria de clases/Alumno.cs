@@ -11,18 +11,17 @@ namespace GTE.Dominio
         public int IdAlumno { get; private set; }
         public string Nombre { get; private set; }
         public string Apellido { get; private set; }
-        public string Grado { get; private set; }
-        public string Curso { get; private set; }
+        public int IdCurso { get; private set; }
+        public CursoEscolar CursoEscolar { get; private set; } = null!;
         public string Estado { get; private set; }
         // Constructor privado sin parámetros requerido por Entity Framework para la materialización de entidades
         private Alumno() { }
-        public Alumno(int id, string nombre, string apellido, string grado, string curso)
+        public Alumno(int id, string nombre, string apellido, int idCurso)
         {
             SetIdAlumno(id);
             SetNombre(nombre);
             SetApellido(apellido);
-            SetGrado(grado);
-            SetCurso(curso);
+            SetCurso(idCurso);
             SetEstado("Presente");
         }
         public void SetIdAlumno(int id)
@@ -43,17 +42,16 @@ namespace GTE.Dominio
                 throw new ArgumentException("El apellido no puede ser nulo o vacío.", nameof(apellido));
             Apellido = apellido;
         }
-        public void SetGrado(string grado)
+        public void SetCurso(int idCurso)
         {
-            if (string.IsNullOrWhiteSpace(grado))
-                throw new ArgumentException("El grado no puede ser nulo o vacío.", nameof(grado));
-            Grado = grado;
+            if (idCurso <= 0)
+                throw new ArgumentException("Debe seleccionar un curso válido.", nameof(idCurso));
+            IdCurso = idCurso;
         }
-        public void SetCurso(string curso)
+        public void SetCursoEscolar(CursoEscolar cursoEscolar)
         {
-            if (string.IsNullOrWhiteSpace(curso))
-                throw new ArgumentException("El curso no puede ser nulo o vacío.", nameof(curso));
-            Curso = curso;
+            CursoEscolar = cursoEscolar ?? throw new ArgumentNullException(nameof(cursoEscolar));
+            IdCurso = cursoEscolar.IdCurso;
         }
         public void SetEstado(string estado)
         {

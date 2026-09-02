@@ -76,6 +76,8 @@ namespace GTE.WindowsForms
                 dgvCursos.Columns["Grado"].Width = 150;
                 dgvCursos.Columns["Curso"].HeaderText = "Curso / División";
                 dgvCursos.Columns["Curso"].Width = 150;
+                dgvCursos.Columns["Turno"].HeaderText = "Turno";
+                dgvCursos.Columns["Turno"].Width = 120;
                 dgvCursos.Columns["HorarioSalida"].HeaderText = "Horario Salida";
                 dgvCursos.Columns["HorarioSalida"].Width = 200;
             }

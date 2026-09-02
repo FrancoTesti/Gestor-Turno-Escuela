@@ -11,6 +11,7 @@ namespace GTE.DTOs
         public int IdCurso { get; set; }
         public string Grado { get; set; } = string.Empty;
         public string Curso { get; set; } = string.Empty;
+        public string Turno { get; set; } = "Mañana";
         public TimeSpan HorarioSalida { get; set; }
     }
 }

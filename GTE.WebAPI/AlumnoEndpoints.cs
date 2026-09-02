@@ -14,7 +14,8 @@ namespace GTE.WebAPI
             })
             .WithName("GetAllAlumnos")
             .Produces<List<AlumnoDTO>>(StatusCodes.Status200OK)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
 
             // Búsqueda con filtros (requisito de la consigna).
             app.MapGet("/alumnos/criteria", async (string? nombre, string? grado, string? curso, string? estado, IAlumnoService service) =>
@@ -25,7 +26,8 @@ namespace GTE.WebAPI
             })
             .WithName("GetAlumnosByCriteria")
             .Produces<List<AlumnoDTO>>(StatusCodes.Status200OK)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
 
             app.MapGet("/alumnos/{id:int}", async (int id, IAlumnoService service) =>
             {
@@ -35,7 +37,8 @@ namespace GTE.WebAPI
             .WithName("GetAlumno")
             .Produces<AlumnoDTO>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
 
             app.MapPost("/alumnos", async (AlumnoDTO dto, IAlumnoService service) =>
             {
@@ -52,7 +55,8 @@ namespace GTE.WebAPI
             .WithName("AddAlumno")
             .Produces<AlumnoDTO>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
 
             app.MapPut("/alumnos", async (AlumnoDTO dto, IAlumnoService service) =>
             {
@@ -70,7 +74,8 @@ namespace GTE.WebAPI
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status400BadRequest)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
 
             app.MapDelete("/alumnos/{id:int}", async (int id, IAlumnoService service) =>
             {
@@ -80,7 +85,8 @@ namespace GTE.WebAPI
             .WithName("DeleteAlumno")
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
         }
     }
 }

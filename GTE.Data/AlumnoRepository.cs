@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
 using GTE.Dominio;
 
 namespace GTE.Data
@@ -28,10 +29,10 @@ namespace GTE.Data
         }
 
         public async Task<Alumno?> GetAsync(int id) =>
-            await _context.Alumnos.FindAsync(id);
+            await _context.Alumnos.Include(a => a.CursoEscolar).FirstOrDefaultAsync(a => a.IdAlumno == id);
 
         public async Task<IEnumerable<Alumno>> GetAllAsync() =>
-            await _context.Alumnos.ToListAsync();
+            await _context.Alumnos.Include(a => a.CursoEscolar).ToListAsync();
 
         public async Task<bool> UpdateAsync(Alumno alumno)
         {
@@ -40,8 +41,7 @@ namespace GTE.Data
 
             existing.SetNombre(alumno.Nombre);
             existing.SetApellido(alumno.Apellido);
-            existing.SetGrado(alumno.Grado);
-            existing.SetCurso(alumno.Curso);
+            existing.SetCurso(alumno.IdCurso);
             existing.SetEstado(alumno.Estado);
 
             await _context.SaveChangesAsync();
@@ -59,32 +59,57 @@ namespace GTE.Data
 
         public async Task<IEnumerable<Alumno>> GetByCriteriaAsync(AlumnoCriteria criteria)
         {
-            IQueryable<Alumno> query = _context.Alumnos;
+            // Esta búsqueda usa ADO.NET deliberadamente. El resto del acceso a
+            // datos permanece implementado con Entity Framework Core.
+            const string sql = @"
+                SELECT a.IdAlumno, a.Nombre, a.Apellido, a.IdCurso, a.Estado,
+                       c.Grado, c.Curso, c.Turno, c.HorarioSalida
+                FROM Alumnos a
+                INNER JOIN Cursos c ON c.IdCurso = a.IdCurso
+                WHERE (@Nombre IS NULL OR Nombre LIKE @NombreBusqueda OR Apellido LIKE @NombreBusqueda)
+                  AND (@Grado IS NULL OR c.Grado = @Grado)
+                  AND (@Curso IS NULL OR c.Curso = @Curso)
+                  AND (@Estado IS NULL OR a.Estado = @Estado)
+                ORDER BY a.Apellido, a.Nombre";
 
-            if (!string.IsNullOrWhiteSpace(criteria.Nombre))
+            var alumnos = new List<Alumno>();
+            var connectionString = _context.Database.GetConnectionString()
+                ?? throw new InvalidOperationException("No se configuró la conexión a la base de datos.");
+
+            await using var connection = new SqlConnection(connectionString);
+            await using var command = new SqlCommand(sql, connection);
+
+            AddNullableString(command, "@Nombre", criteria.Nombre);
+            AddNullableString(command, "@NombreBusqueda",
+                string.IsNullOrWhiteSpace(criteria.Nombre) ? null : $"%{criteria.Nombre}%");
+            AddNullableString(command, "@Grado", criteria.Grado);
+            AddNullableString(command, "@Curso", criteria.Curso);
+            AddNullableString(command, "@Estado", criteria.Estado);
+
+            await connection.OpenAsync();
+            await using var reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
             {
-                var term = criteria.Nombre.ToLower();
-                query = query.Where(a => a.Nombre.ToLower().Contains(term) || a.Apellido.ToLower().Contains(term));
+                var alumno = new Alumno(
+                    reader.GetInt32(0),
+                    reader.GetString(1),
+                    reader.GetString(2),
+                    reader.GetInt32(3));
+                alumno.SetEstado(reader.GetString(4));
+                alumno.SetCursoEscolar(new CursoEscolar(
+                    reader.GetInt32(3), reader.GetString(5), reader.GetString(6),
+                    reader.GetString(7), reader.GetTimeSpan(8)));
+                alumnos.Add(alumno);
             }
 
-            if (!string.IsNullOrWhiteSpace(criteria.Grado))
-            {
-                query = query.Where(a => a.Grado == criteria.Grado);
-            }
+            return alumnos;
+        }
 
-            if (!string.IsNullOrWhiteSpace(criteria.Curso))
-            {
-                query = query.Where(a => a.Curso == criteria.Curso);
-            }
-
-            if (!string.IsNullOrWhiteSpace(criteria.Estado))
-            {
-                query = query.Where(a => a.Estado == criteria.Estado);
-            }
-
-            return await query.OrderBy(a => a.Apellido)
-                              .ThenBy(a => a.Nombre)
-                              .ToListAsync();
+        private static void AddNullableString(SqlCommand command, string parameterName, string? value)
+        {
+            command.Parameters.Add(parameterName, System.Data.SqlDbType.NVarChar, 200).Value =
+                string.IsNullOrWhiteSpace(value) ? DBNull.Value : value;
         }
     }
 }

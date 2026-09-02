@@ -20,6 +20,8 @@
             this.txtGrado = new System.Windows.Forms.TextBox();
             this.lblCurso = new System.Windows.Forms.Label();
             this.txtCurso = new System.Windows.Forms.TextBox();
+            this.lblTurno = new System.Windows.Forms.Label();
+            this.cmbTurno = new System.Windows.Forms.ComboBox();
             this.lblHorario = new System.Windows.Forms.Label();
             this.txtHorario = new System.Windows.Forms.TextBox();
             this.btnGuardar = new System.Windows.Forms.Button();
@@ -72,11 +74,31 @@
             this.txtCurso.Size = new System.Drawing.Size(320, 30);
             this.txtCurso.TabIndex = 2;
             // 
+            // lblTurno
+            // 
+            this.lblTurno.AutoSize = true;
+            this.lblTurno.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblTurno.Location = new System.Drawing.Point(30, 235);
+            this.lblTurno.Name = "lblTurno";
+            this.lblTurno.Size = new System.Drawing.Size(50, 21);
+            this.lblTurno.TabIndex = 0;
+            this.lblTurno.Text = "Turno";
+            // 
+            // cmbTurno
+            // 
+            this.cmbTurno.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.cmbTurno.FormattingEnabled = true;
+            this.cmbTurno.Items.AddRange(new object[] { "Mañana", "Tarde", "Noche" });
+            this.cmbTurno.Location = new System.Drawing.Point(30, 260);
+            this.cmbTurno.Name = "cmbTurno";
+            this.cmbTurno.Size = new System.Drawing.Size(320, 31);
+            this.cmbTurno.TabIndex = 3;
+            // 
             // lblHorario
             // 
             this.lblHorario.AutoSize = true;
             this.lblHorario.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblHorario.Location = new System.Drawing.Point(30, 235);
+            this.lblHorario.Location = new System.Drawing.Point(30, 310);
             this.lblHorario.Name = "lblHorario";
             this.lblHorario.Size = new System.Drawing.Size(183, 21);
             this.lblHorario.TabIndex = 0;
@@ -85,18 +107,18 @@
             // txtHorario
             // 
             this.txtHorario.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txtHorario.Location = new System.Drawing.Point(30, 260);
+            this.txtHorario.Location = new System.Drawing.Point(30, 335);
             this.txtHorario.Name = "txtHorario";
             this.txtHorario.Size = new System.Drawing.Size(320, 30);
-            this.txtHorario.TabIndex = 3;
+            this.txtHorario.TabIndex = 4;
             // 
             // btnGuardar
             // 
             this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnGuardar.Location = new System.Drawing.Point(30, 320);
+            this.btnGuardar.Location = new System.Drawing.Point(30, 395);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(150, 40);
-            this.btnGuardar.TabIndex = 4;
+            this.btnGuardar.TabIndex = 5;
             this.btnGuardar.Text = "Guardar";
             this.btnGuardar.UseVisualStyleBackColor = true;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
@@ -104,10 +126,10 @@
             // btnCancelar
             // 
             this.btnCancelar.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnCancelar.Location = new System.Drawing.Point(200, 320);
+            this.btnCancelar.Location = new System.Drawing.Point(200, 395);
             this.btnCancelar.Name = "btnCancelar";
             this.btnCancelar.Size = new System.Drawing.Size(150, 40);
-            this.btnCancelar.TabIndex = 5;
+            this.btnCancelar.TabIndex = 6;
             this.btnCancelar.Text = "Cancelar";
             this.btnCancelar.UseVisualStyleBackColor = true;
             this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
@@ -116,11 +138,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(380, 390);
+            this.ClientSize = new System.Drawing.Size(380, 465);
             this.Controls.Add(this.btnCancelar);
             this.Controls.Add(this.btnGuardar);
             this.Controls.Add(this.txtHorario);
             this.Controls.Add(this.lblHorario);
+            this.Controls.Add(this.cmbTurno);
+            this.Controls.Add(this.lblTurno);
             this.Controls.Add(this.txtCurso);
             this.Controls.Add(this.lblCurso);
             this.Controls.Add(this.txtGrado);
@@ -142,6 +166,8 @@
         private System.Windows.Forms.TextBox txtGrado;
         private System.Windows.Forms.Label lblCurso;
         private System.Windows.Forms.TextBox txtCurso;
+        private System.Windows.Forms.Label lblTurno;
+        private System.Windows.Forms.ComboBox cmbTurno;
         private System.Windows.Forms.Label lblHorario;
         private System.Windows.Forms.TextBox txtHorario;
         private System.Windows.Forms.Button btnGuardar;

@@ -38,9 +38,10 @@ namespace GTE.Data
             var existing = await _context.Cursos.FindAsync(curso.IdCurso);
             if (existing == null) return false;
 
-            existing.Grado = curso.Grado;
-            existing.Curso = curso.Curso;
-            existing.HorarioSalida = curso.HorarioSalida;
+            existing.SetGrado(curso.Grado);
+            existing.SetCurso(curso.Curso);
+            existing.SetTurno(curso.Turno);
+            existing.SetHorarioSalida(curso.HorarioSalida);
 
             await _context.SaveChangesAsync();
             return true;

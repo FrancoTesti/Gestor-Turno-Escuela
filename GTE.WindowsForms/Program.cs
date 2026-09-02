@@ -1,6 +1,5 @@
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using GTE.Clients;
 using GTE.Auth.WindowsForms;
@@ -10,7 +9,7 @@ namespace GTE.WindowsForms
     static class Program
     {
         /// <summary>
-        /// Punto de entrada principal para la aplicaciÛn.
+        /// Punto de entrada principal para la aplicaci√≥n.
         /// </summary>
         [STAThread]
         static void Main()
@@ -21,25 +20,19 @@ namespace GTE.WindowsForms
             Application.ThreadException += Application_ThreadException;
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
 
-            // Ejecutar async main
-            Task.Run(async () => await MainAsync()).GetAwaiter().GetResult();
-        }
-
-        static async Task MainAsync()
-        {
             // Registrar AuthService en el singleton
             var authService = new WindowsFormsAuthService();
             AuthServiceProvider.Register(authService);
 
-            // Bucle principal de autenticaciÛn
+            // Bucle principal de autenticaci√≥n
             while (true)
             {
-                if (!await authService.IsAuthenticatedAsync())
+                if (!authService.IsAuthenticatedAsync().GetAwaiter().GetResult())
                 {
                     var loginForm = new LoginForm();
                     if (loginForm.ShowDialog() != DialogResult.OK)
                     {
-                        // Usuario cancelÛ login, cerrar aplicaciÛn
+                        // Usuario cancel√≥ el login: cerrar la aplicaci√≥n.
                         return;
                     }
                 }
@@ -47,11 +40,17 @@ namespace GTE.WindowsForms
                 try
                 {
                     Application.Run(new MainForm());
-                    break; // Cierre normal de la aplicaciÛn
+
+                    // Si MainForm se cerr√≥ por logout, la sesi√≥n ya no est√° activa
+                    // y el bucle vuelve a mostrar LoginForm.
+                    if (!authService.IsAuthenticatedAsync().GetAwaiter().GetResult())
+                        continue;
+
+                    break; // El usuario cerr√≥ la aplicaci√≥n sin cerrar sesi√≥n.
                 }
                 catch (UnauthorizedAccessException ex)
                 {
-                    MessageBox.Show(ex.Message, "SesiÛn Expirada",
+                    MessageBox.Show(ex.Message, "Sesi√≥n expirada",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
@@ -61,7 +60,7 @@ namespace GTE.WindowsForms
         {
             if (e.Exception is UnauthorizedAccessException)
             {
-                MessageBox.Show("Su sesiÛn ha expirado. Debe volver a autenticarse.", "SesiÛn Expirada",
+                MessageBox.Show("Su sesi√≥n ha expirado. Debe volver a autenticarse.", "Sesi√≥n expirada",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 Application.Restart();

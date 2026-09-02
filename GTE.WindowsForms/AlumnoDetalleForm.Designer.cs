@@ -20,10 +20,10 @@
             this.txtNombre = new System.Windows.Forms.TextBox();
             this.lblApellido = new System.Windows.Forms.Label();
             this.txtApellido = new System.Windows.Forms.TextBox();
-            this.lblGrado = new System.Windows.Forms.Label();
-            this.txtGrado = new System.Windows.Forms.TextBox();
-            this.lblCurso = new System.Windows.Forms.Label();
-            this.txtCurso = new System.Windows.Forms.TextBox();
+            this.lblTurno = new System.Windows.Forms.Label();
+            this.cmbTurno = new System.Windows.Forms.ComboBox();
+            this.lblCursoEscolar = new System.Windows.Forms.Label();
+            this.cmbCursoEscolar = new System.Windows.Forms.ComboBox();
             this.lblEstado = new System.Windows.Forms.Label();
             this.cmbEstado = new System.Windows.Forms.ComboBox();
             this.btnGuardar = new System.Windows.Forms.Button();
@@ -76,41 +76,42 @@
             this.txtApellido.Size = new System.Drawing.Size(320, 30);
             this.txtApellido.TabIndex = 2;
             // 
-            // lblGrado
+            // lblTurno
             // 
-            this.lblGrado.AutoSize = true;
-            this.lblGrado.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblGrado.Location = new System.Drawing.Point(30, 235);
-            this.lblGrado.Name = "lblGrado";
-            this.lblGrado.Size = new System.Drawing.Size(53, 21);
-            this.lblGrado.TabIndex = 0;
-            this.lblGrado.Text = "Grado";
+            this.lblTurno.AutoSize = true;
+            this.lblTurno.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblTurno.Location = new System.Drawing.Point(30, 235);
+            this.lblTurno.Name = "lblTurno";
+            this.lblTurno.Size = new System.Drawing.Size(50, 21);
+            this.lblTurno.TabIndex = 0;
+            this.lblTurno.Text = "Turno";
             // 
-            // txtGrado
+            // cmbTurno
             // 
-            this.txtGrado.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txtGrado.Location = new System.Drawing.Point(30, 260);
-            this.txtGrado.Name = "txtGrado";
-            this.txtGrado.Size = new System.Drawing.Size(140, 30);
-            this.txtGrado.TabIndex = 3;
+            this.cmbTurno.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.cmbTurno.Location = new System.Drawing.Point(30, 260);
+            this.cmbTurno.Name = "cmbTurno";
+            this.cmbTurno.Size = new System.Drawing.Size(140, 31);
+            this.cmbTurno.TabIndex = 3;
+            this.cmbTurno.SelectedIndexChanged += new System.EventHandler(this.cmbTurno_SelectedIndexChanged);
             // 
-            // lblCurso
+            // lblCursoEscolar
             // 
-            this.lblCurso.AutoSize = true;
-            this.lblCurso.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblCurso.Location = new System.Drawing.Point(210, 235);
-            this.lblCurso.Name = "lblCurso";
-            this.lblCurso.Size = new System.Drawing.Size(50, 21);
-            this.lblCurso.TabIndex = 0;
-            this.lblCurso.Text = "Curso";
+            this.lblCursoEscolar.AutoSize = true;
+            this.lblCursoEscolar.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblCursoEscolar.Location = new System.Drawing.Point(210, 235);
+            this.lblCursoEscolar.Name = "lblCursoEscolar";
+            this.lblCursoEscolar.Size = new System.Drawing.Size(50, 21);
+            this.lblCursoEscolar.TabIndex = 0;
+            this.lblCursoEscolar.Text = "Curso";
             // 
-            // txtCurso
+            // cmbCursoEscolar
             // 
-            this.txtCurso.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txtCurso.Location = new System.Drawing.Point(210, 260);
-            this.txtCurso.Name = "txtCurso";
-            this.txtCurso.Size = new System.Drawing.Size(140, 30);
-            this.txtCurso.TabIndex = 4;
+            this.cmbCursoEscolar.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.cmbCursoEscolar.Location = new System.Drawing.Point(210, 260);
+            this.cmbCursoEscolar.Name = "cmbCursoEscolar";
+            this.cmbCursoEscolar.Size = new System.Drawing.Size(140, 31);
+            this.cmbCursoEscolar.TabIndex = 4;
             // 
             // lblEstado
             // 
@@ -166,10 +167,10 @@
             this.Controls.Add(this.btnGuardar);
             this.Controls.Add(this.cmbEstado);
             this.Controls.Add(this.lblEstado);
-            this.Controls.Add(this.txtCurso);
-            this.Controls.Add(this.lblCurso);
-            this.Controls.Add(this.txtGrado);
-            this.Controls.Add(this.lblGrado);
+            this.Controls.Add(this.cmbCursoEscolar);
+            this.Controls.Add(this.lblCursoEscolar);
+            this.Controls.Add(this.cmbTurno);
+            this.Controls.Add(this.lblTurno);
             this.Controls.Add(this.txtApellido);
             this.Controls.Add(this.lblApellido);
             this.Controls.Add(this.txtNombre);
@@ -191,10 +192,10 @@
         private System.Windows.Forms.TextBox txtNombre;
         private System.Windows.Forms.Label lblApellido;
         private System.Windows.Forms.TextBox txtApellido;
-        private System.Windows.Forms.Label lblGrado;
-        private System.Windows.Forms.TextBox txtGrado;
-        private System.Windows.Forms.Label lblCurso;
-        private System.Windows.Forms.TextBox txtCurso;
+        private System.Windows.Forms.Label lblTurno;
+        private System.Windows.Forms.ComboBox cmbTurno;
+        private System.Windows.Forms.Label lblCursoEscolar;
+        private System.Windows.Forms.ComboBox cmbCursoEscolar;
         private System.Windows.Forms.Label lblEstado;
         private System.Windows.Forms.ComboBox cmbEstado;
         private System.Windows.Forms.Button btnGuardar;

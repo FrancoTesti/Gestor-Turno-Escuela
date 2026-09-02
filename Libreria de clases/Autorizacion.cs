@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +12,7 @@ namespace GTE.Dominio
         public int AlumnoId { get; set; }
         public int TutorId { get; set; }
 
-        public Autorizacion() { }
+        private Autorizacion() { }
 
         public Autorizacion(int idAuto, int idAlu, int idTut)
         {

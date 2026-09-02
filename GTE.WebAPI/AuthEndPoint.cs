@@ -22,7 +22,8 @@ namespace GTE.WebAPI
                 return Results.Ok(response);
             })
             .WithName("Login")
-            .WithOpenApi();
+            .WithOpenApi()
+            .AllowAnonymous();
         }
     }
 }

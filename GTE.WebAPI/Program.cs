@@ -55,14 +55,19 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Crea una base nueva o adapta, sin perder alumnos, la base generada por la versión anterior.
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<GTEContext>();
+    await DatabaseSchemaMigrator.MigrateAsync(db);
+}
+
 // 4. Configurar Middleware HTTP
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

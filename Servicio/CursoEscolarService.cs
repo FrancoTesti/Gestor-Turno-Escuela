@@ -19,7 +19,7 @@ namespace GTE.Application.Services
 
         public async Task<CursoEscolarDTO> AddAsync(CursoEscolarDTO dto)
         {
-            CursoEscolar curso = new CursoEscolar(0, dto.Grado, dto.Curso, dto.HorarioSalida);
+            CursoEscolar curso = new CursoEscolar(0, dto.Grado, dto.Curso, dto.Turno, dto.HorarioSalida);
             await cursoRepository.AddAsync(curso);
 
             dto.IdCurso = curso.IdCurso;
@@ -43,6 +43,7 @@ namespace GTE.Application.Services
                 IdCurso = curso.IdCurso,
                 Grado = curso.Grado,
                 Curso = curso.Curso,
+                Turno = curso.Turno,
                 HorarioSalida = curso.HorarioSalida
             };
         }
@@ -56,6 +57,7 @@ namespace GTE.Application.Services
                 IdCurso = curso.IdCurso,
                 Grado = curso.Grado,
                 Curso = curso.Curso,
+                Turno = curso.Turno,
                 HorarioSalida = curso.HorarioSalida
             }).ToList();
         }
@@ -66,9 +68,10 @@ namespace GTE.Application.Services
             if (existing == null)
                 return false;
 
-            existing.Grado = dto.Grado;
-            existing.Curso = dto.Curso;
-            existing.HorarioSalida = dto.HorarioSalida;
+            existing.SetGrado(dto.Grado);
+            existing.SetCurso(dto.Curso);
+            existing.SetTurno(dto.Turno);
+            existing.SetHorarioSalida(dto.HorarioSalida);
 
             return await cursoRepository.UpdateAsync(existing);
         }
