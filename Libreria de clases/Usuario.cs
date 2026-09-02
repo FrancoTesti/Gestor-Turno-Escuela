@@ -14,11 +14,8 @@ namespace GTE.Dominio
         public bool EstaActivo { get; private set; }
 
 
-<<<<<<< HEAD
         private Usuario() { }
 
-=======
->>>>>>> 1194efef233d2fe95e39f88eb2d8ef8f1afabda0
         public Usuario(string nombreUsuario, string contrasena, bool activo = true)
         {
             SetNombreUsuario(nombreUsuario);

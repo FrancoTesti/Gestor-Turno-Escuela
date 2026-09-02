@@ -170,18 +170,14 @@ class Program
     static async Task LoginAsync(IUsuarioRepository usuarioDAO, ITutorRepository tutorDAO, ISecretarioRepository secretarioDAO, IPorteroRepository porteroDAO)
     {
         IAuthService authService =
-<<<<<<< HEAD
             new AuthService(usuarioDAO, tutorDAO, porteroDAO, secretarioDAO, null!);
-=======
-            new AuthService(usuarioDAO, tutorDAO, porteroDAO, secretarioDAO);
->>>>>>> 1194efef233d2fe95e39f88eb2d8ef8f1afabda0
         Linea();
         Console.WriteLine("Ingrese su nombre de usuario");
         string nombreUsuario = Console.ReadLine() ?? "";
         Console.WriteLine("Ingrese su contraseña");
         string contrasena = Console.ReadLine() ?? "";
 
-        LoginResponse resultado = await authService.LoginAsync(nombreUsuario, contrasena);
+        LoginResponse resultado = await authService.LoginAsync(new LoginRequest { NombreUsuario = nombreUsuario, Contrasena = contrasena });
         Linea();
         if (!resultado.Exito)
         {

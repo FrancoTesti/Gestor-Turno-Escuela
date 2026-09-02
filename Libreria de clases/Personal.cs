@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 using System;
-=======
-﻿using System;
->>>>>>> 1194efef233d2fe95e39f88eb2d8ef8f1afabda0
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,11 +12,8 @@ namespace GTE.Dominio
         public string Nombre { get; private set; }
         public Usuario Usuario { get; private set; }
 
-<<<<<<< HEAD
         protected Personal() { }
 
-=======
->>>>>>> 1194efef233d2fe95e39f88eb2d8ef8f1afabda0
         protected Personal(string nombre, Usuario usuario)
         {
             SetNombre(nombre);

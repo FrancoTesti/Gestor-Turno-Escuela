@@ -10,4 +10,9 @@
     <Compile Remove="Class1.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GTE.Clients\GTE.Clients.csproj" />
+    <ProjectReference Include="..\GTE.DTOs\GTE.DTOs.csproj" />
+  </ItemGroup>
+
 </Project>

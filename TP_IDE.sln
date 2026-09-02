@@ -15,15 +15,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTE.Data", "GTE.Data\GTE.Da
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTE.WebAPI", "GTE.WebAPI\GTE.WebAPI.csproj", "{0FF6E345-2E2C-4F2B-B19E-32EF7D4470DF}"
 EndProject
-<<<<<<< HEAD
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTE.WindowsForms", "GTE.WindowsForms\GTE.WindowsForms.csproj", "{7D17B200-5BBB-4512-8029-23D192CC74CB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTE.Clients", "GTE.Clients\GTE.Clients.csproj", "{197B8765-2BFE-4A22-9514-75EC04959F22}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTE.Auth.WindowsForms", "GTE.Auth.WindowsForms\GTE.Auth.WindowsForms.csproj", "{B339029C-1346-4D59-A64B-9725ED5DEF87}"
 EndProject
-=======
->>>>>>> 1194efef233d2fe95e39f88eb2d8ef8f1afabda0
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,7 +51,6 @@ Global
 		{0FF6E345-2E2C-4F2B-B19E-32EF7D4470DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FF6E345-2E2C-4F2B-B19E-32EF7D4470DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FF6E345-2E2C-4F2B-B19E-32EF7D4470DF}.Release|Any CPU.Build.0 = Release|Any CPU
-<<<<<<< HEAD
 		{7D17B200-5BBB-4512-8029-23D192CC74CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7D17B200-5BBB-4512-8029-23D192CC74CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D17B200-5BBB-4512-8029-23D192CC74CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -67,8 +63,6 @@ Global
 		{B339029C-1346-4D59-A64B-9725ED5DEF87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B339029C-1346-4D59-A64B-9725ED5DEF87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B339029C-1346-4D59-A64B-9725ED5DEF87}.Release|Any CPU.Build.0 = Release|Any CPU
-=======
->>>>>>> 1194efef233d2fe95e39f88eb2d8ef8f1afabda0
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

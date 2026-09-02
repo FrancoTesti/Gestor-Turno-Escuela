@@ -6,11 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-<<<<<<< HEAD
   <ItemGroup>
     <None Remove="NewFile1.txt" />
   </ItemGroup>
 
-=======
->>>>>>> 1194efef233d2fe95e39f88eb2d8ef8f1afabda0
 </Project>

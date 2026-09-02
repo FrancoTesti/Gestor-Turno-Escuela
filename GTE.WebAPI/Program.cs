@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-using System.Text;
+ï»¿using System.Text;
 using GTE.Application.Services;
 using GTE.Data;
 using GTE.WebAPI;
@@ -14,7 +13,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<GTEContext>(options =>
     options.UseSqlServer(connectionString));
 
-// 2. Configurar Autenticación JWT Bearer
+// 2. Configurar AutenticaciÃ³n JWT Bearer
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"] ?? "SuperClaveSecretaGestorTurnoEscuela2026SecureKey12345!";
 
@@ -40,12 +39,16 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-// 3. Inyección de Dependencias (Repositorios y Servicios)
+// 3. InyecciÃ³n de Dependencias (Repositorios y Servicios)
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<ITutorRepository, TutorRepository>();
 builder.Services.AddScoped<IPorteroRepository, PorteroRepository>();
 builder.Services.AddScoped<ISecretarioRepository, SecretarioRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAlumnoRepository, AlumnoRepository>();
+builder.Services.AddScoped<IAlumnoService, AlumnoService>();
+builder.Services.AddScoped<ICursoEscolarRepository, CursoEscolarRepository>();
+builder.Services.AddScoped<ICursoEscolarService, CursoEscolarService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -64,35 +67,9 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// 5. Mapear Endpoints de Autenticación
+// 5. Mapear Endpoints de AutenticaciÃ³n
 app.MapAuthEndpoints();
-
-app.Run();
-=======
-using GTE.WebAPI;
-using GTE.Application.Services;
-using GTE.Data;
-
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-// Add Dependency Injection
-builder.Services.AddScoped<IAlumnoRepository, AlumnoRepository>();
-builder.Services.AddScoped<IAlumnoService, AlumnoService>();
-builder.Services.AddScoped<ICursoEscolarRepository, CursoEscolarRepository>();
-builder.Services.AddScoped<ICursoEscolarService, CursoEscolarService>();
-
-var app = builder.Build();
-
-app.UseSwagger();
-app.UseSwaggerUI();
-
-// Map endpoints
 app.MapAlumnoEndpoints();
 app.MapCursoEscolarEndpoints();
 
 app.Run();
->>>>>>> 1194efef233d2fe95e39f88eb2d8ef8f1afabda0

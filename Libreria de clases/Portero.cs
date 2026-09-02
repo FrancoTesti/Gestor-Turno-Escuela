@@ -1,8 +1,4 @@
-<<<<<<< HEAD
     using System;
-=======
-﻿using System;
->>>>>>> 1194efef233d2fe95e39f88eb2d8ef8f1afabda0
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,11 +10,8 @@ namespace GTE.Dominio
     {
         public string PuertaAsignada { get; private set; }
 
-<<<<<<< HEAD
         private Portero() : base() { }
 
-=======
->>>>>>> 1194efef233d2fe95e39f88eb2d8ef8f1afabda0
         public Portero(string nombre, string puerta, Usuario usuario) : base(nombre, usuario)
         {
             SetPuertaAsignada(puerta);

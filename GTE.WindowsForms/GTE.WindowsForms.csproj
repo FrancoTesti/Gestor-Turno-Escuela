@@ -12,4 +12,10 @@
     <None Remove="NewFile1.txt" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GTE.Clients\GTE.Clients.csproj" />
+    <ProjectReference Include="..\GTE.DTOs\GTE.DTOs.csproj" />
+    <ProjectReference Include="..\GTE.Auth.WindowsForms\GTE.Auth.WindowsForms.csproj" />
+  </ItemGroup>
+
 </Project>

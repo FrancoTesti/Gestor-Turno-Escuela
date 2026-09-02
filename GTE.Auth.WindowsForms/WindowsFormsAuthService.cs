@@ -1,4 +1,4 @@
-﻿using GTE.Clients;
+using GTE.Clients;
 using GTE.DTOs;
 using System;
 using System.Threading.Tasks;
@@ -51,8 +51,8 @@ namespace GTE.Auth.WindowsForms
                 var authClient = new AuthApiClient();
                 var response = await authClient.LoginAsync(new LoginRequest
                 {
-                    Username = username,
-                    Password = password
+                    NombreUsuario = username,
+                    Contrasena = password
                 });
 
                 if (response != null && response.Exito)

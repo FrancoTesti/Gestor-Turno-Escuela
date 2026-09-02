@@ -19,4 +19,8 @@
     <None Remove="NewFile6.txt" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GTE.DTOs\GTE.DTOs.csproj" />
+  </ItemGroup>
+
 </Project>

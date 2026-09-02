@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +12,8 @@ namespace GTE.Dominio
         public int IdAlumno { get; set; }
         public string DescripcionActividad { get; set; } = string.Empty;
         public TimeSpan HoraSalidaEspecial { get; set; }
+
+        public HorarioEspecial() { }
 
         public HorarioEspecial(int idHorario, int idAlu, string desc, TimeSpan horaSalidaEsp)
         {
