@@ -1,5 +1,8 @@
 ﻿using GTE.Application.Services;
+using GTE.Data;
+using GTE.Dominio;
 using GTE.DTOs;
+using Microsoft.EntityFrameworkCore;
 
 namespace GTE.WebAPI
 {
@@ -91,6 +94,41 @@ namespace GTE.WebAPI
             })
             .WithName("GetAlumnosAutorizadosByTutor")
             .Produces<List<AlumnoDTO>>(StatusCodes.Status200OK)
+            .WithOpenApi()
+            .RequireAuthorization();
+
+            app.MapGet("/tutores", async (ITutorRepository tutorRepo) =>
+            {
+                var tutores = await tutorRepo.GetAllAsync();
+                return Results.Ok(tutores.Select(t => new TutorDTO
+                {
+                    IdTutor = t.IdTutor,
+                    Nombre = t.Nombre,
+                    Apellido = t.Apellido,
+                    Dni = t.Dni,
+                    Parentesco = t.Parentesco,
+                    Telefono = t.Telefono,
+                    TieneRestriccion = t.TieneRestriccion
+                }).ToList());
+            })
+            .WithName("GetAllTutores")
+            .Produces<List<TutorDTO>>(StatusCodes.Status200OK)
+            .WithOpenApi()
+            .RequireAuthorization();
+
+            app.MapGet("/personal", async (GTEContext db) =>
+            {
+                var lista = await db.Personal.ToListAsync();
+                var dtos = lista.Select(p => new PorteroDTO
+                {
+                    IdPersonal = p.IdPersonal,
+                    Nombre = p.Nombre,
+                    PuertaAsignada = p is Portero portero ? portero.PuertaAsignada : "Secretaría"
+                }).ToList();
+                return Results.Ok(dtos);
+            })
+            .WithName("GetAllPersonal")
+            .Produces<List<PorteroDTO>>(StatusCodes.Status200OK)
             .WithOpenApi()
             .RequireAuthorization();
         }

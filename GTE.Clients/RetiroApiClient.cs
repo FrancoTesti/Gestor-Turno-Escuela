@@ -123,5 +123,35 @@ namespace GTE.Clients
             }
             throw new Exception("Error al obtener los alumnos autorizados del tutor.");
         }
+
+        public async Task<List<TutorDTO>> GetTutoresAsync()
+        {
+            await EnsureAuthenticatedAsync();
+            using var client = await CreateHttpClientAsync();
+
+            var response = await client.GetAsync("tutores");
+            await HandleUnauthorizedResponseAsync(response);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<List<TutorDTO>>() ?? new List<TutorDTO>();
+            }
+            return new List<TutorDTO>();
+        }
+
+        public async Task<List<PorteroDTO>> GetPersonalAsync()
+        {
+            await EnsureAuthenticatedAsync();
+            using var client = await CreateHttpClientAsync();
+
+            var response = await client.GetAsync("personal");
+            await HandleUnauthorizedResponseAsync(response);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<List<PorteroDTO>>() ?? new List<PorteroDTO>();
+            }
+            return new List<PorteroDTO>();
+        }
     }
 }
