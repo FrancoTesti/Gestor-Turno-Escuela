@@ -1,0 +1,151 @@
+@page "/alumnos"
+@attribute [Authorize(Roles = "Secretario,Portero")]
+@inject AlumnoApiClient AlumnosClient
+@inject CursoEscolarApiClient CursosClient
+
+<h3>Gestión de Alumnos</h3>
+
+<AuthorizeView Roles="Secretario">
+    <Authorized>
+        <button class="btn btn-primary mb-3" @onclick="AbrirModalNuevo">Nuevo Alumno</button>
+    </Authorized>
+</AuthorizeView>
+
+@if (alumnos == null) { <p><em>Cargando...</em></p> }
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre y Apellido</th>
+                <th>Grado y Curso</th>
+                <th>Turno</th>
+                <th>Estado</th>
+                <AuthorizeView Roles="Secretario">
+                    <Authorized><th>Acciones</th></Authorized>
+                </AuthorizeView>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var a in alumnos)
+            {
+                <tr>
+                    <td>@a.Nombre @a.Apellido</td>
+                    <td>@a.Grado @a.Curso</td>
+                    <td>@a.Turno</td>
+                    <td>@a.Estado</td>
+                    <AuthorizeView Roles="Secretario">
+                        <Authorized>
+                            <td>
+                                <button class="btn btn-warning btn-sm" @onclick="() => AbrirModalEditar(a)">Editar</button>
+                                <button class="btn btn-danger btn-sm" @onclick="() => Eliminar(a.IdAlumno)">Borrar</button>
+                            </td>
+                        </Authorized>
+                    </AuthorizeView>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (mostrarModal)
+{
+    <div class="modal fade show d-block" style="background: rgba(0,0,0,0.5);">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@(alumnoEditando.IdAlumno == 0 ? "Nuevo Alumno" : "Editar Alumno")</h5>
+                    <button type="button" class="btn-close" @onclick="CerrarModal"></button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="alumnoEditando" OnValidSubmit="Guardar">
+                        <div class="mb-3">
+                            <label>Nombre</label>
+                            <InputText @bind-Value="alumnoEditando.Nombre" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label>Apellido</label>
+                            <InputText @bind-Value="alumnoEditando.Apellido" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label>Curso Asignado</label>
+                            <InputSelect @bind-Value="alumnoEditando.IdCurso" class="form-control">
+                                <option value="0">-- Seleccionar Curso --</option>
+                                @if (cursos != null)
+                                {
+                                    @foreach (var c in cursos)
+                                    {
+                                        <option value="@c.IdCurso">@c.Grado @c.Curso (@c.Turno)</option>
+                                    }
+                                }
+                            </InputSelect>
+                        </div>
+                        <div class="mb-3">
+                            <label>Estado</label>
+                            <InputSelect @bind-Value="alumnoEditando.Estado" class="form-control">
+                                <option value="Activo">Activo</option>
+                                <option value="Inactivo">Inactivo</option>
+                                <option value="Suspendido">Suspendido</option>
+                            </InputSelect>
+                        </div>
+                        <div class="mt-4 text-end">
+                            <button type="button" class="btn btn-secondary me-2" @onclick="CerrarModal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<AlumnoDTO>? alumnos;
+    private List<CursoEscolarDTO>? cursos;
+    private AlumnoDTO alumnoEditando = new();
+    private bool mostrarModal;
+
+    protected override async Task OnInitializedAsync() 
+    {
+        await CargarDatos();
+        cursos = (await CursosClient.GetAllAsync()).ToList();
+    }
+    
+    private async Task CargarDatos() => alumnos = (await AlumnosClient.GetAllAsync()).ToList();
+
+    private void AbrirModalNuevo() { alumnoEditando = new AlumnoDTO { Estado = "Activo" }; mostrarModal = true; }
+    
+    private void AbrirModalEditar(AlumnoDTO alumno) 
+    { 
+        alumnoEditando = new AlumnoDTO 
+        { 
+            IdAlumno = alumno.IdAlumno, 
+            Nombre = alumno.Nombre, 
+            Apellido = alumno.Apellido, 
+            IdCurso = alumno.IdCurso,
+            Estado = alumno.Estado
+        }; 
+        mostrarModal = true; 
+    }
+    
+    private void CerrarModal() => mostrarModal = false;
+
+    private async Task Guardar()
+    {
+        if (alumnoEditando.IdCurso == 0) return; // Validación simple
+
+        if (alumnoEditando.IdAlumno == 0) 
+            await AlumnosClient.AddAsync(alumnoEditando);
+        else 
+            await AlumnosClient.UpdateAsync(alumnoEditando);
+            
+        mostrarModal = false;
+        await CargarDatos();
+    }
+    
+    private async Task Eliminar(int id) 
+    { 
+        await AlumnosClient.DeleteAsync(id); 
+        await CargarDatos(); 
+    }
+}
