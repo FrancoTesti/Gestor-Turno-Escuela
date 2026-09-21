@@ -15,7 +15,7 @@ namespace GTE.WebAPI
             .WithName("GetAllCursos")
             .Produces<List<CursoEscolarDTO>>(StatusCodes.Status200OK)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(Politicas.LecturaCursos);
 
             app.MapGet("/cursos/{id:int}", async (int id, ICursoEscolarService service) =>
             {
@@ -26,7 +26,7 @@ namespace GTE.WebAPI
             .Produces<CursoEscolarDTO>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(Politicas.LecturaCursos);
 
             app.MapPost("/cursos", async (CursoEscolarDTO dto, ICursoEscolarService service) =>
             {
@@ -44,7 +44,7 @@ namespace GTE.WebAPI
             .Produces<CursoEscolarDTO>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(Politicas.SoloSecretario);
 
             app.MapPut("/cursos", async (CursoEscolarDTO dto, ICursoEscolarService service) =>
             {
@@ -63,7 +63,7 @@ namespace GTE.WebAPI
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(Politicas.SoloSecretario);
 
             app.MapDelete("/cursos/{id:int}", async (int id, ICursoEscolarService service) =>
             {
@@ -74,7 +74,7 @@ namespace GTE.WebAPI
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(Politicas.SoloSecretario);
         }
     }
 }

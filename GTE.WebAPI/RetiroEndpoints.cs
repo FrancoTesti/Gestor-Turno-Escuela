@@ -18,7 +18,7 @@ namespace GTE.WebAPI
             .WithName("GetAllRetiros")
             .Produces<List<RetiroDTO>>(StatusCodes.Status200OK)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(Politicas.GestionRetiros);
 
             app.MapGet("/retiros/{id:int}", async (int id, IRetiroService service) =>
             {
@@ -29,7 +29,7 @@ namespace GTE.WebAPI
             .Produces<RetiroDTO>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(Politicas.GestionRetiros);
 
             app.MapPost("/retiros", async (RetiroDTO dto, IRetiroService service) =>
             {
@@ -51,7 +51,7 @@ namespace GTE.WebAPI
             .Produces<RetiroDTO>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(Politicas.GestionRetiros);
 
             app.MapPut("/retiros", async (RetiroDTO dto, IRetiroService service) =>
             {
@@ -74,7 +74,7 @@ namespace GTE.WebAPI
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(Politicas.GestionRetiros);
 
             app.MapDelete("/retiros/{id:int}", async (int id, IRetiroService service) =>
             {
@@ -85,7 +85,7 @@ namespace GTE.WebAPI
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(Politicas.GestionRetiros);
 
             app.MapGet("/tutores/{id:int}/alumnos", async (int id, IRetiroService service) =>
             {
@@ -95,7 +95,7 @@ namespace GTE.WebAPI
             .WithName("GetAlumnosAutorizadosByTutor")
             .Produces<List<AlumnoDTO>>(StatusCodes.Status200OK)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(Politicas.GestionRetiros);
 
             app.MapGet("/tutores", async (ITutorRepository tutorRepo) =>
             {
@@ -114,7 +114,7 @@ namespace GTE.WebAPI
             .WithName("GetAllTutores")
             .Produces<List<TutorDTO>>(StatusCodes.Status200OK)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(Politicas.GestionRetiros);
 
             app.MapGet("/personal", async (GTEContext db) =>
             {
@@ -130,7 +130,7 @@ namespace GTE.WebAPI
             .WithName("GetAllPersonal")
             .Produces<List<PorteroDTO>>(StatusCodes.Status200OK)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(Politicas.GestionRetiros);
         }
     }
 }
