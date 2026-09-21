@@ -15,7 +15,7 @@ namespace GTE.WebAPI
             .WithName("GetAllAlumnos")
             .Produces<List<AlumnoDTO>>(StatusCodes.Status200OK)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(Politicas.LecturaAlumnos);
 
             // Búsqueda con filtros (requisito de la consigna).
             app.MapGet("/alumnos/criteria", async (string? nombre, string? grado, string? curso, string? estado, IAlumnoService service) =>
@@ -27,7 +27,7 @@ namespace GTE.WebAPI
             .WithName("GetAlumnosByCriteria")
             .Produces<List<AlumnoDTO>>(StatusCodes.Status200OK)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(Politicas.LecturaAlumnos);
 
             app.MapGet("/alumnos/{id:int}", async (int id, IAlumnoService service) =>
             {
@@ -38,7 +38,7 @@ namespace GTE.WebAPI
             .Produces<AlumnoDTO>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(Politicas.LecturaAlumnos);
 
             app.MapPost("/alumnos", async (AlumnoDTO dto, IAlumnoService service) =>
             {
@@ -56,7 +56,7 @@ namespace GTE.WebAPI
             .Produces<AlumnoDTO>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(Politicas.SoloSecretario);
 
             app.MapPut("/alumnos", async (AlumnoDTO dto, IAlumnoService service) =>
             {
@@ -75,7 +75,7 @@ namespace GTE.WebAPI
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(Politicas.SoloSecretario);
 
             app.MapDelete("/alumnos/{id:int}", async (int id, IAlumnoService service) =>
             {
@@ -86,7 +86,7 @@ namespace GTE.WebAPI
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(Politicas.SoloSecretario);
         }
     }
 }

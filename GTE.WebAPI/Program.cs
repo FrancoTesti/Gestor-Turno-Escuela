@@ -37,7 +37,8 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddAuthorization();
+// Políticas de autorización por tipo de usuario (ver Politicas.cs).
+builder.Services.AddPoliticasDeAutorizacion();
 
 // 3. Inyección de Dependencias (Repositorios y Servicios)
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
