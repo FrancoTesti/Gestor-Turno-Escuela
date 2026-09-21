@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using GTE.Dominio;
 using Microsoft.Extensions.Configuration;
 using System.IO;
@@ -16,6 +16,7 @@ namespace GTE.Data
         public DbSet<Portero> Porteros { get; set; }
         public DbSet<Autorizacion> Autorizaciones { get; set; }
         public DbSet<Retiro> Retiros { get; set; }
+        public DbSet<DetalleRetiro> DetalleRetiros { get; set; }
         public DbSet<HorarioEspecial> HorariosEspeciales { get; set; }
 
         public GTEContext(DbContextOptions<GTEContext> options) : base(options)
@@ -131,11 +132,40 @@ namespace GTE.Data
             {
                 entity.HasKey(e => e.IdRetiro);
                 entity.Property(e => e.IdRetiro).ValueGeneratedOnAdd();
-                entity.Property(e => e.IdAlumno).IsRequired();
                 entity.Property(e => e.IdTutor).IsRequired();
                 entity.Property(e => e.IdPersonal).IsRequired();
                 entity.Property(e => e.FechaHora).IsRequired();
                 entity.Property(e => e.Observaciones).HasMaxLength(500);
+
+                entity.HasOne(e => e.Tutor)
+                      .WithMany()
+                      .HasForeignKey(e => e.IdTutor)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.Personal)
+                      .WithMany()
+                      .HasForeignKey(e => e.IdPersonal)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(e => e.Detalles)
+                      .WithOne()
+                      .HasForeignKey(e => e.IdRetiro)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<DetalleRetiro>(entity =>
+            {
+                entity.HasKey(e => e.IdDetalleRetiro);
+                entity.Property(e => e.IdDetalleRetiro).ValueGeneratedOnAdd();
+                entity.Property(e => e.IdRetiro).IsRequired();
+                entity.Property(e => e.IdAlumno).IsRequired();
+                entity.Property(e => e.HoraSalida).IsRequired();
+                entity.Property(e => e.Estado).IsRequired().HasMaxLength(50);
+
+                entity.HasOne(e => e.Alumno)
+                      .WithMany()
+                      .HasForeignKey(e => e.IdAlumno)
+                      .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<HorarioEspecial>(entity =>

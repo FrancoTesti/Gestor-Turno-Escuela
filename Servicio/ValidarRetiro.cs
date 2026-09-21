@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using GTE.Dominio;
 
@@ -44,14 +44,15 @@ namespace GTE.Application.Services
             int idPers,
             string obs = "")
         {
-            return new Retiro(
+            var retiro = new Retiro(
                 0,
-                idAlu,
                 idTutor,
                 idPers,
                 DateTime.Now,
                 obs
             );
+            retiro.AgregarDetalle(new DetalleRetiro(idAlu, DateTime.Now.TimeOfDay, "Retirado"));
+            return retiro;
         }
     }
 }
