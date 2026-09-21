@@ -48,7 +48,23 @@ namespace GTE.WindowsForms
 
         private async void CursoEscolarListaForm_Load(object sender, EventArgs e)
         {
+            await AplicarPermisosSegunRol();
             await RefreshGrid();
+        }
+
+        /// <summary>
+        /// Oculta las acciones que el rol del usuario no puede realizar.
+        /// La restricción real la aplica la API; esto evita ofrecer botones
+        /// que terminarían en un error de permisos.
+        /// </summary>
+        private async Task AplicarPermisosSegunRol()
+        {
+            string? rol = await AuthServiceProvider.Instance.GetRoleAsync();
+            bool puedeAdministrar = PermisosDeUsuario.PuedeAdministrarCursos(rol);
+
+            btnNuevo.Visible = puedeAdministrar;
+            btnEditar.Visible = puedeAdministrar;
+            btnEliminar.Visible = puedeAdministrar;
         }
 
         private async Task RefreshGrid()
