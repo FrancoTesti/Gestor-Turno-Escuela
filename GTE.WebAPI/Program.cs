@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using GTE.Application.Services;
 using GTE.Data;
 using GTE.WebAPI;
@@ -49,6 +49,9 @@ builder.Services.AddScoped<IAlumnoRepository, AlumnoRepository>();
 builder.Services.AddScoped<IAlumnoService, AlumnoService>();
 builder.Services.AddScoped<ICursoEscolarRepository, CursoEscolarRepository>();
 builder.Services.AddScoped<ICursoEscolarService, CursoEscolarService>();
+builder.Services.AddScoped<IAutorizacionRepository, AutorizacionRepository>();
+builder.Services.AddScoped<IRetiroRepository, RetiroRepository>();
+builder.Services.AddScoped<IRetiroService, RetiroService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -76,5 +79,6 @@ app.UseAuthorization();
 app.MapAuthEndpoints();
 app.MapAlumnoEndpoints();
 app.MapCursoEscolarEndpoints();
+app.MapRetiroEndpoints();
 
 app.Run();

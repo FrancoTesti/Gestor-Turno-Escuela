@@ -58,6 +58,46 @@ IF COL_LENGTH('Alumnos', 'Curso') IS NOT NULL
 
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_Alumnos_IdCurso' AND object_id = OBJECT_ID('Alumnos'))
     CREATE INDEX IX_Alumnos_IdCurso ON Alumnos(IdCurso);");
+
+            // Migración para maestro-detalle de Retiros:
+            // 1. Si la tabla Retiros tiene la columna IdAlumno:
+            //    - Si la tabla Retiros contiene datos, se detiene y avisa.
+            //    - Si está vacía, se elimina la columna IdAlumno.
+            await context.Database.ExecuteSqlRawAsync(@"
+IF OBJECT_ID('Retiros', 'U') IS NOT NULL AND COL_LENGTH('Retiros', 'IdAlumno') IS NOT NULL
+BEGIN
+    IF EXISTS (SELECT 1 FROM Retiros)
+        THROW 51001, 'La tabla Retiros contiene registros previos del modelo anterior. Deteniendo la migración para evitar pérdida de datos.', 1;
+
+    DECLARE @FkName nvarchar(200);
+    SELECT @FkName = name FROM sys.foreign_keys
+    WHERE parent_object_id = OBJECT_ID('Retiros') AND referenced_object_id = OBJECT_ID('Alumnos');
+    IF @FkName IS NOT NULL
+        EXEC('ALTER TABLE Retiros DROP CONSTRAINT ' + @FkName);
+
+    ALTER TABLE Retiros DROP COLUMN IdAlumno;
+END;");
+
+            // 2. Crear la tabla DetalleRetiros si no existe
+            await context.Database.ExecuteSqlRawAsync(@"
+IF OBJECT_ID('DetalleRetiros', 'U') IS NULL
+BEGIN
+    CREATE TABLE DetalleRetiros (
+        IdDetalleRetiro int IDENTITY(1,1) NOT NULL PRIMARY KEY,
+        IdRetiro int NOT NULL,
+        IdAlumno int NOT NULL,
+        HoraSalida time NOT NULL,
+        Estado nvarchar(50) NOT NULL,
+        CONSTRAINT FK_DetalleRetiros_Retiros_IdRetiro FOREIGN KEY (IdRetiro) REFERENCES Retiros(IdRetiro) ON DELETE CASCADE,
+        CONSTRAINT FK_DetalleRetiros_Alumnos_IdAlumno FOREIGN KEY (IdAlumno) REFERENCES Alumnos(IdAlumno)
+    );
+END;
+
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_DetalleRetiros_IdRetiro' AND object_id = OBJECT_ID('DetalleRetiros'))
+    CREATE INDEX IX_DetalleRetiros_IdRetiro ON DetalleRetiros(IdRetiro);
+
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_DetalleRetiros_IdAlumno' AND object_id = OBJECT_ID('DetalleRetiros'))
+    CREATE INDEX IX_DetalleRetiros_IdAlumno ON DetalleRetiros(IdAlumno);");
         }
     }
 }
