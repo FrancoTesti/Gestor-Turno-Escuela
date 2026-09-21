@@ -1,0 +1,135 @@
+@page "/cursos"
+@attribute [Authorize]
+@inject CursoEscolarApiClient CursosClient
+
+<h3>Cursos Escolares</h3>
+
+<AuthorizeView Roles="Secretario">
+    <Authorized>
+        <button class="btn btn-primary mb-3" @onclick="AbrirModalNuevo">Nuevo Curso</button>
+    </Authorized>
+</AuthorizeView>
+
+@if (cursos == null) { <p><em>Cargando...</em></p> }
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Grado</th><th>Curso</th><th>Turno</th><th>Horario Salida</th>
+                <AuthorizeView Roles="Secretario">
+                    <Authorized><th>Acciones</th></Authorized>
+                </AuthorizeView>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in cursos)
+            {
+                <tr>
+                    <td>@c.Grado</td><td>@c.Curso</td><td>@c.Turno</td><td>@c.HorarioSalida</td>
+                    <AuthorizeView Roles="Secretario">
+                        <Authorized>
+                            <td>
+                                <button class="btn btn-warning btn-sm" @onclick="() => AbrirModalEditar(c)">Editar</button>
+                                <button class="btn btn-danger btn-sm" @onclick="() => Eliminar(c.IdCurso)">Borrar</button>
+                            </td>
+                        </Authorized>
+                    </AuthorizeView>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (mostrarModal)
+{
+    <div class="modal fade show d-block" style="background: rgba(0,0,0,0.5);">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@(cursoEditando.IdCurso == 0 ? "Nuevo Curso" : "Editar Curso")</h5>
+                    <button type="button" class="btn-close" @onclick="CerrarModal"></button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="cursoEditando" OnValidSubmit="Guardar">
+                        <div class="mb-3">
+                            <label>Grado</label>
+                            <InputText @bind-Value="cursoEditando.Grado" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label>Curso (Ej: A, B)</label>
+                            <InputText @bind-Value="cursoEditando.Curso" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label>Turno</label>
+                            <InputSelect @bind-Value="cursoEditando.Turno" class="form-control">
+                                <option value="Mañana">Mañana</option>
+                                <option value="Tarde">Tarde</option>
+                                <option value="Noche">Noche</option>
+                            </InputSelect>
+                        </div>
+                        <div class="mb-3">
+                            <label>Horario Salida</label>
+                            <input type="time" class="form-control" value="@HorarioSalidaString" @onchange="@(e => HorarioSalidaString = e.Value?.ToString() ?? "")" />
+                        </div>
+                        <div class="mt-4 text-end">
+                            <button type="button" class="btn btn-secondary me-2" @onclick="CerrarModal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<CursoEscolarDTO>? cursos;
+    private CursoEscolarDTO cursoEditando = new();
+    private bool mostrarModal;
+
+    // Propiedad auxiliar para el TimeSpan (HorarioSalida)
+    private string HorarioSalidaString
+    {
+        get => cursoEditando.HorarioSalida.ToString(@"hh\:mm");
+        set { if (TimeSpan.TryParse(value, out var ts)) cursoEditando.HorarioSalida = ts; }
+    }
+
+    protected override async Task OnInitializedAsync() => await CargarDatos();
+    
+    private async Task CargarDatos() => cursos = (await CursosClient.GetAllAsync()).ToList();
+
+    private void AbrirModalNuevo() { cursoEditando = new CursoEscolarDTO { Turno = "Mañana" }; mostrarModal = true; }
+    
+    private void AbrirModalEditar(CursoEscolarDTO curso) 
+    { 
+        cursoEditando = new CursoEscolarDTO 
+        { 
+            IdCurso = curso.IdCurso, 
+            Grado = curso.Grado, 
+            Curso = curso.Curso, 
+            Turno = curso.Turno, 
+            HorarioSalida = curso.HorarioSalida 
+        }; 
+        mostrarModal = true; 
+    }
+    
+    private void CerrarModal() => mostrarModal = false;
+
+    private async Task Guardar()
+    {
+        if (cursoEditando.IdCurso == 0) 
+            await CursosClient.AddAsync(cursoEditando);
+        else 
+            await CursosClient.UpdateAsync(cursoEditando);
+            
+        mostrarModal = false;
+        await CargarDatos();
+    }
+    
+    private async Task Eliminar(int id) 
+    { 
+        await CursosClient.DeleteAsync(id); 
+        await CargarDatos(); 
+    }
+}

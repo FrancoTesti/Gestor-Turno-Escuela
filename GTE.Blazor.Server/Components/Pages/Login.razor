@@ -1,0 +1,39 @@
+@page "/login"
+@layout EmptyLayout
+@inject IAuthService AuthService
+@inject NavigationManager Nav
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <h3 class="mb-3">Iniciar Sesión</h3>
+            <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
+                <div class="mb-3">
+                    <label>Usuario</label>
+                    <InputText @bind-Value="loginModel.Username" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label>Contraseña</label>
+                    <InputText @bind-Value="loginModel.Password" type="password" class="form-control" />
+                </div>
+                @if (error) { <div class="alert alert-danger">Credenciales inválidas</div> }
+                <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    private LoginData loginModel = new();
+    private bool error;
+
+    private async Task HandleLogin()
+    {
+        try {
+            if (await AuthService.LoginAsync(loginModel.Username, loginModel.Password))
+                Nav.NavigateTo("/");
+            else error = true;
+        } catch { error = true; }
+    }
+    public class LoginData { public string Username { get; set; } = ""; public string Password { get; set; } = ""; }
+}
