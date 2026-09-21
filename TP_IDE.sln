@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTE.Auth.WindowsForms", "GT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTE.Tests", "GTE.Tests\GTE.Tests.csproj", "{16751E57-FA1A-48CE-846F-72F1081296F8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTE.Blazor.Server", "GTE.Blazor.Server\GTE.Blazor.Server.csproj", "{83A6C618-0337-444C-974B-B062813D9CE1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -153,6 +155,18 @@ Global
 		{16751E57-FA1A-48CE-846F-72F1081296F8}.Release|x64.Build.0 = Release|Any CPU
 		{16751E57-FA1A-48CE-846F-72F1081296F8}.Release|x86.ActiveCfg = Release|Any CPU
 		{16751E57-FA1A-48CE-846F-72F1081296F8}.Release|x86.Build.0 = Release|Any CPU
+		{83A6C618-0337-444C-974B-B062813D9CE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83A6C618-0337-444C-974B-B062813D9CE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83A6C618-0337-444C-974B-B062813D9CE1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{83A6C618-0337-444C-974B-B062813D9CE1}.Debug|x64.Build.0 = Debug|Any CPU
+		{83A6C618-0337-444C-974B-B062813D9CE1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{83A6C618-0337-444C-974B-B062813D9CE1}.Debug|x86.Build.0 = Debug|Any CPU
+		{83A6C618-0337-444C-974B-B062813D9CE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83A6C618-0337-444C-974B-B062813D9CE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83A6C618-0337-444C-974B-B062813D9CE1}.Release|x64.ActiveCfg = Release|Any CPU
+		{83A6C618-0337-444C-974B-B062813D9CE1}.Release|x64.Build.0 = Release|Any CPU
+		{83A6C618-0337-444C-974B-B062813D9CE1}.Release|x86.ActiveCfg = Release|Any CPU
+		{83A6C618-0337-444C-974B-B062813D9CE1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

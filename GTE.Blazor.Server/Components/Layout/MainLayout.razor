@@ -1,0 +1,35 @@
+@inherits LayoutComponentBase
+@inject IAuthService AuthService
+@inject NavigationManager Nav
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4 auth">
+            <AuthorizeView>
+                <Authorized>
+                    <span class="me-3">Hola, @context.User.Identity?.Name!</span>
+                    <button class="btn btn-outline-danger btn-sm" @onclick="CerrarSesion">Cerrar Sesión</button>
+                </Authorized>
+                <NotAuthorized>
+                    <a href="login" class="btn btn-outline-primary btn-sm">Iniciar Sesión</a>
+                </NotAuthorized>
+            </AuthorizeView>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+@code {
+    private async Task CerrarSesion()
+    {
+        await AuthService.LogoutAsync();
+        Nav.NavigateTo("/login", forceLoad: true);
+    }
+}
