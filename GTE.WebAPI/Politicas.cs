@@ -26,6 +26,9 @@ public static class Politicas
     /// <summary>Pueden consultar cursos los tres tipos de usuario.</summary>
     public const string LecturaCursos = "LecturaCursos";
 
+    /// <summary>Pueden operar los retiros el Secretario y el Portero.</summary>
+    public const string GestionRetiros = "GestionRetiros";
+
     /// <summary>
     /// Registra las políticas de autorización de la aplicación.
     /// </summary>
@@ -41,6 +44,9 @@ public static class Politicas
 
             options.AddPolicy(LecturaCursos, politica =>
                 politica.RequireRole(RolSecretario, RolPortero, RolTutor));
+
+            options.AddPolicy(GestionRetiros, politica =>
+                politica.RequireRole(RolSecretario, RolPortero));
         });
 
         return services;
