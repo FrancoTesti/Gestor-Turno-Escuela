@@ -1,9 +1,15 @@
 @page "/alumnos"
 @attribute [Authorize(Roles = "Secretario,Portero")]
+@inherits PaginaConApiBase
 @inject AlumnoApiClient AlumnosClient
 @inject CursoEscolarApiClient CursosClient
 
 <h3>Gestión de Alumnos</h3>
+
+@if (!string.IsNullOrEmpty(MensajeError))
+{
+    <div class="alert alert-danger">@MensajeError</div>
+}
 
 <AuthorizeView Roles="Secretario">
     <Authorized>
@@ -83,9 +89,9 @@ else
                         <div class="mb-3">
                             <label>Estado</label>
                             <InputSelect @bind-Value="alumnoEditando.Estado" class="form-control">
-                                <option value="Activo">Activo</option>
-                                <option value="Inactivo">Inactivo</option>
-                                <option value="Suspendido">Suspendido</option>
+                                <option value="Presente">Presente</option>
+                                <option value="Retirado">Retirado</option>
+                                <option value="Ausente">Ausente</option>
                             </InputSelect>
                         </div>
                         <div class="mt-4 text-end">
@@ -105,47 +111,60 @@ else
     private AlumnoDTO alumnoEditando = new();
     private bool mostrarModal;
 
-    protected override async Task OnInitializedAsync() 
+    protected override async Task OnInitializedAsync()
     {
-        await CargarDatos();
-        cursos = (await CursosClient.GetAllAsync()).ToList();
+        await EjecutarAsync(async () =>
+        {
+            await CargarDatos();
+            cursos = (await CursosClient.GetAllAsync()).ToList();
+        });
     }
-    
+
     private async Task CargarDatos() => alumnos = (await AlumnosClient.GetAllAsync()).ToList();
 
-    private void AbrirModalNuevo() { alumnoEditando = new AlumnoDTO { Estado = "Activo" }; mostrarModal = true; }
-    
-    private void AbrirModalEditar(AlumnoDTO alumno) 
-    { 
-        alumnoEditando = new AlumnoDTO 
-        { 
-            IdAlumno = alumno.IdAlumno, 
-            Nombre = alumno.Nombre, 
-            Apellido = alumno.Apellido, 
+    private void AbrirModalNuevo()
+    {
+        alumnoEditando = new AlumnoDTO { Estado = "Presente" };
+        mostrarModal = true;
+    }
+
+    private void AbrirModalEditar(AlumnoDTO alumno)
+    {
+        alumnoEditando = new AlumnoDTO
+        {
+            IdAlumno = alumno.IdAlumno,
+            Nombre = alumno.Nombre,
+            Apellido = alumno.Apellido,
             IdCurso = alumno.IdCurso,
             Estado = alumno.Estado
-        }; 
-        mostrarModal = true; 
+        };
+        mostrarModal = true;
     }
-    
+
     private void CerrarModal() => mostrarModal = false;
 
     private async Task Guardar()
     {
         if (alumnoEditando.IdCurso == 0) return; // Validación simple
 
-        if (alumnoEditando.IdAlumno == 0) 
-            await AlumnosClient.AddAsync(alumnoEditando);
-        else 
-            await AlumnosClient.UpdateAsync(alumnoEditando);
-            
-        mostrarModal = false;
-        await CargarDatos();
+        await EjecutarAsync(async () =>
+        {
+            if (alumnoEditando.IdAlumno == 0)
+                await AlumnosClient.AddAsync(alumnoEditando);
+            else
+                await AlumnosClient.UpdateAsync(alumnoEditando);
+
+            mostrarModal = false;
+            await CargarDatos();
+        });
     }
-    
-    private async Task Eliminar(int id) 
-    { 
-        await AlumnosClient.DeleteAsync(id); 
-        await CargarDatos(); 
+
+    private async Task Eliminar(int id)
+    {
+        await EjecutarAsync(async () =>
+        {
+            await AlumnosClient.DeleteAsync(id);
+            await CargarDatos();
+        });
     }
 }
