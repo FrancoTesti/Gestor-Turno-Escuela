@@ -74,3 +74,40 @@ internal sealed class TutorRepositoryFalso : ITutorRepository
 
     public Task<bool> DniExisteAsync(string dni, int? excludeId = null) => Task.FromResult(false);
 }
+
+/// <summary>
+/// Servicio de autenticación configurable, para representar la sesión de un
+/// circuito de Blazor o la de un usuario del escritorio.
+/// </summary>
+internal sealed class AutenticacionConfigurable : GTE.Clients.IAuthService
+{
+    private readonly bool _sesionIniciada;
+
+    public AutenticacionConfigurable(bool sesionIniciada, string? token = null)
+    {
+        _sesionIniciada = sesionIniciada;
+        Token = token ?? (sesionIniciada ? "token" : null);
+    }
+
+    public string? Token { get; private set; }
+
+    public Task<bool> IsAuthenticatedAsync() => Task.FromResult(_sesionIniciada && Token is not null);
+
+    public Task<string?> GetTokenAsync() => Task.FromResult(Token);
+
+    public Task<string?> GetUsernameAsync() => Task.FromResult<string?>("usuario");
+
+    public Task<string?> GetRoleAsync() => Task.FromResult<string?>("Secretario");
+
+    public Task<string?> GetNombreCompletoAsync() => Task.FromResult<string?>("Usuario de Prueba");
+
+    public Task<bool> LoginAsync(string username, string password) => Task.FromResult(true);
+
+    public Task LogoutAsync()
+    {
+        Token = null;
+        return Task.CompletedTask;
+    }
+
+    public Task CheckTokenExpirationAsync() => Task.CompletedTask;
+}

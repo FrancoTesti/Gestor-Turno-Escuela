@@ -21,9 +21,29 @@ namespace GTE.Clients
     {
         protected const string BaseUrl = "http://localhost:5117/";
 
+        private readonly IAuthService? _authService;
+
+        protected BaseApiClient()
+        {
+        }
+
+        protected BaseApiClient(IAuthService authService)
+        {
+            _authService = authService;
+        }
+
+        /// <summary>
+        /// Sesión que usa el cliente. Cuando la interfaz la inyecta se usa esa
+        /// instancia, que es la correcta en Blazor porque cada circuito tiene
+        /// su propia sesión. Si no se inyectó, se recurre al proveedor global
+        /// que registran las aplicaciones que crean los clientes con new, como
+        /// el escritorio.
+        /// </summary>
+        protected IAuthService Autenticacion => _authService ?? AuthServiceProvider.Instance;
+
         protected async Task EnsureAuthenticatedAsync()
         {
-            var auth = AuthServiceProvider.Instance;
+            var auth = Autenticacion;
             if (!await auth.IsAuthenticatedAsync())
                 throw new Exception("Usuario no autenticado.");
             await auth.CheckTokenExpirationAsync();
@@ -32,7 +52,7 @@ namespace GTE.Clients
         protected async Task<HttpClient> CreateHttpClientAsync()
         {
             var client = new HttpClient { BaseAddress = new Uri(BaseUrl) };
-            var auth = AuthServiceProvider.Instance;
+            var auth = Autenticacion;
             var token = await auth.GetTokenAsync();
             if (!string.IsNullOrEmpty(token))
             {
@@ -47,7 +67,7 @@ namespace GTE.Clients
             {
                 // El token venció o no es válido: se cierra la sesión para obligar
                 // a volver a iniciar sesión.
-                await AuthServiceProvider.Instance.LogoutAsync();
+                await Autenticacion.LogoutAsync();
                 throw new SesionExpiradaException("La sesión expiró. Vuelva a iniciar sesión.");
             }
 
