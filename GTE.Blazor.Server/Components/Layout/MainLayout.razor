@@ -30,6 +30,10 @@
     private async Task CerrarSesion()
     {
         await AuthService.LogoutAsync();
-        Nav.NavigateTo("/login", forceLoad: true);
+
+        // Navegación dentro del circuito: recargar la página entera mientras el
+        // usuario no autorizado también redirige dejaba la aplicación en un
+        // estado inconsistente y el siguiente login no funcionaba.
+        Nav.NavigateTo("/login");
     }
 }

@@ -10,6 +10,14 @@ namespace GTE.Clients
 {
     public class RetiroApiClient : BaseApiClient
     {
+        public RetiroApiClient()
+        {
+        }
+
+        public RetiroApiClient(IAuthService authService) : base(authService)
+        {
+        }
+
         public async Task<List<RetiroDTO>> GetAllAsync()
         {
             await EnsureAuthenticatedAsync();

@@ -9,6 +9,14 @@ namespace GTE.Clients
 {
     public class CursoEscolarApiClient : BaseApiClient
     {
+        public CursoEscolarApiClient()
+        {
+        }
+
+        public CursoEscolarApiClient(IAuthService authService) : base(authService)
+        {
+        }
+
         public async Task<List<CursoEscolarDTO>> GetAllAsync()
         {
             await EnsureAuthenticatedAsync();

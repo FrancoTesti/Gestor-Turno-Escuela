@@ -1,8 +1,14 @@
 @page "/cursos"
 @attribute [Authorize]
+@inherits PaginaConApiBase
 @inject CursoEscolarApiClient CursosClient
 
 <h3>Cursos Escolares</h3>
+
+@if (!string.IsNullOrEmpty(MensajeError))
+{
+    <div class="alert alert-danger">@MensajeError</div>
+}
 
 <AuthorizeView Roles="Secretario">
     <Authorized>
@@ -95,41 +101,54 @@ else
         set { if (TimeSpan.TryParse(value, out var ts)) cursoEditando.HorarioSalida = ts; }
     }
 
-    protected override async Task OnInitializedAsync() => await CargarDatos();
-    
+    protected override async Task OnInitializedAsync()
+    {
+        await EjecutarAsync(CargarDatos);
+    }
+
     private async Task CargarDatos() => cursos = (await CursosClient.GetAllAsync()).ToList();
 
-    private void AbrirModalNuevo() { cursoEditando = new CursoEscolarDTO { Turno = "Mañana" }; mostrarModal = true; }
-    
-    private void AbrirModalEditar(CursoEscolarDTO curso) 
-    { 
-        cursoEditando = new CursoEscolarDTO 
-        { 
-            IdCurso = curso.IdCurso, 
-            Grado = curso.Grado, 
-            Curso = curso.Curso, 
-            Turno = curso.Turno, 
-            HorarioSalida = curso.HorarioSalida 
-        }; 
-        mostrarModal = true; 
+    private void AbrirModalNuevo()
+    {
+        cursoEditando = new CursoEscolarDTO { Turno = "Mañana" };
+        mostrarModal = true;
     }
-    
+
+    private void AbrirModalEditar(CursoEscolarDTO curso)
+    {
+        cursoEditando = new CursoEscolarDTO
+        {
+            IdCurso = curso.IdCurso,
+            Grado = curso.Grado,
+            Curso = curso.Curso,
+            Turno = curso.Turno,
+            HorarioSalida = curso.HorarioSalida
+        };
+        mostrarModal = true;
+    }
+
     private void CerrarModal() => mostrarModal = false;
 
     private async Task Guardar()
     {
-        if (cursoEditando.IdCurso == 0) 
-            await CursosClient.AddAsync(cursoEditando);
-        else 
-            await CursosClient.UpdateAsync(cursoEditando);
-            
-        mostrarModal = false;
-        await CargarDatos();
+        await EjecutarAsync(async () =>
+        {
+            if (cursoEditando.IdCurso == 0)
+                await CursosClient.AddAsync(cursoEditando);
+            else
+                await CursosClient.UpdateAsync(cursoEditando);
+
+            mostrarModal = false;
+            await CargarDatos();
+        });
     }
-    
-    private async Task Eliminar(int id) 
-    { 
-        await CursosClient.DeleteAsync(id); 
-        await CargarDatos(); 
+
+    private async Task Eliminar(int id)
+    {
+        await EjecutarAsync(async () =>
+        {
+            await CursosClient.DeleteAsync(id);
+            await CargarDatos();
+        });
     }
 }

@@ -1,9 +1,48 @@
 @page "/alumnos"
 @attribute [Authorize(Roles = "Secretario,Portero")]
+@inherits PaginaConApiBase
 @inject AlumnoApiClient AlumnosClient
 @inject CursoEscolarApiClient CursosClient
 
 <h3>Gestión de Alumnos</h3>
+
+@if (!string.IsNullOrEmpty(MensajeError))
+{
+    <div class="alert alert-danger">@MensajeError</div>
+}
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h6 class="card-subtitle mb-3 text-muted">Buscar por filtros</h6>
+        <div class="row g-2 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label">Nombre o apellido</label>
+                <input class="form-control" @bind="filtro.Nombre" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Grado</label>
+                <input class="form-control" @bind="filtro.Grado" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">División</label>
+                <input class="form-control" @bind="filtro.Curso" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Estado</label>
+                <select class="form-control" @bind="filtro.Estado">
+                    <option value="">Todos</option>
+                    <option value="Presente">Presente</option>
+                    <option value="Retirado">Retirado</option>
+                    <option value="Ausente">Ausente</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-primary" @onclick="Buscar">Buscar</button>
+                <button class="btn btn-outline-secondary" @onclick="LimpiarFiltros">Limpiar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <AuthorizeView Roles="Secretario">
     <Authorized>
@@ -12,6 +51,10 @@
 </AuthorizeView>
 
 @if (alumnos == null) { <p><em>Cargando...</em></p> }
+else if (alumnos.Count == 0)
+{
+    <p>No se encontraron alumnos con esos filtros.</p>
+}
 else
 {
     <table class="table table-striped">
@@ -83,9 +126,9 @@ else
                         <div class="mb-3">
                             <label>Estado</label>
                             <InputSelect @bind-Value="alumnoEditando.Estado" class="form-control">
-                                <option value="Activo">Activo</option>
-                                <option value="Inactivo">Inactivo</option>
-                                <option value="Suspendido">Suspendido</option>
+                                <option value="Presente">Presente</option>
+                                <option value="Retirado">Retirado</option>
+                                <option value="Ausente">Ausente</option>
                             </InputSelect>
                         </div>
                         <div class="mt-4 text-end">
@@ -103,49 +146,76 @@ else
     private List<AlumnoDTO>? alumnos;
     private List<CursoEscolarDTO>? cursos;
     private AlumnoDTO alumnoEditando = new();
+    private FiltroDeAlumnos filtro = new();
     private bool mostrarModal;
 
-    protected override async Task OnInitializedAsync() 
+    protected override async Task OnInitializedAsync()
     {
-        await CargarDatos();
-        cursos = (await CursosClient.GetAllAsync()).ToList();
+        await EjecutarAsync(async () =>
+        {
+            await CargarDatos();
+            cursos = (await CursosClient.GetAllAsync()).ToList();
+        });
     }
-    
+
     private async Task CargarDatos() => alumnos = (await AlumnosClient.GetAllAsync()).ToList();
 
-    private void AbrirModalNuevo() { alumnoEditando = new AlumnoDTO { Estado = "Activo" }; mostrarModal = true; }
-    
-    private void AbrirModalEditar(AlumnoDTO alumno) 
-    { 
-        alumnoEditando = new AlumnoDTO 
-        { 
-            IdAlumno = alumno.IdAlumno, 
-            Nombre = alumno.Nombre, 
-            Apellido = alumno.Apellido, 
+    /// <summary>
+    /// Busca con los filtros cargados. Recorre el endpoint de criterios, que es
+    /// el que resuelve la consulta con ADO.NET del lado de la API.
+    /// </summary>
+    private async Task Buscar() => await EjecutarAsync(async () =>
+        alumnos = (await AlumnosClient.GetByCriteriaAsync(filtro.ToCriteria())).ToList());
+
+    private async Task LimpiarFiltros()
+    {
+        filtro.Limpiar();
+        await EjecutarAsync(CargarDatos);
+    }
+
+    private void AbrirModalNuevo()
+    {
+        alumnoEditando = new AlumnoDTO { Estado = "Presente" };
+        mostrarModal = true;
+    }
+
+    private void AbrirModalEditar(AlumnoDTO alumno)
+    {
+        alumnoEditando = new AlumnoDTO
+        {
+            IdAlumno = alumno.IdAlumno,
+            Nombre = alumno.Nombre,
+            Apellido = alumno.Apellido,
             IdCurso = alumno.IdCurso,
             Estado = alumno.Estado
-        }; 
-        mostrarModal = true; 
+        };
+        mostrarModal = true;
     }
-    
+
     private void CerrarModal() => mostrarModal = false;
 
     private async Task Guardar()
     {
         if (alumnoEditando.IdCurso == 0) return; // Validación simple
 
-        if (alumnoEditando.IdAlumno == 0) 
-            await AlumnosClient.AddAsync(alumnoEditando);
-        else 
-            await AlumnosClient.UpdateAsync(alumnoEditando);
-            
-        mostrarModal = false;
-        await CargarDatos();
+        await EjecutarAsync(async () =>
+        {
+            if (alumnoEditando.IdAlumno == 0)
+                await AlumnosClient.AddAsync(alumnoEditando);
+            else
+                await AlumnosClient.UpdateAsync(alumnoEditando);
+
+            mostrarModal = false;
+            await CargarDatos();
+        });
     }
-    
-    private async Task Eliminar(int id) 
-    { 
-        await AlumnosClient.DeleteAsync(id); 
-        await CargarDatos(); 
+
+    private async Task Eliminar(int id)
+    {
+        await EjecutarAsync(async () =>
+        {
+            await AlumnosClient.DeleteAsync(id);
+            await CargarDatos();
+        });
     }
 }

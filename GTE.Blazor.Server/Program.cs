@@ -15,19 +15,18 @@ builder.Services.AddScoped<AuthApiClient>();
 builder.Services.AddScoped<CursoEscolarApiClient>();
 builder.Services.AddScoped<AlumnoApiClient>();
 
-// registro la autenticaci髇
+// registro la autenticaci贸n
 builder.Services.AddScoped<BlazorAuthService>();
 builder.Services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<BlazorAuthService>());
 builder.Services.AddScoped<IAuthService>(sp => sp.GetRequiredService<BlazorAuthService>());
 
 var app = builder.Build();
 
-// hack del TP para inyectar la instancia de Auth a los clientes est醫icos
-using (var scope = app.Services.CreateScope())
-{
-    var authSvc = scope.ServiceProvider.GetRequiredService<IAuthService>();
-    AuthServiceProvider.Register(authSvc);
-}
+// Los clientes de la API reciben el servicio de autenticaci贸n por inyecci贸n de
+// dependencias, as铆 que cada circuito de Blazor usa su propia sesi贸n.
+// No hay que registrar nada en el proveedor global desde ac谩: hacerlo dejar铆a
+// una instancia de otro alcance, que nunca recibe el token del usuario y hace
+// que las llamadas a la API fallen como "no autenticado".
 
 if (!app.Environment.IsDevelopment())
 {
