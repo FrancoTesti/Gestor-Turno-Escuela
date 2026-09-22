@@ -11,6 +11,39 @@
     <div class="alert alert-danger">@MensajeError</div>
 }
 
+<div class="card mb-3">
+    <div class="card-body">
+        <h6 class="card-subtitle mb-3 text-muted">Buscar por filtros</h6>
+        <div class="row g-2 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label">Nombre o apellido</label>
+                <input class="form-control" @bind="filtro.Nombre" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Grado</label>
+                <input class="form-control" @bind="filtro.Grado" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">División</label>
+                <input class="form-control" @bind="filtro.Curso" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Estado</label>
+                <select class="form-control" @bind="filtro.Estado">
+                    <option value="">Todos</option>
+                    <option value="Presente">Presente</option>
+                    <option value="Retirado">Retirado</option>
+                    <option value="Ausente">Ausente</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-primary" @onclick="Buscar">Buscar</button>
+                <button class="btn btn-outline-secondary" @onclick="LimpiarFiltros">Limpiar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <AuthorizeView Roles="Secretario">
     <Authorized>
         <button class="btn btn-primary mb-3" @onclick="AbrirModalNuevo">Nuevo Alumno</button>
@@ -18,6 +51,10 @@
 </AuthorizeView>
 
 @if (alumnos == null) { <p><em>Cargando...</em></p> }
+else if (alumnos.Count == 0)
+{
+    <p>No se encontraron alumnos con esos filtros.</p>
+}
 else
 {
     <table class="table table-striped">
@@ -109,6 +146,7 @@ else
     private List<AlumnoDTO>? alumnos;
     private List<CursoEscolarDTO>? cursos;
     private AlumnoDTO alumnoEditando = new();
+    private FiltroDeAlumnos filtro = new();
     private bool mostrarModal;
 
     protected override async Task OnInitializedAsync()
@@ -121,6 +159,19 @@ else
     }
 
     private async Task CargarDatos() => alumnos = (await AlumnosClient.GetAllAsync()).ToList();
+
+    /// <summary>
+    /// Busca con los filtros cargados. Recorre el endpoint de criterios, que es
+    /// el que resuelve la consulta con ADO.NET del lado de la API.
+    /// </summary>
+    private async Task Buscar() => await EjecutarAsync(async () =>
+        alumnos = (await AlumnosClient.GetByCriteriaAsync(filtro.ToCriteria())).ToList());
+
+    private async Task LimpiarFiltros()
+    {
+        filtro.Limpiar();
+        await EjecutarAsync(CargarDatos);
+    }
 
     private void AbrirModalNuevo()
     {
