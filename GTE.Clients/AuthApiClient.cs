@@ -8,14 +8,6 @@ namespace GTE.Clients
 {
     public class AuthApiClient : BaseApiClient
     {
-        public AuthApiClient()
-        {
-        }
-
-        public AuthApiClient(IAuthService authService) : base(authService)
-        {
-        }
-
         public async Task<LoginResponse?> LoginAsync(LoginRequest request)
         {
             using var client = new HttpClient();
