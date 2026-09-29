@@ -68,7 +68,8 @@ namespace GTE.WindowsForms
                 btnAutorizaciones.Visible = true;
                 btnReporteAlumnos.Visible = true;
                 btnReporteRetiros.Visible = true;
-                btnOtros.Visible = false;
+                btnOtros.Visible = true;
+                btnOtros.Text = "Horarios Esp.";
             }
             else if (role == "Portero")
             {
@@ -79,7 +80,8 @@ namespace GTE.WindowsForms
                 btnAutorizaciones.Visible = true;
                 btnReporteAlumnos.Visible = true;
                 btnReporteRetiros.Visible = true;
-                btnOtros.Visible = false;
+                btnOtros.Visible = true;
+                btnOtros.Text = "Horarios Esp.";
             }
             else
             {
@@ -151,7 +153,7 @@ namespace GTE.WindowsForms
         private void btnOtros_Click(object sender, EventArgs e)
         {
             HighlightButton(btnOtros);
-            MessageBox.Show("Funcionalidad en construcción para este rol.", "En construcción", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            ShowChildForm(new HorarioEspecialListaForm());
         }
 
         private void HighlightButton(Button activeBtn)
@@ -181,3 +183,6 @@ namespace GTE.WindowsForms
         }
     }
 }
+
+
+

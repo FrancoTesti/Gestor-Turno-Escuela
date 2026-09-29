@@ -1,0 +1,165 @@
+@page "/horariosespeciales"
+@attribute [Authorize]
+@inherits PaginaConApiBase
+@inject GTE.Clients.HorarioEspecialApiClient HorarioClient
+@inject GTE.Clients.AlumnoApiClient AlumnoClient
+@using GTE.DTOs
+
+<h3>Horarios Especiales</h3>
+
+@if (!string.IsNullOrEmpty(MensajeError))
+{
+    <div class="alert alert-danger">@MensajeError</div>
+}
+
+<AuthorizeView Roles="Secretario, Portero">
+    <Authorized>
+        <button class="btn btn-primary mb-3" @onclick="AbrirModalNuevo">Nuevo Horario Especial</button>
+    </Authorized>
+</AuthorizeView>
+
+@if (horarios == null) { <p><em>Cargando...</em></p> }
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Alumno</th><th>Descripción</th><th>Hora Salida</th>
+                <AuthorizeView Roles="Secretario, Portero">
+                    <Authorized><th>Acciones</th></Authorized>
+                </AuthorizeView>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var h in horarios)
+            {
+                <tr>
+                    <td>@h.AlumnoNombreCompleto</td><td>@h.DescripcionActividad</td><td>@h.HoraSalidaEspecial</td>
+                    <AuthorizeView Roles="Secretario, Portero">
+                        <Authorized>
+                            <td>
+                                <button class="btn btn-warning btn-sm" @onclick="() => AbrirModalEditar(h)">Editar</button>
+                                <button class="btn btn-danger btn-sm" @onclick="() => Eliminar(h.IdHorarioEspecial)">Borrar</button>
+                            </td>
+                        </Authorized>
+                    </AuthorizeView>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (mostrarModal)
+{
+    <div class="modal fade show d-block" style="background: rgba(0,0,0,0.5);">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@(horarioEditando.IdHorarioEspecial == 0 ? "Nuevo Horario" : "Editar Horario")</h5>
+                    <button type="button" class="btn-close" @onclick="CerrarModal"></button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="horarioEditando" OnValidSubmit="Guardar">
+                        <div class="mb-3">
+                            <label>Alumno</label>
+                            <InputSelect @bind-Value="horarioEditando.IdAlumno" class="form-control">
+                                <option value="0">-- Seleccione Alumno --</option>
+                                @if (alumnos != null)
+                                {
+                                    foreach (var alu in alumnos)
+                                    {
+                                        <option value="@alu.IdAlumno">@alu.Nombre @alu.Apellido</option>
+                                    }
+                                }
+                            </InputSelect>
+                        </div>
+                        <div class="mb-3">
+                            <label>Descripción</label>
+                            <InputText @bind-Value="horarioEditando.DescripcionActividad" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label>Horario Salida</label>
+                            <input type="time" class="form-control" value="@HorarioSalidaString" @onchange="@(e => HorarioSalidaString = e.Value?.ToString() ?? "")" />
+                        </div>
+                        <div class="mt-4 text-end">
+                            <button type="button" class="btn btn-secondary me-2" @onclick="CerrarModal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<HorarioEspecialDTO>? horarios;
+    private List<AlumnoDTO>? alumnos;
+    private HorarioEspecialDTO horarioEditando = new();
+    private bool mostrarModal;
+
+    private string HorarioSalidaString
+    {
+        get => horarioEditando.HoraSalidaEspecial.ToString(@"hh\:mm");
+        set { if (TimeSpan.TryParse(value, out var ts)) horarioEditando.HoraSalidaEspecial = ts; }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await EjecutarAsync(async () => {
+            alumnos = (await AlumnoClient.GetAllAsync()).ToList();
+            await CargarDatos();
+        });
+    }
+
+    private async Task CargarDatos() => horarios = (await HorarioClient.GetAllAsync()).ToList();
+
+    private void AbrirModalNuevo()
+    {
+        horarioEditando = new HorarioEspecialDTO { HoraSalidaEspecial = new TimeSpan(12, 0, 0) };
+        mostrarModal = true;
+    }
+
+    private void AbrirModalEditar(HorarioEspecialDTO h)
+    {
+        horarioEditando = new HorarioEspecialDTO
+        {
+            IdHorarioEspecial = h.IdHorarioEspecial,
+            IdAlumno = h.IdAlumno,
+            DescripcionActividad = h.DescripcionActividad,
+            HoraSalidaEspecial = h.HoraSalidaEspecial
+        };
+        mostrarModal = true;
+    }
+
+    private void CerrarModal() => mostrarModal = false;
+
+    private async Task Guardar()
+    {
+        if (horarioEditando.IdAlumno == 0)
+        {
+            MensajeError = "Seleccione un alumno";
+            return;
+        }
+
+        await EjecutarAsync(async () =>
+        {
+            if (horarioEditando.IdHorarioEspecial == 0)
+                await HorarioClient.AddAsync(horarioEditando);
+            else
+                await HorarioClient.UpdateAsync(horarioEditando);
+
+            mostrarModal = false;
+            await CargarDatos();
+        });
+    }
+
+    private async Task Eliminar(int id)
+    {
+        await EjecutarAsync(async () =>
+        {
+            await HorarioClient.DeleteAsync(id);
+            await CargarDatos();
+        });
+    }
+}

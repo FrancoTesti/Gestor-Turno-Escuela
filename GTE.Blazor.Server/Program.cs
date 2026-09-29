@@ -17,6 +17,8 @@ builder.Services.AddScoped<AlumnoApiClient>();
 builder.Services.AddScoped<TutorApiClient>();
 builder.Services.AddScoped<AutorizacionApiClient>();
 builder.Services.AddScoped<RetiroApiClient>();
+builder.Services.AddScoped<ReporteApiClient>();
+builder.Services.AddScoped<HorarioEspecialApiClient>();
 
 // registro la autenticación
 builder.Services.AddScoped<BlazorAuthService>();
