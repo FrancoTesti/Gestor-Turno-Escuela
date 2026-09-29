@@ -86,9 +86,9 @@ namespace Servicio
         private void Validar(HorarioEspecialDTO dto)
         {
             if (string.IsNullOrWhiteSpace(dto.DescripcionActividad))
-                throw new Exception("La descripciÛn no puede estar vacÌa.");
+                throw new Exception("La descripci√≥n no puede estar vac√≠a.");
             if (dto.HoraSalidaEspecial == default)
-                throw new Exception("Debe especificar una hora de salida v·lida.");
+                throw new Exception("Debe especificar una hora de salida v√°lida.");
         }
     }
 }

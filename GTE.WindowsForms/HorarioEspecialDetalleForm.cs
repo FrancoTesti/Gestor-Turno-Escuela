@@ -35,7 +35,7 @@ namespace GTE.WindowsForms
             this.cmbAlumno.DropDownStyle = ComboBoxStyle.DropDownList;
 
             this.lblDesc.Location = new Point(20, 60);
-            this.lblDesc.Text = "Descripción:";
+            this.lblDesc.Text = "DescripciÃ³n:";
             this.txtDesc.Location = new Point(120, 60);
             this.txtDesc.Size = new Size(200, 25);
 

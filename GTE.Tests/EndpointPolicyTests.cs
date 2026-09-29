@@ -30,6 +30,12 @@ public class EndpointPolicyTests
     [InlineData("DELETE", "/retiros/{id:int}", Politicas.GestionRetiros)]
     [InlineData("GET", "/tutores/{id:int}/alumnos", Politicas.GestionRetiros)]
     [InlineData("GET", "/personal", Politicas.GestionRetiros)]
+    [InlineData("GET", "/autorizaciones", Politicas.LecturaAlumnos)]
+    [InlineData("GET", "/autorizaciones/{id:int}", Politicas.LecturaAlumnos)]
+    [InlineData("GET", "/autorizaciones/tutor/{tutorId:int}", Politicas.LecturaAlumnos)]
+    [InlineData("POST", "/autorizaciones", Politicas.SoloSecretario)]
+    [InlineData("DELETE", "/autorizaciones/{id:int}", Politicas.SoloSecretario)]
+    [InlineData("DELETE", "/autorizaciones/tutor/{tutorId:int}/alumno/{alumnoId:int}", Politicas.SoloSecretario)]
     [InlineData("GET", "/reportes/alumnos-por-curso", Politicas.LecturaAlumnos)]
     [InlineData("GET", "/reportes/retiros", Politicas.LecturaAlumnos)]
     [InlineData("GET", "/tutores", Politicas.LecturaAlumnos)]
@@ -90,6 +96,7 @@ public class EndpointPolicyTests
         builder.Services.AddSingleton<IAlumnoService, AlumnoServiceFalso>();
         builder.Services.AddSingleton<ICursoEscolarService, CursoEscolarServiceFalso>();
         builder.Services.AddSingleton<IRetiroService, RetiroServiceFalso>();
+        builder.Services.AddSingleton<IAutorizacionService, AutorizacionServiceFalso>();
         builder.Services.AddSingleton<IReporteService, ReporteServiceFalso>();
         builder.Services.AddSingleton<ITutorService, TutorServiceFalso>();
         builder.Services.AddSingleton<ITutorRepository, TutorRepositoryFalso>();
@@ -99,6 +106,7 @@ public class EndpointPolicyTests
         WebApplication app = builder.Build();
         app.MapAlumnoEndpoints();
         app.MapCursoEscolarEndpoints();
+        app.MapAutorizacionEndpoints();
         app.MapRetiroEndpoints();
         app.MapReporteEndpoints();
         app.MapTutorEndpoints();

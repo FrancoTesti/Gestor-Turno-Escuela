@@ -32,6 +32,7 @@ namespace GTE.WindowsForms
             StyleMenuButton(btnCursos);
             StyleMenuButton(btnRetiros);
             StyleMenuButton(btnTutores);
+            StyleMenuButton(btnAutorizaciones);
             StyleMenuButton(btnReporteAlumnos);
             StyleMenuButton(btnReporteRetiros);
             StyleMenuButton(btnOtros);
@@ -63,28 +64,24 @@ namespace GTE.WindowsForms
                 btnAlumnos.Visible = true;
                 btnCursos.Visible = true;
                 btnRetiros.Visible = true;
-<<<<<<< HEAD
-                btnOtros.Visible = true; btnOtros.Text = "Horarios Esp.";
-=======
                 btnTutores.Visible = true;
+                btnAutorizaciones.Visible = true;
                 btnReporteAlumnos.Visible = true;
                 btnReporteRetiros.Visible = true;
-                btnOtros.Visible = false;
->>>>>>> origin/main
+                btnOtros.Visible = true;
+                btnOtros.Text = "Horarios Esp.";
             }
             else if (role == "Portero")
             {
                 btnAlumnos.Visible = false;
                 btnCursos.Visible = false;
                 btnRetiros.Visible = true;
-<<<<<<< HEAD
-                btnOtros.Visible = true; btnOtros.Text = "Horarios Esp.";
-=======
                 btnTutores.Visible = false;
+                btnAutorizaciones.Visible = true;
                 btnReporteAlumnos.Visible = true;
                 btnReporteRetiros.Visible = true;
-                btnOtros.Visible = false;
->>>>>>> origin/main
+                btnOtros.Visible = true;
+                btnOtros.Text = "Horarios Esp.";
             }
             else
             {
@@ -92,6 +89,7 @@ namespace GTE.WindowsForms
                 btnCursos.Visible = true;
                 btnRetiros.Visible = false;
                 btnTutores.Visible = false;
+                btnAutorizaciones.Visible = false;
                 btnReporteAlumnos.Visible = false;
                 btnReporteRetiros.Visible = false;
                 btnOtros.Visible = false;
@@ -134,6 +132,12 @@ namespace GTE.WindowsForms
             ShowChildForm(new TutorListaForm());
         }
 
+        private void btnAutorizaciones_Click(object sender, EventArgs e)
+        {
+            HighlightButton(btnAutorizaciones);
+            ShowChildForm(new AutorizacionListaForm());
+        }
+
         private void btnReporteAlumnos_Click(object sender, EventArgs e)
         {
             HighlightButton(btnReporteAlumnos);
@@ -158,6 +162,7 @@ namespace GTE.WindowsForms
             btnCursos.BackColor = Color.FromArgb(33, 37, 41);
             btnRetiros.BackColor = Color.FromArgb(33, 37, 41);
             btnTutores.BackColor = Color.FromArgb(33, 37, 41);
+            btnAutorizaciones.BackColor = Color.FromArgb(33, 37, 41);
             btnReporteAlumnos.BackColor = Color.FromArgb(33, 37, 41);
             btnReporteRetiros.BackColor = Color.FromArgb(33, 37, 41);
             btnOtros.BackColor = Color.FromArgb(33, 37, 41);
@@ -167,7 +172,7 @@ namespace GTE.WindowsForms
 
         private async void btnLogOut_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("¿Está seguro de que desea cerrar sesión?", "Cerrar Sesión",
+            if (MessageBox.Show("Â¿EstÃ¡ seguro de que desea cerrar sesiÃ³n?", "Cerrar SesiÃ³n",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 var authService = AuthServiceProvider.Instance;

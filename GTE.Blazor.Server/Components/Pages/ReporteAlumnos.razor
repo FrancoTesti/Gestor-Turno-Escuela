@@ -82,12 +82,12 @@ else
 }
 
 @code {
-    private List<ReporteAlumnosPorCursoDTO>? datos;
+    private List<AlumnosPorCursoDTO>? datos;
 
     protected override async Task OnInitializedAsync()
     {
         await EjecutarAsync(async () => {
-            datos = await ReporteClient.ObtenerAlumnosPorCursoAsync();
+            datos = await ReporteClient.GetAlumnosPorCursoAsync();
         });
     }
 }

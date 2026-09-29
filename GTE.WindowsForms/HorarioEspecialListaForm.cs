@@ -31,7 +31,7 @@ namespace GTE.WindowsForms
             this.lblTitle.Location = new Point(12, 9);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new Size(300, 30);
-            this.lblTitle.Text = "Gestión de Horarios Especiales";
+            this.lblTitle.Text = "GestiÃ³n de Horarios Especiales";
             
             // btnNuevo
             this.btnNuevo.Location = new Point(17, 50);
@@ -152,7 +152,7 @@ namespace GTE.WindowsForms
             if (dgvHorarios.SelectedRows.Count == 0) return;
             var obj = dgvHorarios.SelectedRows[0].DataBoundItem as HorarioEspecialDTO;
             if (obj == null) return;
-            if (MessageBox.Show("¿Eliminar horario?", "Confirmar", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("Â¿Eliminar horario?", "Confirmar", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 await _apiClient.DeleteAsync(obj.IdHorarioEspecial);
                 await RefreshGrid();

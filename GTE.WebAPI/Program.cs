@@ -51,16 +51,13 @@ builder.Services.AddScoped<IAlumnoService, AlumnoService>();
 builder.Services.AddScoped<ICursoEscolarRepository, CursoEscolarRepository>();
 builder.Services.AddScoped<ICursoEscolarService, CursoEscolarService>();
 builder.Services.AddScoped<IAutorizacionRepository, AutorizacionRepository>();
+builder.Services.AddScoped<IAutorizacionService, AutorizacionService>();
 builder.Services.AddScoped<IRetiroRepository, RetiroRepository>();
 builder.Services.AddScoped<IRetiroService, RetiroService>();
-<<<<<<< HEAD
-builder.Services.AddScoped<Servicio.IReporteService, Servicio.ReporteService>();
-builder.Services.AddScoped<GTE.Data.IHorarioEspecialRepository, GTE.Data.HorarioEspecialRepository>();
-builder.Services.AddScoped<Servicio.IHorarioEspecialService, Servicio.HorarioEspecialService>();
-=======
 builder.Services.AddScoped<IReporteService, ReporteService>();
 builder.Services.AddScoped<ITutorService, TutorService>();
->>>>>>> origin/main
+builder.Services.AddScoped<GTE.Data.IHorarioEspecialRepository, GTE.Data.HorarioEspecialRepository>();
+builder.Services.AddScoped<Servicio.IHorarioEspecialService, Servicio.HorarioEspecialService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -88,12 +85,10 @@ app.UseAuthorization();
 app.MapAuthEndpoints();
 app.MapAlumnoEndpoints();
 app.MapCursoEscolarEndpoints();
+app.MapAutorizacionEndpoints();
 app.MapRetiroEndpoints();
 app.MapReporteEndpoints();
-<<<<<<< HEAD
 app.MapHorarioEspecialEndpoints();
-=======
 app.MapTutorEndpoints();
->>>>>>> origin/main
 
 app.Run();

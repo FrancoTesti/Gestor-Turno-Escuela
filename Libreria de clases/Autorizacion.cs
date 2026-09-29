@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +17,12 @@ namespace GTE.Dominio
         public Autorizacion(int idAuto, int idAlu, int idTut)
         {
             IdAutorizacion = idAuto;
+            AlumnoId = idAlu;
+            TutorId = idTut;
+        }
+
+        public Autorizacion(int idAlu, int idTut)
+        {
             AlumnoId = idAlu;
             TutorId = idTut;
         }

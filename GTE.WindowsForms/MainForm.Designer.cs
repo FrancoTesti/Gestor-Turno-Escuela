@@ -1,4 +1,4 @@
-﻿namespace GTE.WindowsForms
+namespace GTE.WindowsForms
 {
     partial class MainForm
     {
@@ -21,8 +21,9 @@
             this.lblUserTitle = new System.Windows.Forms.Label();
             this.pnlSidebar = new System.Windows.Forms.Panel();
             this.btnOtros = new System.Windows.Forms.Button();
-            this.btnReporteRetiros = new System.Windows.Forms.Button();
+            this.btnAutorizaciones = new System.Windows.Forms.Button();
             this.btnReporteAlumnos = new System.Windows.Forms.Button();
+            this.btnReporteRetiros = new System.Windows.Forms.Button();
             this.btnRetiros = new System.Windows.Forms.Button();
             this.btnTutores = new System.Windows.Forms.Button();
             this.btnCursos = new System.Windows.Forms.Button();
@@ -80,6 +81,7 @@
             this.pnlSidebar.Controls.Add(this.btnOtros);
             this.pnlSidebar.Controls.Add(this.btnReporteRetiros);
             this.pnlSidebar.Controls.Add(this.btnReporteAlumnos);
+            this.pnlSidebar.Controls.Add(this.btnAutorizaciones);
             this.pnlSidebar.Controls.Add(this.btnRetiros);
             this.pnlSidebar.Controls.Add(this.btnTutores);
             this.pnlSidebar.Controls.Add(this.btnCursos);
@@ -93,36 +95,47 @@
             // btnOtros
             // 
             this.btnOtros.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnOtros.Location = new System.Drawing.Point(0, 300);
+            this.btnOtros.Location = new System.Drawing.Point(0, 350);
             this.btnOtros.Name = "btnOtros";
             this.btnOtros.Size = new System.Drawing.Size(220, 50);
-            this.btnOtros.TabIndex = 3;
+            this.btnOtros.TabIndex = 4;
             this.btnOtros.Text = "Otras Opciones";
             this.btnOtros.UseVisualStyleBackColor = true;
             this.btnOtros.Visible = false;
             this.btnOtros.Click += new System.EventHandler(this.btnOtros_Click);
             // 
-            // btnReporteRetiros
+            // btnAutorizaciones
             // 
-            this.btnReporteRetiros.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnReporteRetiros.Location = new System.Drawing.Point(0, 250);
-            this.btnReporteRetiros.Name = "btnReporteRetiros";
-            this.btnReporteRetiros.Size = new System.Drawing.Size(220, 50);
-            this.btnReporteRetiros.TabIndex = 6;
-            this.btnReporteRetiros.Text = "Reporte de Retiros";
-            this.btnReporteRetiros.UseVisualStyleBackColor = true;
-            this.btnReporteRetiros.Click += new System.EventHandler(this.btnReporteRetiros_Click);
+            this.btnAutorizaciones.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnAutorizaciones.Location = new System.Drawing.Point(0, 200);
+            this.btnAutorizaciones.Name = "btnAutorizaciones";
+            this.btnAutorizaciones.Size = new System.Drawing.Size(220, 50);
+            this.btnAutorizaciones.TabIndex = 7;
+            this.btnAutorizaciones.Text = "Autorizaciones";
+            this.btnAutorizaciones.UseVisualStyleBackColor = true;
+            this.btnAutorizaciones.Click += new System.EventHandler(this.btnAutorizaciones_Click);
             // 
             // btnReporteAlumnos
             // 
             this.btnReporteAlumnos.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnReporteAlumnos.Location = new System.Drawing.Point(0, 200);
+            this.btnReporteAlumnos.Location = new System.Drawing.Point(0, 250);
             this.btnReporteAlumnos.Name = "btnReporteAlumnos";
             this.btnReporteAlumnos.Size = new System.Drawing.Size(220, 50);
-            this.btnReporteAlumnos.TabIndex = 5;
+            this.btnReporteAlumnos.TabIndex = 8;
             this.btnReporteAlumnos.Text = "Reporte de Alumnos";
             this.btnReporteAlumnos.UseVisualStyleBackColor = true;
             this.btnReporteAlumnos.Click += new System.EventHandler(this.btnReporteAlumnos_Click);
+            // 
+            // btnReporteRetiros
+            // 
+            this.btnReporteRetiros.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnReporteRetiros.Location = new System.Drawing.Point(0, 300);
+            this.btnReporteRetiros.Name = "btnReporteRetiros";
+            this.btnReporteRetiros.Size = new System.Drawing.Size(220, 50);
+            this.btnReporteRetiros.TabIndex = 9;
+            this.btnReporteRetiros.Text = "Reporte de Retiros";
+            this.btnReporteRetiros.UseVisualStyleBackColor = true;
+            this.btnReporteRetiros.Click += new System.EventHandler(this.btnReporteRetiros_Click);
             // 
             // btnRetiros
             // 
@@ -200,8 +213,9 @@
         private System.Windows.Forms.Button btnLogOut;
         private System.Windows.Forms.Panel pnlSidebar;
         private System.Windows.Forms.Button btnOtros;
-        private System.Windows.Forms.Button btnReporteRetiros;
+        private System.Windows.Forms.Button btnAutorizaciones;
         private System.Windows.Forms.Button btnReporteAlumnos;
+        private System.Windows.Forms.Button btnReporteRetiros;
         private System.Windows.Forms.Button btnRetiros;
         private System.Windows.Forms.Button btnTutores;
         private System.Windows.Forms.Button btnCursos;

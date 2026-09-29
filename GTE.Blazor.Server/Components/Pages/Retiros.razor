@@ -1,0 +1,473 @@
+@page "/retiros"
+@attribute [Authorize(Roles = "Secretario,Portero")]
+@inherits PaginaConApiBase
+@inject RetiroApiClient RetiroClient
+
+<h3>Gestión de Retiros (Maestro / Detalle)</h3>
+
+@if (!string.IsNullOrEmpty(MensajeError))
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @MensajeError
+        <button type="button" class="btn-close" @onclick="() => MensajeError = string.Empty"></button>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(mensajeExito))
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @mensajeExito
+        <button type="button" class="btn-close" @onclick="() => mensajeExito = string.Empty"></button>
+    </div>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="input-group w-50">
+        <input type="text" class="form-control" placeholder="Buscar por tutor, alumno u observaciones..." @bind="terminoBusqueda" @bind:event="oninput" />
+        <button class="btn btn-outline-secondary" @onclick="() => terminoBusqueda = string.Empty">Limpiar</button>
+    </div>
+    <button class="btn btn-primary" @onclick="AbrirModalNuevo">
+        + Registrar Nuevo Retiro
+    </button>
+</div>
+
+@if (retiros == null)
+{
+    <p><em>Cargando retiros...</em></p>
+}
+else if (RetirosFiltrados.Count == 0)
+{
+    <div class="alert alert-info">No se encontraron retiros registrados.</div>
+}
+else
+{
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-striped table-hover align-middle mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha y Hora</th>
+                    <th>Tutor</th>
+                    <th>Personal (Entrega)</th>
+                    <th>Alumnos Retirados</th>
+                    <th>Observaciones</th>
+                    <th class="text-center" style="width: 160px;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in RetirosFiltrados)
+                {
+                    <tr>
+                        <td><strong>#@r.IdRetiro</strong></td>
+                        <td>@r.FechaHora.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@(r.TutorNombreCompleto ?? $"Tutor #{r.IdTutor}")</td>
+                        <td>@(r.PersonalNombre ?? $"Personal #{r.IdPersonal}")</td>
+                        <td>
+                            <ul class="list-unstyled mb-0">
+                                @foreach (var d in r.Detalles)
+                                {
+                                    <li>
+                                        <span class="badge bg-primary me-1">@(d.AlumnoNombreCompleto ?? $"Alumno #{d.IdAlumno}")</span>
+                                        <small class="text-muted">(@d.HoraSalida.ToString(@"hh\:mm"))</small>
+                                    </li>
+                                }
+                            </ul>
+                        </td>
+                        <td><small>@r.Observaciones</small></td>
+                        <td class="text-center">
+                            <button class="btn btn-outline-warning btn-sm me-1" @onclick="() => AbrirModalEditar(r)" title="Editar">
+                                Editar
+                            </button>
+                            <button class="btn btn-outline-danger btn-sm" @onclick="() => EliminarRetiro(r.IdRetiro)" title="Eliminar">
+                                Borrar
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@if (mostrarModal)
+{
+    <div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.6);">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        @(retiroEditando.IdRetiro == 0 ? "Registrar Nuevo Retiro" : $"Modificar Retiro #{retiroEditando.IdRetiro}")
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" @onclick="CerrarModal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="card mb-3">
+                        <div class="card-header bg-light"><strong>1. Datos de Cabecera (Maestro)</strong></div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Tutor que retira: <span class="text-danger">*</span></label>
+                                    <select class="form-select" @onchange="OnTutorSeleccionadoChanged" value="@retiroEditando.IdTutor">
+                                        <option value="0">-- Seleccione Tutor --</option>
+                                        @foreach (var t in tutores)
+                                        {
+                                            <option value="@t.IdTutor">
+                                                @t.Nombre @t.Apellido (DNI: @t.Dni) @(t.TieneRestriccion ? "⚠️ [CON RESTRICCIÓN]" : "")
+                                            </option>
+                                        }
+                                    </select>
+                                    @if (tutorSeleccionado?.TieneRestriccion == true)
+                                    {
+                                        <div class="text-danger mt-1 small">
+                                            ⚠️ Este tutor posee restricciones legales registradas.
+                                        </div>
+                                    }
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Personal que entrega: <span class="text-danger">*</span></label>
+                                    <select class="form-select" @bind="retiroEditando.IdPersonal">
+                                        <option value="0">-- Seleccione Personal --</option>
+                                        @foreach (var p in listaPersonal)
+                                        {
+                                            <option value="@p.IdPersonal">@p.Nombre (@p.PuertaAsignada)</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Fecha y Hora:</label>
+                                    <input type="datetime-local" class="form-control" value="@FechaHoraString" @onchange="OnFechaHoraChanged" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Observaciones:</label>
+                                    <input type="text" class="form-control" placeholder="Ej: Motivo de retiro, autorización firmada..." @bind="retiroEditando.Observaciones" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3 border-success">
+                        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                            <strong>2. Alumnos a Retirar (Detalle Maestro/Detalle)</strong>
+                            <span class="badge bg-light text-dark">@retiroEditando.Detalles.Count alumno(s)</span>
+                        </div>
+                        <div class="card-body">
+                            @if (retiroEditando.IdTutor <= 0)
+                            {
+                                <div class="alert alert-warning mb-0">
+                                    Debe seleccionar un tutor en la cabecera para ver sus alumnos autorizados.
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="row g-2 align-items-end mb-3">
+                                    <div class="col-md-8">
+                                        <label class="form-label">Alumno Autorizado:</label>
+                                        <select class="form-select" @bind="alumnoIdAAgregar">
+                                            <option value="0">-- Seleccione Alumno Autorizado --</option>
+                                            @foreach (var alu in AlumnosAutorizadosDisponiblesParaAgregar)
+                                            {
+                                                <option value="@alu.IdAlumno">
+                                                    @alu.Nombre @alu.Apellido (@alu.Grado @alu.Curso - Estado: @alu.Estado)
+                                                </option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button class="btn btn-outline-success w-100" @onclick="AgregarAlumnoADetalle" disabled="@(alumnoIdAAgregar <= 0)">
+                                            + Agregar Alumno
+                                        </button>
+                                    </div>
+                                </div>
+
+                                @if (retiroEditando.Detalles.Count == 0)
+                                {
+                                    <div class="alert alert-secondary mb-0">
+                                        No se han agregado alumnos a este retiro. Debe incluir al menos un alumno.
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-sm align-middle">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Alumno</th>
+                                                    <th style="width: 150px;">Hora de Salida</th>
+                                                    <th style="width: 120px;">Estado</th>
+                                                    <th style="width: 80px;" class="text-center">Quitar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var det in retiroEditando.Detalles)
+                                                {
+                                                    <tr>
+                                                        <td><strong>@det.AlumnoNombreCompleto</strong></td>
+                                                        <td>
+                                                            <input type="time" class="form-control form-control-sm" 
+                                                                   value="@det.HoraSalida.ToString(@"hh\:mm")" 
+                                                                   @onchange="@(e => OnHoraSalidaDetalleChanged(det, e.Value?.ToString()))" />
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge bg-warning text-dark">@det.Estado</span>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <button class="btn btn-danger btn-sm py-0 px-2" @onclick="() => QuitarAlumnoDeDetalle(det.IdAlumno)">
+                                                                ✕
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CerrarModal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" @onclick="GuardarRetiro" disabled="@(retiroEditando.Detalles.Count == 0 || retiroEditando.IdTutor <= 0 || retiroEditando.IdPersonal <= 0)">
+                        Guardar Retiro
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<RetiroDTO>? retiros;
+    private List<TutorDTO> tutores = new();
+    private List<PorteroDTO> listaPersonal = new();
+    private List<AlumnoDTO> alumnosAutorizadosDelTutor = new();
+    private RetiroDTO retiroEditando = new();
+    private bool mostrarModal = false;
+    private int alumnoIdAAgregar = 0;
+    private string terminoBusqueda = string.Empty;
+    private string mensajeExito = string.Empty;
+
+    private TutorDTO? tutorSeleccionado => tutores.FirstOrDefault(t => t.IdTutor == retiroEditando.IdTutor);
+
+    private string FechaHoraString
+    {
+        get => retiroEditando.FechaHora.ToString("yyyy-MM-ddTHH:mm");
+        set
+        {
+            if (DateTime.TryParse(value, out var dt))
+                retiroEditando.FechaHora = dt;
+        }
+    }
+
+    private IEnumerable<AlumnoDTO> AlumnosAutorizadosDisponiblesParaAgregar
+    {
+        get
+        {
+            var yaEnDetalle = retiroEditando.Detalles.Select(d => d.IdAlumno).ToHashSet();
+            return alumnosAutorizadosDelTutor.Where(a => !yaEnDetalle.Contains(a.IdAlumno));
+        }
+    }
+
+    private List<RetiroDTO> RetirosFiltrados
+    {
+        get
+        {
+            if (retiros == null) return new List<RetiroDTO>();
+            if (string.IsNullOrWhiteSpace(terminoBusqueda)) return retiros;
+
+            return retiros.Where(r =>
+                (!string.IsNullOrEmpty(r.TutorNombreCompleto) && r.TutorNombreCompleto.Contains(terminoBusqueda, StringComparison.OrdinalIgnoreCase)) ||
+                (!string.IsNullOrEmpty(r.PersonalNombre) && r.PersonalNombre.Contains(terminoBusqueda, StringComparison.OrdinalIgnoreCase)) ||
+                (!string.IsNullOrEmpty(r.Observaciones) && r.Observaciones.Contains(terminoBusqueda, StringComparison.OrdinalIgnoreCase)) ||
+                r.Detalles.Any(d => !string.IsNullOrEmpty(d.AlumnoNombreCompleto) && d.AlumnoNombreCompleto.Contains(terminoBusqueda, StringComparison.OrdinalIgnoreCase))
+            ).ToList();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await EjecutarAsync(async () =>
+        {
+            await CargarRetiros();
+            tutores = await RetiroClient.GetTutoresAsync();
+            listaPersonal = await RetiroClient.GetPersonalAsync();
+        });
+    }
+
+    private async Task CargarRetiros()
+    {
+        retiros = await RetiroClient.GetAllAsync();
+    }
+
+    private void AbrirModalNuevo()
+    {
+        mensajeExito = string.Empty;
+        MensajeError = string.Empty;
+        retiroEditando = new RetiroDTO
+        {
+            FechaHora = DateTime.Now,
+            Detalles = new List<DetalleRetiroDTO>()
+        };
+        alumnosAutorizadosDelTutor = new List<AlumnoDTO>();
+        alumnoIdAAgregar = 0;
+        mostrarModal = true;
+    }
+
+    private async Task AbrirModalEditar(RetiroDTO retiro)
+    {
+        mensajeExito = string.Empty;
+        MensajeError = string.Empty;
+        retiroEditando = new RetiroDTO
+        {
+            IdRetiro = retiro.IdRetiro,
+            IdTutor = retiro.IdTutor,
+            TutorNombreCompleto = retiro.TutorNombreCompleto,
+            IdPersonal = retiro.IdPersonal,
+            PersonalNombre = retiro.PersonalNombre,
+            FechaHora = retiro.FechaHora,
+            Observaciones = retiro.Observaciones,
+            Detalles = retiro.Detalles.Select(d => new DetalleRetiroDTO
+            {
+                IdDetalleRetiro = d.IdDetalleRetiro,
+                IdRetiro = d.IdRetiro,
+                IdAlumno = d.IdAlumno,
+                AlumnoNombreCompleto = d.AlumnoNombreCompleto,
+                HoraSalida = d.HoraSalida,
+                Estado = d.Estado
+            }).ToList()
+        };
+
+        if (retiro.IdTutor > 0)
+        {
+            await CargarAlumnosAutorizados(retiro.IdTutor);
+        }
+        alumnoIdAAgregar = 0;
+        mostrarModal = true;
+    }
+
+    private void CerrarModal() => mostrarModal = false;
+
+    private async Task OnTutorSeleccionadoChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out int id))
+        {
+            retiroEditando.IdTutor = id;
+            retiroEditando.Detalles.Clear();
+            alumnoIdAAgregar = 0;
+            if (id > 0)
+            {
+                await CargarAlumnosAutorizados(id);
+            }
+            else
+            {
+                alumnosAutorizadosDelTutor.Clear();
+            }
+        }
+    }
+
+    private async Task CargarAlumnosAutorizados(int tutorId)
+    {
+        await EjecutarAsync(async () =>
+        {
+            alumnosAutorizadosDelTutor = await RetiroClient.GetAlumnosAutorizadosByTutorAsync(tutorId);
+        });
+    }
+
+    private void OnFechaHoraChanged(ChangeEventArgs e)
+    {
+        if (DateTime.TryParse(e.Value?.ToString(), out var dt))
+        {
+            retiroEditando.FechaHora = dt;
+        }
+    }
+
+    private void OnHoraSalidaDetalleChanged(DetalleRetiroDTO detalle, string? timeStr)
+    {
+        if (TimeSpan.TryParse(timeStr, out var ts))
+        {
+            detalle.HoraSalida = ts;
+        }
+    }
+
+    private void AgregarAlumnoADetalle()
+    {
+        if (alumnoIdAAgregar <= 0) return;
+
+        var alumno = alumnosAutorizadosDelTutor.FirstOrDefault(a => a.IdAlumno == alumnoIdAAgregar);
+        if (alumno == null) return;
+
+        if (retiroEditando.Detalles.Any(d => d.IdAlumno == alumnoIdAAgregar))
+        {
+            MensajeError = "El alumno ya se encuentra en la lista de retiro.";
+            return;
+        }
+
+        retiroEditando.Detalles.Add(new DetalleRetiroDTO
+        {
+            IdAlumno = alumno.IdAlumno,
+            AlumnoNombreCompleto = $"{alumno.Nombre} {alumno.Apellido}",
+            HoraSalida = DateTime.Now.TimeOfDay,
+            Estado = "Retirado"
+        });
+
+        alumnoIdAAgregar = 0;
+    }
+
+    private void QuitarAlumnoDeDetalle(int alumnoId)
+    {
+        retiroEditando.Detalles.RemoveAll(d => d.IdAlumno == alumnoId);
+    }
+
+    private async Task GuardarRetiro()
+    {
+        if (retiroEditando.IdTutor <= 0)
+        {
+            MensajeError = "Debe seleccionar un tutor válido.";
+            return;
+        }
+        if (retiroEditando.IdPersonal <= 0)
+        {
+            MensajeError = "Debe seleccionar un personal válido.";
+            return;
+        }
+        if (retiroEditando.Detalles.Count == 0)
+        {
+            MensajeError = "Debe incluir al menos un alumno en el retiro.";
+            return;
+        }
+
+        await EjecutarAsync(async () =>
+        {
+            if (retiroEditando.IdRetiro == 0)
+            {
+                await RetiroClient.AddAsync(retiroEditando);
+                mensajeExito = "Retiro registrado correctamente.";
+            }
+            else
+            {
+                await RetiroClient.UpdateAsync(retiroEditando);
+                mensajeExito = "Retiro modificado correctamente.";
+            }
+
+            mostrarModal = false;
+            await CargarRetiros();
+        });
+    }
+
+    private async Task EliminarRetiro(int id)
+    {
+        await EjecutarAsync(async () =>
+        {
+            bool ok = await RetiroClient.DeleteAsync(id);
+            if (ok)
+            {
+                mensajeExito = $"Retiro #{id} eliminado correctamente.";
+                await CargarRetiros();
+            }
+            else
+            {
+                MensajeError = $"No se pudo eliminar el retiro #{id}.";
+            }
+        });
+    }
+}

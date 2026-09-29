@@ -24,7 +24,7 @@ else
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Alumno</th><th>Descripción</th><th>Hora Salida</th>
+                <th>Alumno</th><th>DescripciÃ³n</th><th>Hora Salida</th>
                 <AuthorizeView Roles="Secretario, Portero">
                     <Authorized><th>Acciones</th></Authorized>
                 </AuthorizeView>
@@ -74,7 +74,7 @@ else
                             </InputSelect>
                         </div>
                         <div class="mb-3">
-                            <label>Descripción</label>
+                            <label>DescripciÃ³n</label>
                             <InputText @bind-Value="horarioEditando.DescripcionActividad" class="form-control" />
                         </div>
                         <div class="mb-3">

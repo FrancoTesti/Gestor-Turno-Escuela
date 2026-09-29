@@ -14,12 +14,11 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://
 builder.Services.AddScoped<AuthApiClient>();
 builder.Services.AddScoped<CursoEscolarApiClient>();
 builder.Services.AddScoped<AlumnoApiClient>();
-<<<<<<< HEAD
+builder.Services.AddScoped<TutorApiClient>();
+builder.Services.AddScoped<AutorizacionApiClient>();
+builder.Services.AddScoped<RetiroApiClient>();
 builder.Services.AddScoped<ReporteApiClient>();
 builder.Services.AddScoped<HorarioEspecialApiClient>();
-=======
-builder.Services.AddScoped<TutorApiClient>();
->>>>>>> origin/main
 
 // registro la autenticación
 builder.Services.AddScoped<BlazorAuthService>();

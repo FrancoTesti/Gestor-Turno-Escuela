@@ -21,7 +21,16 @@
                 </NavLink>
             </div>
             <div class="nav-item px-3">
-<<<<<<< HEAD
+                <NavLink class="nav-link" href="tutores">
+                    <span class="bi bi-people-fill-nav-menu" aria-hidden="true"></span> Tutores
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="retiros">
+                    <span class="bi bi-box-arrow-right-nav-menu" aria-hidden="true"></span> Retiros
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
                 <NavLink class="nav-link" href="horariosespeciales">
                     <span class="bi bi-clock-fill-nav-menu" aria-hidden="true"></span> Horarios Esp.
                 </NavLink>
@@ -36,14 +45,14 @@
                     <span class="bi bi-table-nav-menu" aria-hidden="true"></span> Rep. Retiros
                 </NavLink>
             </div>
-=======
-                <NavLink class="nav-link" href="tutores">
-                    <span class="bi bi-people-fill-nav-menu" aria-hidden="true"></span> Tutores
+        </AuthorizeView>
+
+        <AuthorizeView Roles="Secretario">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="autorizaciones">
+                    <span class="bi bi-shield-lock-fill-nav-menu" aria-hidden="true"></span> Autorizaciones
                 </NavLink>
             </div>
-            @* Los retiros (maestro/detalle) se implementan solo en el escritorio,
-               según la consigna de la Entrega 3, así que no tienen página en la web. *@
->>>>>>> origin/main
         </AuthorizeView>
 
         <AuthorizeView>

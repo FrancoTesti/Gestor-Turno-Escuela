@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +18,11 @@ namespace GTE.Data
         public async Task<IEnumerable<Autorizacion>> GetAllAsync()
         {
             return await _context.Autorizaciones.ToListAsync();
+        }
+
+        public async Task<Autorizacion?> GetByIdAsync(int id)
+        {
+            return await _context.Autorizaciones.FindAsync(id);
         }
 
         public async Task<IEnumerable<Autorizacion>> GetByTutorIdAsync(int tutorId)
@@ -40,6 +45,12 @@ namespace GTE.Data
                 .ToListAsync();
         }
 
+        public async Task<Autorizacion?> GetByTutorAndAlumnoAsync(int tutorId, int alumnoId)
+        {
+            return await _context.Autorizaciones
+                .FirstOrDefaultAsync(a => a.TutorId == tutorId && a.AlumnoId == alumnoId);
+        }
+
         public async Task<bool> EstaAutorizadoAsync(int tutorId, int alumnoId)
         {
             return await _context.Autorizaciones
@@ -55,6 +66,17 @@ namespace GTE.Data
         public async Task<bool> DeleteAsync(int id)
         {
             var autorizacion = await _context.Autorizaciones.FindAsync(id);
+            if (autorizacion == null) return false;
+
+            _context.Autorizaciones.Remove(autorizacion);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> DeleteByTutorAndAlumnoAsync(int tutorId, int alumnoId)
+        {
+            var autorizacion = await _context.Autorizaciones
+                .FirstOrDefaultAsync(a => a.TutorId == tutorId && a.AlumnoId == alumnoId);
             if (autorizacion == null) return false;
 
             _context.Autorizaciones.Remove(autorizacion);

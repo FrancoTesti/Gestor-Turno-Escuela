@@ -84,7 +84,7 @@ else
     private async Task Consultar()
     {
         await EjecutarAsync(async () => {
-            retiros = await ReporteClient.ObtenerRetirosPorRangoAsync(fechaDesde, fechaHasta);
+            retiros = await ReporteClient.GetRetirosAsync(fechaDesde, fechaHasta);
             retiroExpandido = 0; // cerrar detalles abiertos
         });
     }
