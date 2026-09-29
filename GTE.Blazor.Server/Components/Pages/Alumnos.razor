@@ -76,7 +76,7 @@ else
                     <td>@a.Nombre @a.Apellido</td>
                     <td>@a.Grado @a.Curso</td>
                     <td>@a.Turno</td>
-                    <td>@a.Estado</td>
+                    <td><EstadoBadge Estado="@a.Estado" /></td>
                     <AuthorizeView Roles="Secretario">
                         <Authorized>
                             <td>
