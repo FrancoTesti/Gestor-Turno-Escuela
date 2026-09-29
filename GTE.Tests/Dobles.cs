@@ -75,6 +75,111 @@ internal sealed class TutorRepositoryFalso : ITutorRepository
     public Task<bool> DniExisteAsync(string dni, int? excludeId = null) => Task.FromResult(false);
 }
 
+/// <summary>Servicio de reportes vacio, para poder mapear los endpoints en las pruebas.</summary>
+internal sealed class ReporteServiceFalso : IReporteService
+{
+    public Task<IEnumerable<AlumnosPorCursoDTO>> GetAlumnosPorCursoAsync() =>
+        Task.FromResult<IEnumerable<AlumnosPorCursoDTO>>(Array.Empty<AlumnosPorCursoDTO>());
+
+    public Task<IEnumerable<RetiroDTO>> GetRetirosAsync(DateTime? desde, DateTime? hasta) =>
+        Task.FromResult<IEnumerable<RetiroDTO>>(Array.Empty<RetiroDTO>());
+}
+
+/// <summary>Repositorio de alumnos en memoria, para las pruebas de servicios.</summary>
+internal sealed class AlumnoRepositoryFalso : IAlumnoRepository
+{
+    private readonly List<Alumno> _alumnos;
+
+    public AlumnoRepositoryFalso(params Alumno[] alumnos)
+    {
+        _alumnos = alumnos.ToList();
+    }
+
+    public Task AddAsync(Alumno alumno)
+    {
+        _alumnos.Add(alumno);
+        return Task.CompletedTask;
+    }
+
+    public Task<bool> DeleteAsync(int id) => Task.FromResult(true);
+
+    public Task<Alumno?> GetAsync(int id) =>
+        Task.FromResult(_alumnos.FirstOrDefault(a => a.IdAlumno == id));
+
+    public Task<IEnumerable<Alumno>> GetAllAsync() =>
+        Task.FromResult<IEnumerable<Alumno>>(_alumnos.ToList());
+
+    public Task<bool> UpdateAsync(Alumno alumno)
+    {
+        var existente = _alumnos.FirstOrDefault(a => a.IdAlumno == alumno.IdAlumno);
+        if (existente is null) return Task.FromResult(false);
+
+        existente.SetNombre(alumno.Nombre);
+        existente.SetApellido(alumno.Apellido);
+        existente.SetCurso(alumno.IdCurso);
+        existente.SetEstado(alumno.Estado);
+        return Task.FromResult(true);
+    }
+
+    public Task<IEnumerable<Alumno>> GetByCriteriaAsync(AlumnoCriteria criteria) =>
+        Task.FromResult<IEnumerable<Alumno>>(_alumnos.ToList());
+}
+
+/// <summary>Repositorio de cursos en memoria, para las pruebas de servicios.</summary>
+internal sealed class CursoEscolarRepositoryFalso : ICursoEscolarRepository
+{
+    private readonly List<CursoEscolar> _cursos;
+
+    public CursoEscolarRepositoryFalso(params CursoEscolar[] cursos)
+    {
+        _cursos = cursos.ToList();
+    }
+
+    public Task AddAsync(CursoEscolar curso)
+    {
+        _cursos.Add(curso);
+        return Task.CompletedTask;
+    }
+
+    public Task<CursoEscolar?> GetAsync(int id) =>
+        Task.FromResult(_cursos.FirstOrDefault(c => c.IdCurso == id));
+
+    public Task<IEnumerable<CursoEscolar>> GetAllAsync() =>
+        Task.FromResult<IEnumerable<CursoEscolar>>(_cursos.ToList());
+
+    public Task<bool> UpdateAsync(CursoEscolar curso) => Task.FromResult(true);
+
+    public Task<bool> DeleteAsync(int id) => Task.FromResult(true);
+}
+
+/// <summary>Servicio de retiros que devuelve una lista fija, para las pruebas de reportes.</summary>
+internal sealed class RetiroServiceConDatos : IRetiroService
+{
+    private readonly List<RetiroDTO> _retiros;
+
+    public RetiroServiceConDatos(params RetiroDTO[] retiros)
+    {
+        _retiros = retiros.ToList();
+    }
+
+    public Task<IEnumerable<RetiroDTO>> GetAllAsync() =>
+        Task.FromResult<IEnumerable<RetiroDTO>>(_retiros.ToList());
+
+    public Task<RetiroDTO?> GetAsync(int id) =>
+        Task.FromResult(_retiros.FirstOrDefault(r => r.IdRetiro == id));
+
+    public Task<(bool Exito, string Mensaje, RetiroDTO? Retiro)> AddAsync(RetiroDTO dto) =>
+        Task.FromResult((true, string.Empty, (RetiroDTO?)dto));
+
+    public Task<(bool Exito, string Mensaje, RetiroDTO? Retiro)> UpdateAsync(RetiroDTO dto) =>
+        Task.FromResult((true, string.Empty, (RetiroDTO?)dto));
+
+    public Task<bool> DeleteAsync(int id) => Task.FromResult(true);
+
+    public Task<IEnumerable<AlumnoDTO>> GetAlumnosAutorizadosAsync(int tutorId) =>
+        Task.FromResult<IEnumerable<AlumnoDTO>>(Array.Empty<AlumnoDTO>());
+}
+
 /// <summary>
 /// Servicio de autenticación configurable, para representar la sesión de un
 /// circuito de Blazor o la de un usuario del escritorio.

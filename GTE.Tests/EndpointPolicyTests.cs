@@ -31,6 +31,8 @@ public class EndpointPolicyTests
     [InlineData("GET", "/tutores", Politicas.GestionRetiros)]
     [InlineData("GET", "/tutores/{id:int}/alumnos", Politicas.GestionRetiros)]
     [InlineData("GET", "/personal", Politicas.GestionRetiros)]
+    [InlineData("GET", "/reportes/alumnos-por-curso", Politicas.LecturaAlumnos)]
+    [InlineData("GET", "/reportes/retiros", Politicas.LecturaAlumnos)]
     public void El_endpoint_exige_la_politica_correspondiente(string metodo, string ruta, string politicaEsperada)
     {
         Endpoint? endpoint = BuscarEndpoint(metodo, ruta);
@@ -63,6 +65,7 @@ public class EndpointPolicyTests
         builder.Services.AddSingleton<IAlumnoService, AlumnoServiceFalso>();
         builder.Services.AddSingleton<ICursoEscolarService, CursoEscolarServiceFalso>();
         builder.Services.AddSingleton<IRetiroService, RetiroServiceFalso>();
+        builder.Services.AddSingleton<IReporteService, ReporteServiceFalso>();
         builder.Services.AddSingleton<ITutorRepository, TutorRepositoryFalso>();
         builder.Services.AddDbContext<GTEContext>(opciones =>
             opciones.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=SoloParaMapear;Trusted_Connection=True"));
@@ -71,6 +74,7 @@ public class EndpointPolicyTests
         app.MapAlumnoEndpoints();
         app.MapCursoEscolarEndpoints();
         app.MapRetiroEndpoints();
+        app.MapReporteEndpoints();
 
         return ((IEndpointRouteBuilder)app).DataSources
             .SelectMany(origen => origen.Endpoints)
