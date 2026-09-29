@@ -16,37 +16,23 @@ namespace GTE.WindowsForms
 
         private void ApplyStyles()
         {
-            pnlHeader.BackColor = Color.FromArgb(24, 28, 36);
-            pnlSidebar.BackColor = Color.FromArgb(33, 37, 41);
-            pnlContent.BackColor = Color.FromArgb(248, 249, 250);
+            pnlHeader.BackColor = Tema.Barra;
+            pnlSidebar.BackColor = Tema.Barra;
+            pnlContent.BackColor = Tema.Fondo;
 
             lblUserTitle.ForeColor = Color.White;
             lblUserSub.ForeColor = Color.FromArgb(173, 181, 189);
 
-            btnLogOut.BackColor = Color.FromArgb(220, 53, 69);
-            btnLogOut.ForeColor = Color.White;
-            btnLogOut.FlatStyle = FlatStyle.Flat;
-            btnLogOut.FlatAppearance.BorderSize = 0;
+            Tema.BotonPeligro(btnLogOut);
 
-            StyleMenuButton(btnAlumnos);
-            StyleMenuButton(btnCursos);
-            StyleMenuButton(btnRetiros);
-            StyleMenuButton(btnTutores);
-            StyleMenuButton(btnAutorizaciones);
-            StyleMenuButton(btnReporteAlumnos);
-            StyleMenuButton(btnReporteRetiros);
-            StyleMenuButton(btnOtros);
-        }
-
-        private void StyleMenuButton(Button btn)
-        {
-            btn.BackColor = Color.FromArgb(33, 37, 41);
-            btn.ForeColor = Color.FromArgb(222, 226, 230);
-            btn.FlatStyle = FlatStyle.Flat;
-            btn.FlatAppearance.BorderSize = 0;
-            btn.TextAlign = ContentAlignment.MiddleLeft;
-            btn.Padding = new Padding(15, 0, 0, 0);
-            btn.Font = new Font("Segoe UI Semibold", 10.5F, FontStyle.Bold);
+            foreach (var boton in new[]
+                     {
+                         btnAlumnos, btnCursos, btnTutores, btnRetiros, btnAutorizaciones,
+                         btnReporteAlumnos, btnReporteRetiros, btnOtros
+                     })
+            {
+                Tema.BotonMenu(boton);
+            }
         }
 
         private async void LoadUserData()
@@ -158,16 +144,16 @@ namespace GTE.WindowsForms
 
         private void HighlightButton(Button activeBtn)
         {
-            btnAlumnos.BackColor = Color.FromArgb(33, 37, 41);
-            btnCursos.BackColor = Color.FromArgb(33, 37, 41);
-            btnRetiros.BackColor = Color.FromArgb(33, 37, 41);
-            btnTutores.BackColor = Color.FromArgb(33, 37, 41);
-            btnAutorizaciones.BackColor = Color.FromArgb(33, 37, 41);
-            btnReporteAlumnos.BackColor = Color.FromArgb(33, 37, 41);
-            btnReporteRetiros.BackColor = Color.FromArgb(33, 37, 41);
-            btnOtros.BackColor = Color.FromArgb(33, 37, 41);
+            foreach (var boton in new[]
+                     {
+                         btnAlumnos, btnCursos, btnTutores, btnRetiros, btnAutorizaciones,
+                         btnReporteAlumnos, btnReporteRetiros, btnOtros
+                     })
+            {
+                boton.BackColor = Tema.Barra;
+            }
 
-            activeBtn.BackColor = Color.FromArgb(13, 110, 253);
+            activeBtn.BackColor = Tema.Primario;
         }
 
         private async void btnLogOut_Click(object sender, EventArgs e)
