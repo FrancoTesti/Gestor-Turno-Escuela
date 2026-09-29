@@ -15,6 +15,8 @@ public static class PermisosDeUsuario
 
     public static bool PuedeAdministrarCursos(string? rol) => rol == Secretario;
 
+    public static bool PuedeAdministrarTutores(string? rol) => rol == Secretario;
+
     public static bool PuedeGestionarRetiros(string? rol) =>
         rol is Secretario or Portero;
 
