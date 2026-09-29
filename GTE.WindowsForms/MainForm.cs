@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using GTE.Clients;
@@ -63,20 +63,28 @@ namespace GTE.WindowsForms
                 btnAlumnos.Visible = true;
                 btnCursos.Visible = true;
                 btnRetiros.Visible = true;
+<<<<<<< HEAD
+                btnOtros.Visible = true; btnOtros.Text = "Horarios Esp.";
+=======
                 btnTutores.Visible = true;
                 btnReporteAlumnos.Visible = true;
                 btnReporteRetiros.Visible = true;
                 btnOtros.Visible = false;
+>>>>>>> origin/main
             }
             else if (role == "Portero")
             {
                 btnAlumnos.Visible = false;
                 btnCursos.Visible = false;
                 btnRetiros.Visible = true;
+<<<<<<< HEAD
+                btnOtros.Visible = true; btnOtros.Text = "Horarios Esp.";
+=======
                 btnTutores.Visible = false;
                 btnReporteAlumnos.Visible = true;
                 btnReporteRetiros.Visible = true;
                 btnOtros.Visible = false;
+>>>>>>> origin/main
             }
             else
             {
@@ -141,7 +149,7 @@ namespace GTE.WindowsForms
         private void btnOtros_Click(object sender, EventArgs e)
         {
             HighlightButton(btnOtros);
-            MessageBox.Show("Funcionalidad en construcciÃ³n para este rol.", "En construcciÃ³n", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            ShowChildForm(new HorarioEspecialListaForm());
         }
 
         private void HighlightButton(Button activeBtn)
@@ -159,7 +167,7 @@ namespace GTE.WindowsForms
 
         private async void btnLogOut_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Â¿EstÃ¡ seguro de que desea cerrar sesiÃ³n?", "Cerrar SesiÃ³n",
+            if (MessageBox.Show("¿Está seguro de que desea cerrar sesión?", "Cerrar Sesión",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 var authService = AuthServiceProvider.Instance;
@@ -170,3 +178,6 @@ namespace GTE.WindowsForms
         }
     }
 }
+
+
+
