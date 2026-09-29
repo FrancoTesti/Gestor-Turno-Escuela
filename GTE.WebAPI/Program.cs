@@ -53,6 +53,8 @@ builder.Services.AddScoped<ICursoEscolarService, CursoEscolarService>();
 builder.Services.AddScoped<IAutorizacionRepository, AutorizacionRepository>();
 builder.Services.AddScoped<IRetiroRepository, RetiroRepository>();
 builder.Services.AddScoped<IRetiroService, RetiroService>();
+builder.Services.AddScoped<IReporteService, ReporteService>();
+builder.Services.AddScoped<ITutorService, TutorService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -81,5 +83,7 @@ app.MapAuthEndpoints();
 app.MapAlumnoEndpoints();
 app.MapCursoEscolarEndpoints();
 app.MapRetiroEndpoints();
+app.MapReporteEndpoints();
+app.MapTutorEndpoints();
 
 app.Run();

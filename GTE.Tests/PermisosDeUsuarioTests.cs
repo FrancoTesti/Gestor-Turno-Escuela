@@ -31,5 +31,9 @@ public class PermisosDeUsuarioTests
         Assert.Equal(
             await AutorizacionDePrueba.AutorizarAsync(Politicas.LecturaCursos, rol),
             PermisosDeUsuario.PuedeVerCursos(rol));
+
+        Assert.Equal(
+            await AutorizacionDePrueba.AutorizarAsync(Politicas.SoloSecretario, rol),
+            PermisosDeUsuario.PuedeAdministrarTutores(rol));
     }
 }

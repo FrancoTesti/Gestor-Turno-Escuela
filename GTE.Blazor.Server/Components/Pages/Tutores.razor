@@ -1,0 +1,190 @@
+@page "/tutores"
+@attribute [Authorize(Roles = "Secretario,Portero")]
+@inherits PaginaConApiBase
+@inject TutorApiClient TutoresClient
+
+<h3>Gestión de Tutores</h3>
+
+@if (!string.IsNullOrEmpty(MensajeError))
+{
+    <div class="alert alert-danger">@MensajeError</div>
+}
+
+<AuthorizeView Roles="Secretario">
+    <Authorized>
+        <button class="btn btn-primary mb-3" @onclick="AbrirModalNuevo">Nuevo Tutor</button>
+    </Authorized>
+</AuthorizeView>
+
+@if (tutores == null)
+{
+    <p><em>Cargando...</em></p>
+}
+else if (tutores.Count == 0)
+{
+    <p>No hay tutores registrados.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre y Apellido</th>
+                <th>DNI</th>
+                <th>Parentesco</th>
+                <th>Teléfono</th>
+                <th>Usuario</th>
+                <th>Restricción</th>
+                <AuthorizeView Roles="Secretario">
+                    <Authorized><th>Acciones</th></Authorized>
+                </AuthorizeView>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in tutores)
+            {
+                <tr>
+                    <td>@t.Nombre @t.Apellido</td>
+                    <td>@t.Dni</td>
+                    <td>@t.Parentesco</td>
+                    <td>@t.Telefono</td>
+                    <td>@t.NombreUsuario</td>
+                    <td>@(t.TieneRestriccion ? "Sí" : "No")</td>
+                    <AuthorizeView Roles="Secretario">
+                        <Authorized>
+                            <td>
+                                <button class="btn btn-warning btn-sm" @onclick="() => AbrirModalEditar(t)">Editar</button>
+                                <button class="btn btn-danger btn-sm" @onclick="() => Eliminar(t.IdTutor)">Borrar</button>
+                            </td>
+                        </Authorized>
+                    </AuthorizeView>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (mostrarModal)
+{
+    <div class="modal fade show d-block" style="background: rgba(0,0,0,0.5);">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@(tutorEditando.IdTutor == 0 ? "Nuevo Tutor" : "Editar Tutor")</h5>
+                    <button type="button" class="btn-close" @onclick="CerrarModal"></button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="tutorEditando" OnValidSubmit="Guardar">
+                        <div class="mb-3">
+                            <label>Nombre</label>
+                            <InputText @bind-Value="tutorEditando.Nombre" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label>Apellido</label>
+                            <InputText @bind-Value="tutorEditando.Apellido" class="form-control" />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label>DNI</label>
+                                <InputText @bind-Value="tutorEditando.Dni" class="form-control" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Parentesco</label>
+                                <InputText @bind-Value="tutorEditando.Parentesco" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label>Teléfono</label>
+                                <InputText @bind-Value="tutorEditando.Telefono" class="form-control" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Usuario</label>
+                                <InputText @bind-Value="tutorEditando.NombreUsuario" class="form-control" disabled="@esEdicion" />
+                            </div>
+                        </div>
+                        @if (!esEdicion)
+                        {
+                            <div class="mb-3">
+                                <label>Contraseña</label>
+                                <InputText type="password" @bind-Value="tutorEditando.Contrasena" class="form-control" />
+                            </div>
+                        }
+                        <div class="form-check mb-3">
+                            <InputCheckbox @bind-Value="tutorEditando.TieneRestriccion" class="form-check-input" />
+                            <label class="form-check-label">Tiene restricción legal para retirar</label>
+                        </div>
+                        <div class="mt-4 text-end">
+                            <button type="button" class="btn btn-secondary me-2" @onclick="CerrarModal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<TutorDTO>? tutores;
+    private TutorDTO tutorEditando = new();
+    private bool mostrarModal;
+    private bool esEdicion;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await EjecutarAsync(CargarDatos);
+    }
+
+    private async Task CargarDatos() => tutores = (await TutoresClient.GetAllAsync()).ToList();
+
+    private void AbrirModalNuevo()
+    {
+        tutorEditando = new TutorDTO();
+        esEdicion = false;
+        mostrarModal = true;
+    }
+
+    private void AbrirModalEditar(TutorDTO tutor)
+    {
+        tutorEditando = new TutorDTO
+        {
+            IdTutor = tutor.IdTutor,
+            Nombre = tutor.Nombre,
+            Apellido = tutor.Apellido,
+            Dni = tutor.Dni,
+            Parentesco = tutor.Parentesco,
+            Telefono = tutor.Telefono,
+            TieneRestriccion = tutor.TieneRestriccion,
+            NombreUsuario = tutor.NombreUsuario,
+            Contrasena = string.Empty
+        };
+        esEdicion = true;
+        mostrarModal = true;
+    }
+
+    private void CerrarModal() => mostrarModal = false;
+
+    private async Task Guardar()
+    {
+        await EjecutarAsync(async () =>
+        {
+            if (esEdicion)
+                await TutoresClient.UpdateAsync(tutorEditando);
+            else
+                await TutoresClient.AddAsync(tutorEditando);
+
+            mostrarModal = false;
+            await CargarDatos();
+        });
+    }
+
+    private async Task Eliminar(int id)
+    {
+        await EjecutarAsync(async () =>
+        {
+            await TutoresClient.DeleteAsync(id);
+            await CargarDatos();
+        });
+    }
+}
