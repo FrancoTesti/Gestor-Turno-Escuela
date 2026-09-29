@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using GTE.Clients;
@@ -31,6 +31,7 @@ namespace GTE.WindowsForms
             StyleMenuButton(btnAlumnos);
             StyleMenuButton(btnCursos);
             StyleMenuButton(btnRetiros);
+            StyleMenuButton(btnAutorizaciones);
             StyleMenuButton(btnOtros);
         }
 
@@ -60,6 +61,7 @@ namespace GTE.WindowsForms
                 btnAlumnos.Visible = true;
                 btnCursos.Visible = true;
                 btnRetiros.Visible = true;
+                btnAutorizaciones.Visible = true;
                 btnOtros.Visible = false;
             }
             else if (role == "Portero")
@@ -67,6 +69,7 @@ namespace GTE.WindowsForms
                 btnAlumnos.Visible = false;
                 btnCursos.Visible = false;
                 btnRetiros.Visible = true;
+                btnAutorizaciones.Visible = true;
                 btnOtros.Visible = false;
             }
             else
@@ -74,6 +77,7 @@ namespace GTE.WindowsForms
                 btnAlumnos.Visible = false;
                 btnCursos.Visible = true;
                 btnRetiros.Visible = false;
+                btnAutorizaciones.Visible = false;
                 btnOtros.Visible = false;
             }
         }
@@ -108,6 +112,12 @@ namespace GTE.WindowsForms
             ShowChildForm(new RetiroListaForm());
         }
 
+        private void btnAutorizaciones_Click(object sender, EventArgs e)
+        {
+            HighlightButton(btnAutorizaciones);
+            ShowChildForm(new AutorizacionListaForm());
+        }
+
         private void btnOtros_Click(object sender, EventArgs e)
         {
             HighlightButton(btnOtros);
@@ -119,6 +129,7 @@ namespace GTE.WindowsForms
             btnAlumnos.BackColor = Color.FromArgb(33, 37, 41);
             btnCursos.BackColor = Color.FromArgb(33, 37, 41);
             btnRetiros.BackColor = Color.FromArgb(33, 37, 41);
+            btnAutorizaciones.BackColor = Color.FromArgb(33, 37, 41);
             btnOtros.BackColor = Color.FromArgb(33, 37, 41);
 
             activeBtn.BackColor = Color.FromArgb(13, 110, 253);

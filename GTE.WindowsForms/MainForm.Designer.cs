@@ -1,4 +1,4 @@
-﻿namespace GTE.WindowsForms
+namespace GTE.WindowsForms
 {
     partial class MainForm
     {
@@ -21,6 +21,7 @@
             this.lblUserTitle = new System.Windows.Forms.Label();
             this.pnlSidebar = new System.Windows.Forms.Panel();
             this.btnOtros = new System.Windows.Forms.Button();
+            this.btnAutorizaciones = new System.Windows.Forms.Button();
             this.btnRetiros = new System.Windows.Forms.Button();
             this.btnCursos = new System.Windows.Forms.Button();
             this.btnAlumnos = new System.Windows.Forms.Button();
@@ -75,6 +76,7 @@
             // pnlSidebar
             // 
             this.pnlSidebar.Controls.Add(this.btnOtros);
+            this.pnlSidebar.Controls.Add(this.btnAutorizaciones);
             this.pnlSidebar.Controls.Add(this.btnRetiros);
             this.pnlSidebar.Controls.Add(this.btnCursos);
             this.pnlSidebar.Controls.Add(this.btnAlumnos);
@@ -87,14 +89,25 @@
             // btnOtros
             // 
             this.btnOtros.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnOtros.Location = new System.Drawing.Point(0, 150);
+            this.btnOtros.Location = new System.Drawing.Point(0, 200);
             this.btnOtros.Name = "btnOtros";
             this.btnOtros.Size = new System.Drawing.Size(220, 50);
-            this.btnOtros.TabIndex = 3;
+            this.btnOtros.TabIndex = 4;
             this.btnOtros.Text = "Otras Opciones";
             this.btnOtros.UseVisualStyleBackColor = true;
             this.btnOtros.Visible = false;
             this.btnOtros.Click += new System.EventHandler(this.btnOtros_Click);
+            // 
+            // btnAutorizaciones
+            // 
+            this.btnAutorizaciones.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnAutorizaciones.Location = new System.Drawing.Point(0, 150);
+            this.btnAutorizaciones.Name = "btnAutorizaciones";
+            this.btnAutorizaciones.Size = new System.Drawing.Size(220, 50);
+            this.btnAutorizaciones.TabIndex = 3;
+            this.btnAutorizaciones.Text = "Autorizaciones";
+            this.btnAutorizaciones.UseVisualStyleBackColor = true;
+            this.btnAutorizaciones.Click += new System.EventHandler(this.btnAutorizaciones_Click);
             // 
             // btnRetiros
             // 
@@ -161,6 +174,7 @@
         private System.Windows.Forms.Button btnLogOut;
         private System.Windows.Forms.Panel pnlSidebar;
         private System.Windows.Forms.Button btnOtros;
+        private System.Windows.Forms.Button btnAutorizaciones;
         private System.Windows.Forms.Button btnRetiros;
         private System.Windows.Forms.Button btnCursos;
         private System.Windows.Forms.Button btnAlumnos;
