@@ -1,0 +1,244 @@
+@page "/autorizaciones"
+@attribute [Authorize(Roles = "Secretario,Portero")]
+@inherits PaginaConApiBase
+@inject AutorizacionApiClient AutorizacionesClient
+
+<h3>Gestión de Autorizaciones (Maestro / Detalle)</h3>
+
+@if (!string.IsNullOrEmpty(MensajeError))
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @MensajeError
+        <button type="button" class="btn-close" @onclick="() => MensajeError = string.Empty"></button>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(mensajeExito))
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @mensajeExito
+        <button type="button" class="btn-close" @onclick="() => mensajeExito = string.Empty"></button>
+    </div>
+}
+
+<div class="card mb-4 shadow-sm">
+    <div class="card-header bg-dark text-white">
+        <strong>1. Seleccionar Tutor (Maestro)</strong>
+    </div>
+    <div class="card-body">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <label class="form-label">Tutor Registrado:</label>
+                <select class="form-select" @onchange="OnTutorChanged" value="@tutorSeleccionadoId">
+                    <option value="0">-- Seleccione un Tutor --</option>
+                    @if (tutores != null)
+                    {
+                        @foreach (var t in tutores)
+                        {
+                            <option value="@t.IdTutor">@t.Nombre @t.Apellido (DNI: @t.Dni) @(t.TieneRestriccion ? "[CON RESTRICCIÓN]" : "")</option>
+                        }
+                    }
+                </select>
+            </div>
+            @if (tutorSeleccionado != null)
+            {
+                <div class="col-md-6 mt-3 mt-md-0">
+                    <div class="p-2 border rounded bg-light">
+                        <strong>Detalles del Tutor:</strong><br />
+                        <span>Teléfono: @tutorSeleccionado.Telefono</span> | 
+                        <span>Parentesco: @tutorSeleccionado.Parentesco</span>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@if (tutorSeleccionadoId > 0)
+{
+    <AuthorizeView Roles="Secretario">
+        <Authorized>
+            <div class="card mb-4 shadow-sm border-primary">
+                <div class="card-header bg-primary text-white">
+                    <strong>2. Autorizar Nuevo Alumno para este Tutor</strong>
+                </div>
+                <div class="card-body">
+                    <div class="row g-2 align-items-end">
+                        <div class="col-md-8">
+                            <label class="form-label">Seleccionar Alumno Disponible:</label>
+                            <select class="form-select" @bind="alumnoAAutorizarId">
+                                <option value="0">-- Seleccione un Alumno --</option>
+                                @foreach (var alu in AlumnosDisponibles)
+                                {
+                                    <option value="@alu.IdAlumno">@alu.Nombre @alu.Apellido - @alu.Grado @alu.Curso (@alu.Turno)</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-success w-100" @onclick="AgregarAutorizacion" disabled="@(alumnoAAutorizarId <= 0)">
+                                + Autorizar Alumno
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </Authorized>
+    </AuthorizeView>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+            <strong>3. Alumnos Autorizados (Detalle)</strong>
+            <span class="badge bg-light text-dark">Total: @(alumnosAutorizados?.Count ?? 0)</span>
+        </div>
+        <div class="card-body">
+            @if (alumnosAutorizados == null)
+            {
+                <p><em>Cargando autorizaciones...</em></p>
+            }
+            else if (alumnosAutorizados.Count == 0)
+            {
+                <div class="alert alert-info mb-0">
+                    Este tutor actualmente no posee alumnos autorizados asociados.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Nombre y Apellido</th>
+                                <th>Grado y División</th>
+                                <th>Turno</th>
+                                <th>Estado</th>
+                                <AuthorizeView Roles="Secretario">
+                                    <Authorized>
+                                        <th style="width: 120px;" class="text-center">Acción</th>
+                                    </Authorized>
+                                </AuthorizeView>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var alu in alumnosAutorizados)
+                            {
+                                <tr>
+                                    <td><strong>@alu.Nombre @alu.Apellido</strong></td>
+                                    <td>@alu.Grado @alu.Curso</td>
+                                    <td>@alu.Turno</td>
+                                    <td>
+                                        <span class="badge @(alu.Estado == "Presente" ? "bg-success" : (alu.Estado == "Retirado" ? "bg-warning text-dark" : "bg-secondary"))">
+                                            @alu.Estado
+                                        </span>
+                                    </td>
+                                    <AuthorizeView Roles="Secretario">
+                                        <Authorized>
+                                            <td class="text-center">
+                                                <button class="btn btn-outline-danger btn-sm" @onclick="() => QuitarAutorizacion(alu.IdAlumno)">
+                                                    Quitar
+                                                </button>
+                                            </td>
+                                        </Authorized>
+                                    </AuthorizeView>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    private List<TutorDTO>? tutores;
+    private List<AlumnoDTO> todosLosAlumnos = new();
+    private List<AlumnoDTO>? alumnosAutorizados;
+    private int tutorSeleccionadoId = 0;
+    private TutorDTO? tutorSeleccionado => tutores?.FirstOrDefault(t => t.IdTutor == tutorSeleccionadoId);
+    private int alumnoAAutorizarId = 0;
+    private string mensajeExito = string.Empty;
+
+    private IEnumerable<AlumnoDTO> AlumnosDisponibles
+    {
+        get
+        {
+            if (alumnosAutorizados == null) return todosLosAlumnos;
+            var autorizadosIds = alumnosAutorizados.Select(a => a.IdAlumno).ToHashSet();
+            return todosLosAlumnos.Where(a => !autorizadosIds.Contains(a.IdAlumno));
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await EjecutarAsync(async () =>
+        {
+            tutores = await AutorizacionesClient.GetTutoresAsync();
+            todosLosAlumnos = await AutorizacionesClient.GetAllAlumnosAsync();
+        });
+    }
+
+    private async Task OnTutorChanged(ChangeEventArgs e)
+    {
+        mensajeExito = string.Empty;
+        MensajeError = string.Empty;
+        if (int.TryParse(e.Value?.ToString(), out int id) && id > 0)
+        {
+            tutorSeleccionadoId = id;
+            await CargarAutorizacionesDelTutor(id);
+        }
+        else
+        {
+            tutorSeleccionadoId = 0;
+            alumnosAutorizados = null;
+        }
+        alumnoAAutorizarId = 0;
+    }
+
+    private async Task CargarAutorizacionesDelTutor(int tutorId)
+    {
+        await EjecutarAsync(async () =>
+        {
+            alumnosAutorizados = await AutorizacionesClient.GetAlumnosAutorizadosByTutorAsync(tutorId);
+        });
+    }
+
+    private async Task AgregarAutorizacion()
+    {
+        if (tutorSeleccionadoId <= 0 || alumnoAAutorizarId <= 0) return;
+
+        mensajeExito = string.Empty;
+        await EjecutarAsync(async () =>
+        {
+            var dto = new AutorizacionDTO
+            {
+                TutorId = tutorSeleccionadoId,
+                AlumnoId = alumnoAAutorizarId
+            };
+
+            await AutorizacionesClient.AddAsync(dto);
+            mensajeExito = "Alumno autorizado correctamente.";
+            alumnoAAutorizarId = 0;
+            await CargarAutorizacionesDelTutor(tutorSeleccionadoId);
+        });
+    }
+
+    private async Task QuitarAutorizacion(int alumnoId)
+    {
+        if (tutorSeleccionadoId <= 0) return;
+
+        mensajeExito = string.Empty;
+        await EjecutarAsync(async () =>
+        {
+            bool ok = await AutorizacionesClient.DeleteByTutorAndAlumnoAsync(tutorSeleccionadoId, alumnoId);
+            if (ok)
+            {
+                mensajeExito = "Autorización revocada correctamente.";
+                await CargarAutorizacionesDelTutor(tutorSeleccionadoId);
+            }
+            else
+            {
+                MensajeError = "No se pudo revocar la autorización.";
+            }
+        });
+    }
+}
