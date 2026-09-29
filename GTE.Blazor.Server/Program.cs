@@ -1,37 +1,11 @@
+using GTE.Blazor.Server;
 using GTE.Blazor.Server.Components;
-using GTE.Blazor.Server.Auth;
-using GTE.Clients;
-using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
-
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5117") });
-
-// registro los clientes
-builder.Services.AddScoped<AuthApiClient>();
-builder.Services.AddScoped<CursoEscolarApiClient>();
-builder.Services.AddScoped<AlumnoApiClient>();
-builder.Services.AddScoped<TutorApiClient>();
-builder.Services.AddScoped<AutorizacionApiClient>();
-builder.Services.AddScoped<RetiroApiClient>();
-builder.Services.AddScoped<ReporteApiClient>();
-builder.Services.AddScoped<HorarioEspecialApiClient>();
-
-// registro la autenticación
-builder.Services.AddScoped<BlazorAuthService>();
-builder.Services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<BlazorAuthService>());
-builder.Services.AddScoped<IAuthService>(sp => sp.GetRequiredService<BlazorAuthService>());
+builder.Services.AgregarServiciosDeLaWeb();
 
 var app = builder.Build();
-
-// Los clientes de la API reciben el servicio de autenticación por inyección de
-// dependencias, así que cada circuito de Blazor usa su propia sesión.
-// No hay que registrar nada en el proveedor global desde acá: hacerlo dejaría
-// una instancia de otro alcance, que nunca recibe el token del usuario y hace
-// que las llamadas a la API fallen como "no autenticado".
 
 if (!app.Environment.IsDevelopment())
 {
@@ -39,6 +13,10 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseStaticFiles();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseAntiforgery();
 
 app.MapRazorComponents<App>()

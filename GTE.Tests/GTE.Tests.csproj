@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\GTE.WebAPI\GTE.WebAPI.csproj" />
     <ProjectReference Include="..\GTE.Clients\GTE.Clients.csproj" />
+    <ProjectReference Include="..\GTE.Blazor.Server\GTE.Blazor.Server.csproj" />
   </ItemGroup>
 
 </Project>
