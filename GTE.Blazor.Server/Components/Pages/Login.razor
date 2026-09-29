@@ -14,7 +14,7 @@
                 <p class="text-muted mb-0">Sistema de gestión de retiros</p>
             </div>
 
-            <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
+            <EditForm Model="loginModel" OnValidSubmit="HandleLogin" FormName="login">
                 <div class="mb-3">
                     <label class="form-label">Usuario</label>
                     <InputText @bind-Value="loginModel.Username" class="form-control" placeholder="Ingrese su usuario" />
@@ -25,10 +25,10 @@
                     <InputText @bind-Value="loginModel.Password" type="password" class="form-control" placeholder="Ingrese su contraseña" />
                 </div>
 
-                @if (error)
+                @if (mensajeError is not null)
                 {
                     <div class="alert alert-danger py-2 mb-3">
-                        Usuario o contraseña incorrectos.
+                        @mensajeError
                     </div>
                 }
 
@@ -58,12 +58,12 @@
 
 @code {
     private LoginData loginModel = new();
-    private bool error;
+    private string? mensajeError;
     private bool cargando;
 
     private async Task HandleLogin()
     {
-        error = false;
+        mensajeError = null;
         cargando = true;
 
         try
@@ -71,11 +71,17 @@
             if (await AuthService.LoginAsync(loginModel.Username, loginModel.Password))
                 Nav.NavigateTo("/");
             else
-                error = true;
+                mensajeError = "Usuario o contraseña incorrectos.";
         }
-        catch
+        catch (ApiNoDisponibleException ex)
         {
-            error = true;
+            // Sin este caso aparte, cuando la API no está levantada la pantalla
+            // decía "usuario o contraseña incorrectos" y no se entendía el problema.
+            mensajeError = ex.Message;
+        }
+        catch (Exception ex)
+        {
+            mensajeError = $"No se pudo iniciar sesión: {ex.Message}";
         }
         finally
         {

@@ -55,6 +55,21 @@ namespace GTE.Blazor.Server
                 {
                     options.LoginPath = "/login";
                     options.AccessDeniedPath = "/login";
+
+                    // Sin el "?ReturnUrl=%2F" en la barra de direcciones: la web
+                    // siempre entra por el login, porque la sesión vive en el
+                    // circuito y volver a la pantalla pedida no funcionaría igual.
+                    options.Events.OnRedirectToLogin = contexto =>
+                    {
+                        contexto.Response.Redirect("/login");
+                        return Task.CompletedTask;
+                    };
+
+                    options.Events.OnRedirectToAccessDenied = contexto =>
+                    {
+                        contexto.Response.Redirect("/login");
+                        return Task.CompletedTask;
+                    };
                 });
             services.AddAuthorization();
 

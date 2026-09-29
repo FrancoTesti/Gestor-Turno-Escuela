@@ -17,6 +17,17 @@ namespace GTE.Clients
         public SinPermisoException(string mensaje) : base(mensaje) { }
     }
 
+    /// <summary>
+    /// Se lanza cuando la API no responde, por ejemplo porque el proyecto
+    /// GTE.WebAPI no está en ejecución.
+    /// </summary>
+    public class ApiNoDisponibleException : Exception
+    {
+        public ApiNoDisponibleException(string mensaje) : base(mensaje) { }
+
+        public ApiNoDisponibleException(string mensaje, Exception interna) : base(mensaje, interna) { }
+    }
+
     public abstract class BaseApiClient
     {
         protected const string BaseUrl = "http://localhost:5117/";
