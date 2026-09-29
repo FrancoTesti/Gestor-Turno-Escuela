@@ -31,7 +31,10 @@ namespace GTE.WindowsForms
             StyleMenuButton(btnAlumnos);
             StyleMenuButton(btnCursos);
             StyleMenuButton(btnRetiros);
+            StyleMenuButton(btnTutores);
             StyleMenuButton(btnAutorizaciones);
+            StyleMenuButton(btnReporteAlumnos);
+            StyleMenuButton(btnReporteRetiros);
             StyleMenuButton(btnOtros);
         }
 
@@ -61,7 +64,10 @@ namespace GTE.WindowsForms
                 btnAlumnos.Visible = true;
                 btnCursos.Visible = true;
                 btnRetiros.Visible = true;
+                btnTutores.Visible = true;
                 btnAutorizaciones.Visible = true;
+                btnReporteAlumnos.Visible = true;
+                btnReporteRetiros.Visible = true;
                 btnOtros.Visible = false;
             }
             else if (role == "Portero")
@@ -69,7 +75,10 @@ namespace GTE.WindowsForms
                 btnAlumnos.Visible = false;
                 btnCursos.Visible = false;
                 btnRetiros.Visible = true;
+                btnTutores.Visible = false;
                 btnAutorizaciones.Visible = true;
+                btnReporteAlumnos.Visible = true;
+                btnReporteRetiros.Visible = true;
                 btnOtros.Visible = false;
             }
             else
@@ -77,7 +86,10 @@ namespace GTE.WindowsForms
                 btnAlumnos.Visible = false;
                 btnCursos.Visible = true;
                 btnRetiros.Visible = false;
+                btnTutores.Visible = false;
                 btnAutorizaciones.Visible = false;
+                btnReporteAlumnos.Visible = false;
+                btnReporteRetiros.Visible = false;
                 btnOtros.Visible = false;
             }
         }
@@ -112,10 +124,28 @@ namespace GTE.WindowsForms
             ShowChildForm(new RetiroListaForm());
         }
 
+        private void btnTutores_Click(object sender, EventArgs e)
+        {
+            HighlightButton(btnTutores);
+            ShowChildForm(new TutorListaForm());
+        }
+
         private void btnAutorizaciones_Click(object sender, EventArgs e)
         {
             HighlightButton(btnAutorizaciones);
             ShowChildForm(new AutorizacionListaForm());
+        }
+
+        private void btnReporteAlumnos_Click(object sender, EventArgs e)
+        {
+            HighlightButton(btnReporteAlumnos);
+            ShowChildForm(new ReporteAlumnosPorCursoForm());
+        }
+
+        private void btnReporteRetiros_Click(object sender, EventArgs e)
+        {
+            HighlightButton(btnReporteRetiros);
+            ShowChildForm(new ReporteRetirosForm());
         }
 
         private void btnOtros_Click(object sender, EventArgs e)
@@ -129,7 +159,10 @@ namespace GTE.WindowsForms
             btnAlumnos.BackColor = Color.FromArgb(33, 37, 41);
             btnCursos.BackColor = Color.FromArgb(33, 37, 41);
             btnRetiros.BackColor = Color.FromArgb(33, 37, 41);
+            btnTutores.BackColor = Color.FromArgb(33, 37, 41);
             btnAutorizaciones.BackColor = Color.FromArgb(33, 37, 41);
+            btnReporteAlumnos.BackColor = Color.FromArgb(33, 37, 41);
+            btnReporteRetiros.BackColor = Color.FromArgb(33, 37, 41);
             btnOtros.BackColor = Color.FromArgb(33, 37, 41);
 
             activeBtn.BackColor = Color.FromArgb(13, 110, 253);

@@ -28,7 +28,6 @@ public class EndpointPolicyTests
     [InlineData("POST", "/retiros", Politicas.GestionRetiros)]
     [InlineData("PUT", "/retiros", Politicas.GestionRetiros)]
     [InlineData("DELETE", "/retiros/{id:int}", Politicas.GestionRetiros)]
-    [InlineData("GET", "/tutores", Politicas.GestionRetiros)]
     [InlineData("GET", "/tutores/{id:int}/alumnos", Politicas.GestionRetiros)]
     [InlineData("GET", "/personal", Politicas.GestionRetiros)]
     [InlineData("GET", "/autorizaciones", Politicas.LecturaAlumnos)]
@@ -37,6 +36,13 @@ public class EndpointPolicyTests
     [InlineData("POST", "/autorizaciones", Politicas.SoloSecretario)]
     [InlineData("DELETE", "/autorizaciones/{id:int}", Politicas.SoloSecretario)]
     [InlineData("DELETE", "/autorizaciones/tutor/{tutorId:int}/alumno/{alumnoId:int}", Politicas.SoloSecretario)]
+    [InlineData("GET", "/reportes/alumnos-por-curso", Politicas.LecturaAlumnos)]
+    [InlineData("GET", "/reportes/retiros", Politicas.LecturaAlumnos)]
+    [InlineData("GET", "/tutores", Politicas.LecturaAlumnos)]
+    [InlineData("GET", "/tutores/{id:int}", Politicas.LecturaAlumnos)]
+    [InlineData("POST", "/tutores", Politicas.SoloSecretario)]
+    [InlineData("PUT", "/tutores", Politicas.SoloSecretario)]
+    [InlineData("DELETE", "/tutores/{id:int}", Politicas.SoloSecretario)]
     public void El_endpoint_exige_la_politica_correspondiente(string metodo, string ruta, string politicaEsperada)
     {
         Endpoint? endpoint = BuscarEndpoint(metodo, ruta);
@@ -47,6 +53,27 @@ public class EndpointPolicyTests
 
         Assert.NotNull(autorizacion);
         Assert.Equal(politicaEsperada, autorizacion!.Policy);
+    }
+
+    [Fact]
+    public void No_hay_dos_endpoints_con_la_misma_ruta_y_metodo()
+    {
+        // Dos endpoints con la misma combinacion de ruta y metodo hacen que la
+        // aplicacion falle al atender el pedido, porque no puede decidir cual
+        // corresponde. Paso al mover el listado de tutores a su propio archivo.
+        var repetidos = ConstruirEndpoints()
+            .SelectMany(endpoint => MetodosDe(endpoint).Select(metodo => new
+            {
+                Metodo = metodo,
+                Ruta = (endpoint as RouteEndpoint)?.RoutePattern.RawText
+            }))
+            .Where(par => par.Ruta is not null)
+            .GroupBy(par => $"{par.Metodo} {par.Ruta}")
+            .Where(grupo => grupo.Count() > 1)
+            .Select(grupo => grupo.Key)
+            .ToList();
+
+        Assert.Empty(repetidos);
     }
 
     private static Endpoint? BuscarEndpoint(string metodo, string ruta)
@@ -70,6 +97,8 @@ public class EndpointPolicyTests
         builder.Services.AddSingleton<ICursoEscolarService, CursoEscolarServiceFalso>();
         builder.Services.AddSingleton<IRetiroService, RetiroServiceFalso>();
         builder.Services.AddSingleton<IAutorizacionService, AutorizacionServiceFalso>();
+        builder.Services.AddSingleton<IReporteService, ReporteServiceFalso>();
+        builder.Services.AddSingleton<ITutorService, TutorServiceFalso>();
         builder.Services.AddSingleton<ITutorRepository, TutorRepositoryFalso>();
         builder.Services.AddDbContext<GTEContext>(opciones =>
             opciones.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=SoloParaMapear;Trusted_Connection=True"));
@@ -79,6 +108,8 @@ public class EndpointPolicyTests
         app.MapCursoEscolarEndpoints();
         app.MapAutorizacionEndpoints();
         app.MapRetiroEndpoints();
+        app.MapReporteEndpoints();
+        app.MapTutorEndpoints();
 
         return ((IEndpointRouteBuilder)app).DataSources
             .SelectMany(origen => origen.Endpoints)
