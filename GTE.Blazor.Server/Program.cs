@@ -14,6 +14,8 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://
 builder.Services.AddScoped<AuthApiClient>();
 builder.Services.AddScoped<CursoEscolarApiClient>();
 builder.Services.AddScoped<AlumnoApiClient>();
+builder.Services.AddScoped<AutorizacionApiClient>();
+builder.Services.AddScoped<RetiroApiClient>();
 
 // registro la autenticación
 builder.Services.AddScoped<BlazorAuthService>();
