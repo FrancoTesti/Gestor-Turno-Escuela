@@ -31,6 +31,12 @@ public class EndpointPolicyTests
     [InlineData("GET", "/tutores", Politicas.GestionRetiros)]
     [InlineData("GET", "/tutores/{id:int}/alumnos", Politicas.GestionRetiros)]
     [InlineData("GET", "/personal", Politicas.GestionRetiros)]
+    [InlineData("GET", "/autorizaciones", Politicas.LecturaAlumnos)]
+    [InlineData("GET", "/autorizaciones/{id:int}", Politicas.LecturaAlumnos)]
+    [InlineData("GET", "/autorizaciones/tutor/{tutorId:int}", Politicas.LecturaAlumnos)]
+    [InlineData("POST", "/autorizaciones", Politicas.SoloSecretario)]
+    [InlineData("DELETE", "/autorizaciones/{id:int}", Politicas.SoloSecretario)]
+    [InlineData("DELETE", "/autorizaciones/tutor/{tutorId:int}/alumno/{alumnoId:int}", Politicas.SoloSecretario)]
     public void El_endpoint_exige_la_politica_correspondiente(string metodo, string ruta, string politicaEsperada)
     {
         Endpoint? endpoint = BuscarEndpoint(metodo, ruta);
@@ -63,6 +69,7 @@ public class EndpointPolicyTests
         builder.Services.AddSingleton<IAlumnoService, AlumnoServiceFalso>();
         builder.Services.AddSingleton<ICursoEscolarService, CursoEscolarServiceFalso>();
         builder.Services.AddSingleton<IRetiroService, RetiroServiceFalso>();
+        builder.Services.AddSingleton<IAutorizacionService, AutorizacionServiceFalso>();
         builder.Services.AddSingleton<ITutorRepository, TutorRepositoryFalso>();
         builder.Services.AddDbContext<GTEContext>(opciones =>
             opciones.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=SoloParaMapear;Trusted_Connection=True"));
@@ -70,6 +77,7 @@ public class EndpointPolicyTests
         WebApplication app = builder.Build();
         app.MapAlumnoEndpoints();
         app.MapCursoEscolarEndpoints();
+        app.MapAutorizacionEndpoints();
         app.MapRetiroEndpoints();
 
         return ((IEndpointRouteBuilder)app).DataSources

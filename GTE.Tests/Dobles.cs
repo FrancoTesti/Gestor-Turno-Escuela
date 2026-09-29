@@ -59,6 +59,27 @@ internal sealed class RetiroServiceFalso : IRetiroService
         Task.FromResult<IEnumerable<AlumnoDTO>>(Array.Empty<AlumnoDTO>());
 }
 
+internal sealed class AutorizacionServiceFalso : IAutorizacionService
+{
+    public Task<IEnumerable<AutorizacionDTO>> GetAllAsync() =>
+        Task.FromResult<IEnumerable<AutorizacionDTO>>(Array.Empty<AutorizacionDTO>());
+
+    public Task<AutorizacionDTO?> GetAsync(int id) => Task.FromResult<AutorizacionDTO?>(null);
+
+    public Task<IEnumerable<AutorizacionDTO>> GetByTutorIdAsync(int tutorId) =>
+        Task.FromResult<IEnumerable<AutorizacionDTO>>(Array.Empty<AutorizacionDTO>());
+
+    public Task<IEnumerable<AlumnoDTO>> GetAlumnosAutorizadosAsync(int tutorId) =>
+        Task.FromResult<IEnumerable<AlumnoDTO>>(Array.Empty<AlumnoDTO>());
+
+    public Task<(bool Exito, string Mensaje, AutorizacionDTO? Autorizacion)> AddAsync(AutorizacionDTO dto) =>
+        Task.FromResult((true, string.Empty, (AutorizacionDTO?)dto));
+
+    public Task<bool> DeleteAsync(int id) => Task.FromResult(true);
+
+    public Task<bool> DeleteByTutorAndAlumnoAsync(int tutorId, int alumnoId) => Task.FromResult(true);
+}
+
 internal sealed class TutorRepositoryFalso : ITutorRepository
 {
     public Task AddAsync(Tutor tutor) => Task.CompletedTask;

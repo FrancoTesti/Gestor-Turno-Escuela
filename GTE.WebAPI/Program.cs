@@ -51,6 +51,7 @@ builder.Services.AddScoped<IAlumnoService, AlumnoService>();
 builder.Services.AddScoped<ICursoEscolarRepository, CursoEscolarRepository>();
 builder.Services.AddScoped<ICursoEscolarService, CursoEscolarService>();
 builder.Services.AddScoped<IAutorizacionRepository, AutorizacionRepository>();
+builder.Services.AddScoped<IAutorizacionService, AutorizacionService>();
 builder.Services.AddScoped<IRetiroRepository, RetiroRepository>();
 builder.Services.AddScoped<IRetiroService, RetiroService>();
 
@@ -80,6 +81,7 @@ app.UseAuthorization();
 app.MapAuthEndpoints();
 app.MapAlumnoEndpoints();
 app.MapCursoEscolarEndpoints();
+app.MapAutorizacionEndpoints();
 app.MapRetiroEndpoints();
 
 app.Run();
