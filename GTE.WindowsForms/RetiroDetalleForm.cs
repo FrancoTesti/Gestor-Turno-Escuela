@@ -211,6 +211,24 @@ namespace GTE.WindowsForms
             }
         }
 
+        /// <summary>
+        /// Al elegir un alumno, el desplegable de estado muestra el estado que
+        /// tiene hoy, no el resultado del retiro.
+        /// </summary>
+        private void cmbAlumno_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbAlumno.SelectedValue is not int idAlumno || idAlumno <= 0)
+                return;
+
+            var alumno = _alumnosAutorizados.FirstOrDefault(a => a.IdAlumno == idAlumno);
+            if (alumno == null)
+                return;
+
+            int indice = cmbEstado.Items.IndexOf(alumno.Estado);
+            if (indice >= 0)
+                cmbEstado.SelectedIndex = indice;
+        }
+
         private async Task CargarAlumnosAutorizados(int tutorId)
         {
             try

@@ -407,7 +407,8 @@ else
             IdAlumno = alumno.IdAlumno,
             AlumnoNombreCompleto = $"{alumno.Nombre} {alumno.Apellido}",
             HoraSalida = DateTime.Now.TimeOfDay,
-            Estado = "Retirado"
+            // Se muestra el estado que el alumno tenia antes del retiro.
+            Estado = alumno.Estado
         });
 
         alumnoIdAAgregar = 0;
