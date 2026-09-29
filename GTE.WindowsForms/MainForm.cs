@@ -28,7 +28,7 @@ namespace GTE.WindowsForms
             foreach (var boton in new[]
                      {
                          btnAlumnos, btnCursos, btnTutores, btnRetiros, btnAutorizaciones,
-                         btnReporteAlumnos, btnReporteRetiros, btnOtros
+                         btnReporteAlumnos, btnReporteRetiros, btnOtros, btnMisAlumnos
                      })
             {
                 Tema.BotonMenu(boton);
@@ -80,6 +80,9 @@ namespace GTE.WindowsForms
                 btnReporteRetiros.Visible = false;
                 btnOtros.Visible = false;
             }
+
+            // El tutor solo tiene, además de cursos, su pantalla de alumnos a cargo.
+            btnMisAlumnos.Visible = role == "Tutor";
         }
 
         private void ShowChildForm(Form childForm)
@@ -142,12 +145,18 @@ namespace GTE.WindowsForms
             ShowChildForm(new HorarioEspecialListaForm());
         }
 
+        private void btnMisAlumnos_Click(object sender, EventArgs e)
+        {
+            HighlightButton(btnMisAlumnos);
+            ShowChildForm(new MisAlumnosForm());
+        }
+
         private void HighlightButton(Button activeBtn)
         {
             foreach (var boton in new[]
                      {
                          btnAlumnos, btnCursos, btnTutores, btnRetiros, btnAutorizaciones,
-                         btnReporteAlumnos, btnReporteRetiros, btnOtros
+                         btnReporteAlumnos, btnReporteRetiros, btnOtros, btnMisAlumnos
                      })
             {
                 boton.BackColor = Tema.Barra;

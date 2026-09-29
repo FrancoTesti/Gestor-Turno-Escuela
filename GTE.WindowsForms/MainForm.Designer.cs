@@ -20,6 +20,7 @@ namespace GTE.WindowsForms
             this.lblUserSub = new System.Windows.Forms.Label();
             this.lblUserTitle = new System.Windows.Forms.Label();
             this.pnlSidebar = new System.Windows.Forms.Panel();
+            this.btnMisAlumnos = new System.Windows.Forms.Button();
             this.btnOtros = new System.Windows.Forms.Button();
             this.btnAutorizaciones = new System.Windows.Forms.Button();
             this.btnReporteAlumnos = new System.Windows.Forms.Button();
@@ -79,6 +80,7 @@ namespace GTE.WindowsForms
             // pnlSidebar
             // 
             this.pnlSidebar.Controls.Add(this.btnOtros);
+            this.pnlSidebar.Controls.Add(this.btnMisAlumnos);
             this.pnlSidebar.Controls.Add(this.btnReporteRetiros);
             this.pnlSidebar.Controls.Add(this.btnReporteAlumnos);
             this.pnlSidebar.Controls.Add(this.btnAutorizaciones);
@@ -91,6 +93,18 @@ namespace GTE.WindowsForms
             this.pnlSidebar.Name = "pnlSidebar";
             this.pnlSidebar.Size = new System.Drawing.Size(220, 530);
             this.pnlSidebar.TabIndex = 1;
+            // 
+            // btnMisAlumnos
+            // 
+            this.btnMisAlumnos.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnMisAlumnos.Location = new System.Drawing.Point(0, 400);
+            this.btnMisAlumnos.Name = "btnMisAlumnos";
+            this.btnMisAlumnos.Size = new System.Drawing.Size(220, 50);
+            this.btnMisAlumnos.TabIndex = 10;
+            this.btnMisAlumnos.Text = "Mis Alumnos";
+            this.btnMisAlumnos.UseVisualStyleBackColor = true;
+            this.btnMisAlumnos.Visible = false;
+            this.btnMisAlumnos.Click += new System.EventHandler(this.btnMisAlumnos_Click);
             // 
             // btnOtros
             // 
@@ -212,6 +226,7 @@ namespace GTE.WindowsForms
         private System.Windows.Forms.Label lblUserTitle;
         private System.Windows.Forms.Button btnLogOut;
         private System.Windows.Forms.Panel pnlSidebar;
+        private System.Windows.Forms.Button btnMisAlumnos;
         private System.Windows.Forms.Button btnOtros;
         private System.Windows.Forms.Button btnAutorizaciones;
         private System.Windows.Forms.Button btnReporteAlumnos;
