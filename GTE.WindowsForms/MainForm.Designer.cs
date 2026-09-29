@@ -22,6 +22,7 @@
             this.pnlSidebar = new System.Windows.Forms.Panel();
             this.btnOtros = new System.Windows.Forms.Button();
             this.btnRetiros = new System.Windows.Forms.Button();
+            this.btnTutores = new System.Windows.Forms.Button();
             this.btnCursos = new System.Windows.Forms.Button();
             this.btnAlumnos = new System.Windows.Forms.Button();
             this.pnlContent = new System.Windows.Forms.Panel();
@@ -76,6 +77,7 @@
             // 
             this.pnlSidebar.Controls.Add(this.btnOtros);
             this.pnlSidebar.Controls.Add(this.btnRetiros);
+            this.pnlSidebar.Controls.Add(this.btnTutores);
             this.pnlSidebar.Controls.Add(this.btnCursos);
             this.pnlSidebar.Controls.Add(this.btnAlumnos);
             this.pnlSidebar.Dock = System.Windows.Forms.DockStyle.Left;
@@ -87,7 +89,7 @@
             // btnOtros
             // 
             this.btnOtros.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnOtros.Location = new System.Drawing.Point(0, 150);
+            this.btnOtros.Location = new System.Drawing.Point(0, 200);
             this.btnOtros.Name = "btnOtros";
             this.btnOtros.Size = new System.Drawing.Size(220, 50);
             this.btnOtros.TabIndex = 3;
@@ -99,13 +101,24 @@
             // btnRetiros
             // 
             this.btnRetiros.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnRetiros.Location = new System.Drawing.Point(0, 100);
+            this.btnRetiros.Location = new System.Drawing.Point(0, 150);
             this.btnRetiros.Name = "btnRetiros";
             this.btnRetiros.Size = new System.Drawing.Size(220, 50);
             this.btnRetiros.TabIndex = 2;
             this.btnRetiros.Text = "Gestionar Retiros";
             this.btnRetiros.UseVisualStyleBackColor = true;
             this.btnRetiros.Click += new System.EventHandler(this.btnRetiros_Click);
+            // 
+            // btnTutores
+            // 
+            this.btnTutores.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnTutores.Location = new System.Drawing.Point(0, 100);
+            this.btnTutores.Name = "btnTutores";
+            this.btnTutores.Size = new System.Drawing.Size(220, 50);
+            this.btnTutores.TabIndex = 4;
+            this.btnTutores.Text = "Gestionar Tutores";
+            this.btnTutores.UseVisualStyleBackColor = true;
+            this.btnTutores.Click += new System.EventHandler(this.btnTutores_Click);
             // 
             // btnCursos
             // 
@@ -162,6 +175,7 @@
         private System.Windows.Forms.Panel pnlSidebar;
         private System.Windows.Forms.Button btnOtros;
         private System.Windows.Forms.Button btnRetiros;
+        private System.Windows.Forms.Button btnTutores;
         private System.Windows.Forms.Button btnCursos;
         private System.Windows.Forms.Button btnAlumnos;
         private System.Windows.Forms.Panel pnlContent;
