@@ -33,9 +33,15 @@ else
         @foreach (var r in retiros)
         {
             <div class="list-group-item list-group-item-action">
-                <div class="d-flex w-100 justify-content-between cursor-pointer" @onclick="() => ToggleDetalle(r.IdRetiro)" style="cursor: pointer;">
+                <div class="d-flex w-100 justify-content-between align-items-center encabezado-retiro"
+                     @onclick="() => ToggleDetalle(r.IdRetiro)">
                     <h5 class="mb-1">Retiro ID: @r.IdRetiro - @r.FechaHora.ToString("dd/MM/yyyy HH:mm")</h5>
-                    <small>@r.Detalles.Count alumnos</small>
+                    <div class="d-flex align-items-center gap-3">
+                        <small>@r.Detalles.Count alumnos</small>
+                        <span class="btn btn-sm btn-outline-primary">
+                            @(retiroExpandido == r.IdRetiro ? "Ocultar detalle" : "Ver detalle")
+                        </span>
+                    </div>
                 </div>
                 <p class="mb-1"><strong>Tutor:</strong> @r.TutorNombreCompleto | <strong>Personal:</strong> @r.PersonalNombre</p>
                 <small><strong>Obs:</strong> @r.Observaciones</small>
@@ -58,7 +64,7 @@ else
                                     <tr>
                                         <td>@d.AlumnoNombreCompleto</td>
                                         <td>@d.HoraSalida.ToString(@"hh\:mm")</td>
-                                        <td>@d.Estado</td>
+                                        <td><EstadoBadge Estado="@d.Estado" /></td>
                                     </tr>
                                 }
                             </tbody>
@@ -69,6 +75,18 @@ else
         }
     </div>
 }
+
+<style>
+    .encabezado-retiro {
+        cursor: pointer;
+        padding: 6px 8px;
+        border-radius: 6px;
+    }
+
+    .encabezado-retiro:hover {
+        background-color: #eef2f7;
+    }
+</style>
 
 @code {
     private DateTime? fechaDesde = DateTime.Today.AddDays(-30);

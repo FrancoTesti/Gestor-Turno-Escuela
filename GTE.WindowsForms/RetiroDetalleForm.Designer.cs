@@ -250,6 +250,7 @@
             this.cmbAlumno.Name = "cmbAlumno";
             this.cmbAlumno.Size = new System.Drawing.Size(240, 28);
             this.cmbAlumno.TabIndex = 2;
+            this.cmbAlumno.SelectedIndexChanged += new System.EventHandler(this.cmbAlumno_SelectedIndexChanged);
             // 
             // lblAlumno
             // 

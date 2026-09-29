@@ -7,7 +7,7 @@
 
 @if (!string.IsNullOrEmpty(MensajeError))
 {
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <div class="alert alert-danger alert-dismissible fade show alerta-flotante" role="alert">
         @MensajeError
         <button type="button" class="btn-close" @onclick="() => MensajeError = string.Empty"></button>
     </div>
@@ -15,7 +15,7 @@
 
 @if (!string.IsNullOrEmpty(mensajeExito))
 {
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <div class="alert alert-success alert-dismissible fade show alerta-flotante" role="alert">
         @mensajeExito
         <button type="button" class="btn-close" @onclick="() => mensajeExito = string.Empty"></button>
     </div>
@@ -208,7 +208,7 @@ else
                                                                    @onchange="@(e => OnHoraSalidaDetalleChanged(det, e.Value?.ToString()))" />
                                                         </td>
                                                         <td>
-                                                            <span class="badge bg-warning text-dark">@det.Estado</span>
+                                                            <EstadoBadge Estado="@det.Estado" />
                                                         </td>
                                                         <td class="text-center">
                                                             <button class="btn btn-danger btn-sm py-0 px-2" @onclick="() => QuitarAlumnoDeDetalle(det.IdAlumno)">
@@ -407,7 +407,8 @@ else
             IdAlumno = alumno.IdAlumno,
             AlumnoNombreCompleto = $"{alumno.Nombre} {alumno.Apellido}",
             HoraSalida = DateTime.Now.TimeOfDay,
-            Estado = "Retirado"
+            // Se muestra el estado que el alumno tenia antes del retiro.
+            Estado = alumno.Estado
         });
 
         alumnoIdAAgregar = 0;

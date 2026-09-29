@@ -1,4 +1,5 @@
 using GTE.Application.Services;
+using GTE.Data;
 using GTE.DTOs;
 
 namespace GTE.WebAPI
@@ -7,6 +8,44 @@ namespace GTE.WebAPI
     {
         public static void MapTutorEndpoints(this WebApplication app)
         {
+            // Alumnos que el tutor que está conectado tiene autorizados.
+            app.MapGet("/mis-alumnos", async (
+                System.Security.Claims.ClaimsPrincipal usuario,
+                ITutorRepository tutorRepository,
+                IAutorizacionRepository autorizacionRepository) =>
+            {
+                string? idTexto = usuario.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+                if (!int.TryParse(idTexto, out int idUsuario))
+                    return Results.Ok(new List<AlumnoACargoDTO>());
+
+                var tutores = await tutorRepository.GetAllAsync();
+                var tutor = tutores.FirstOrDefault(t => t.Usuario != null && t.Usuario.IdUsuario == idUsuario);
+
+                if (tutor == null)
+                    return Results.Ok(new List<AlumnoACargoDTO>());
+
+                var alumnos = await autorizacionRepository.GetAlumnosByTutorIdAsync(tutor.IdTutor);
+
+                var dtos = alumnos.Select(alumno => new AlumnoACargoDTO
+                {
+                    IdAlumno = alumno.IdAlumno,
+                    Nombre = alumno.Nombre,
+                    Apellido = alumno.Apellido,
+                    Grado = alumno.CursoEscolar?.Grado ?? string.Empty,
+                    Curso = alumno.CursoEscolar?.Curso ?? string.Empty,
+                    Turno = alumno.CursoEscolar?.Turno ?? string.Empty,
+                    HorarioSalida = alumno.CursoEscolar?.HorarioSalida ?? TimeSpan.Zero,
+                    Estado = alumno.Estado
+                }).ToList();
+
+                return Results.Ok(dtos);
+            })
+            .WithName("GetMisAlumnos")
+            .Produces<List<AlumnoACargoDTO>>(StatusCodes.Status200OK)
+            .WithOpenApi()
+            .RequireAuthorization(Politicas.SoloTutor);
+
             app.MapGet("/tutores", async (ITutorService service) =>
             {
                 var dtos = await service.GetAllAsync();

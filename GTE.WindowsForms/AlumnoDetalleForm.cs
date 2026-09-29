@@ -32,44 +32,20 @@ namespace GTE.WindowsForms
 
         private void ApplyStyles()
         {
-            this.BackColor = Color.FromArgb(33, 37, 41);
+            Tema.Ventana(this);
+            Tema.Titulo(lblTitle);
 
-            lblTitle.ForeColor = Color.White;
-            lblNombre.ForeColor = Color.FromArgb(206, 212, 218);
-            lblApellido.ForeColor = Color.FromArgb(206, 212, 218);
-            lblTurno.ForeColor = Color.FromArgb(206, 212, 218);
-            lblCursoEscolar.ForeColor = Color.FromArgb(206, 212, 218);
-            lblEstado.ForeColor = Color.FromArgb(206, 212, 218);
+            foreach (var etiqueta in new[] { lblNombre, lblApellido, lblTurno, lblCursoEscolar, lblEstado })
+                Tema.Etiqueta(etiqueta);
 
-            txtNombre.BackColor = Color.FromArgb(49, 53, 56);
-            txtNombre.ForeColor = Color.White;
-            txtNombre.BorderStyle = BorderStyle.FixedSingle;
+            foreach (var campo in new[] { txtNombre, txtApellido })
+                Tema.Entrada(campo);
 
-            txtApellido.BackColor = Color.FromArgb(49, 53, 56);
-            txtApellido.ForeColor = Color.White;
-            txtApellido.BorderStyle = BorderStyle.FixedSingle;
+            foreach (var combo in new[] { cmbTurno, cmbCursoEscolar, cmbEstado })
+                Tema.Entrada(combo);
 
-            cmbTurno.BackColor = Color.FromArgb(49, 53, 56);
-            cmbTurno.ForeColor = Color.White;
-            cmbTurno.DropDownStyle = ComboBoxStyle.DropDownList;
-
-            cmbCursoEscolar.BackColor = Color.FromArgb(49, 53, 56);
-            cmbCursoEscolar.ForeColor = Color.White;
-            cmbCursoEscolar.DropDownStyle = ComboBoxStyle.DropDownList;
-
-            cmbEstado.BackColor = Color.FromArgb(49, 53, 56);
-            cmbEstado.ForeColor = Color.White;
-            cmbEstado.DropDownStyle = ComboBoxStyle.DropDownList;
-
-            btnGuardar.BackColor = Color.FromArgb(40, 167, 69);
-            btnGuardar.ForeColor = Color.White;
-            btnGuardar.FlatStyle = FlatStyle.Flat;
-            btnGuardar.FlatAppearance.BorderSize = 0;
-
-            btnCancelar.BackColor = Color.FromArgb(108, 117, 125);
-            btnCancelar.ForeColor = Color.White;
-            btnCancelar.FlatStyle = FlatStyle.Flat;
-            btnCancelar.FlatAppearance.BorderSize = 0;
+            Tema.BotonExito(btnGuardar);
+            Tema.BotonSecundario(btnCancelar);
         }
 
         private void CargarDatos()

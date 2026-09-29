@@ -33,6 +33,24 @@ namespace GTE.Clients
             throw new Exception("Error al obtener tutores.");
         }
 
+        /// <summary>Alumnos que el tutor conectado tiene a cargo.</summary>
+        public async Task<List<AlumnoACargoDTO>> GetMisAlumnosAsync()
+        {
+            await EnsureAuthenticatedAsync();
+            using var client = await CreateHttpClientAsync();
+
+            var response = await client.GetAsync("mis-alumnos");
+            await HandleUnauthorizedResponseAsync(response);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<List<AlumnoACargoDTO>>()
+                    ?? new List<AlumnoACargoDTO>();
+            }
+
+            throw new Exception("Error al obtener los alumnos a cargo.");
+        }
+
         public async Task<TutorDTO?> GetAsync(int id)
         {
             await EnsureAuthenticatedAsync();

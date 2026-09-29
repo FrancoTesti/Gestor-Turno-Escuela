@@ -9,6 +9,14 @@ namespace GTE.Clients
 {
     public class HorarioEspecialApiClient : BaseApiClient
     {
+        public HorarioEspecialApiClient()
+        {
+        }
+
+        public HorarioEspecialApiClient(IAuthService authService) : base(authService)
+        {
+        }
+
         public async Task<List<HorarioEspecialDTO>> GetAllAsync()
         {
             await EnsureAuthenticatedAsync();

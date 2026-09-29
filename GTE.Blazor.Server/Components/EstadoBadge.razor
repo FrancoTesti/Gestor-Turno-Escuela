@@ -1,0 +1,19 @@
+@* Muestra el estado de un alumno siempre con el mismo color, en cualquier pantalla. *@
+
+@if (!string.IsNullOrWhiteSpace(Estado))
+{
+    <span class="badge @Clase">@Estado</span>
+}
+
+@code {
+    [Parameter]
+    public string? Estado { get; set; }
+
+    private string Clase => (Estado ?? string.Empty).Trim().ToLowerInvariant() switch
+    {
+        "presente" => "bg-success",
+        "retirado" => "bg-warning text-dark",
+        "ausente" => "bg-danger",
+        _ => "bg-secondary"
+    };
+}

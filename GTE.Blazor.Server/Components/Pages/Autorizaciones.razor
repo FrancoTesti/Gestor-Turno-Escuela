@@ -7,7 +7,7 @@
 
 @if (!string.IsNullOrEmpty(MensajeError))
 {
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <div class="alert alert-danger alert-dismissible fade show alerta-flotante" role="alert">
         @MensajeError
         <button type="button" class="btn-close" @onclick="() => MensajeError = string.Empty"></button>
     </div>
@@ -15,7 +15,7 @@
 
 @if (!string.IsNullOrEmpty(mensajeExito))
 {
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <div class="alert alert-success alert-dismissible fade show alerta-flotante" role="alert">
         @mensajeExito
         <button type="button" class="btn-close" @onclick="() => mensajeExito = string.Empty"></button>
     </div>
@@ -126,9 +126,7 @@
                                     <td>@alu.Grado @alu.Curso</td>
                                     <td>@alu.Turno</td>
                                     <td>
-                                        <span class="badge @(alu.Estado == "Presente" ? "bg-success" : (alu.Estado == "Retirado" ? "bg-warning text-dark" : "bg-secondary"))">
-                                            @alu.Estado
-                                        </span>
+                                        <EstadoBadge Estado="@alu.Estado" />
                                     </td>
                                     <AuthorizeView Roles="Secretario">
                                         <Authorized>

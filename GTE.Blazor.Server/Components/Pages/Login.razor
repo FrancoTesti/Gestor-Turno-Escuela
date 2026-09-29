@@ -3,37 +3,95 @@
 @inject IAuthService AuthService
 @inject NavigationManager Nav
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-4">
-            <h3 class="mb-3">Iniciar Sesión</h3>
-            <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
+<PageTitle>Iniciar sesión</PageTitle>
+
+<div class="login-wrapper">
+    <div class="card login-card shadow">
+        <div class="card-body p-4">
+
+            <div class="text-center mb-4">
+                <h3 class="mb-1">Gestor de Turnos Escolar</h3>
+                <p class="text-muted mb-0">Sistema de gestión de retiros</p>
+            </div>
+
+            <EditForm Model="loginModel" OnValidSubmit="HandleLogin" FormName="login">
                 <div class="mb-3">
-                    <label>Usuario</label>
-                    <InputText @bind-Value="loginModel.Username" class="form-control" />
+                    <label class="form-label">Usuario</label>
+                    <InputText @bind-Value="loginModel.Username" class="form-control" placeholder="Ingrese su usuario" />
                 </div>
+
                 <div class="mb-3">
-                    <label>Contraseña</label>
-                    <InputText @bind-Value="loginModel.Password" type="password" class="form-control" />
+                    <label class="form-label">Contraseña</label>
+                    <InputText @bind-Value="loginModel.Password" type="password" class="form-control" placeholder="Ingrese su contraseña" />
                 </div>
-                @if (error) { <div class="alert alert-danger">Credenciales inválidas</div> }
-                <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+
+                @if (mensajeError is not null)
+                {
+                    <div class="alert alert-danger py-2 mb-3">
+                        @mensajeError
+                    </div>
+                }
+
+                <button type="submit" class="btn btn-primary w-100 py-2" disabled="@cargando">
+                    @(cargando ? "Ingresando..." : "Ingresar")
+                </button>
             </EditForm>
         </div>
     </div>
 </div>
 
+<style>
+    .login-wrapper {
+        min-height: 85vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 400px;
+        border: 0;
+        border-radius: 12px;
+    }
+</style>
+
 @code {
     private LoginData loginModel = new();
-    private bool error;
+    private string? mensajeError;
+    private bool cargando;
 
     private async Task HandleLogin()
     {
-        try {
+        mensajeError = null;
+        cargando = true;
+
+        try
+        {
             if (await AuthService.LoginAsync(loginModel.Username, loginModel.Password))
                 Nav.NavigateTo("/");
-            else error = true;
-        } catch { error = true; }
+            else
+                mensajeError = "Usuario o contraseña incorrectos.";
+        }
+        catch (ApiNoDisponibleException ex)
+        {
+            // Sin este caso aparte, cuando la API no está levantada la pantalla
+            // decía "usuario o contraseña incorrectos" y no se entendía el problema.
+            mensajeError = ex.Message;
+        }
+        catch (Exception ex)
+        {
+            mensajeError = $"No se pudo iniciar sesión: {ex.Message}";
+        }
+        finally
+        {
+            cargando = false;
+        }
     }
-    public class LoginData { public string Username { get; set; } = ""; public string Password { get; set; } = ""; }
+
+    public class LoginData
+    {
+        public string Username { get; set; } = "";
+        public string Password { get; set; } = "";
+    }
 }

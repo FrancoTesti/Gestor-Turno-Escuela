@@ -46,30 +46,27 @@ namespace GTE.Auth.WindowsForms
 
         public async Task<bool> LoginAsync(string username, string password)
         {
-            try
+            var authClient = new AuthApiClient();
+            var response = await authClient.LoginAsync(new LoginRequest
             {
-                var authClient = new AuthApiClient();
-                var response = await authClient.LoginAsync(new LoginRequest
-                {
-                    NombreUsuario = username,
-                    Contrasena = password
-                });
+                NombreUsuario = username,
+                Contrasena = password
+            });
 
-                if (response != null && response.Exito)
-                {
-                    _currentToken = response.Token;
-                    _tokenExpiration = response.ExpiresAt ?? DateTime.UtcNow.AddMinutes(60);
-                    _currentUsername = response.NombreUsuario;
-                    _currentRole = response.Rol;
-                    _currentNombreCompleto = response.NombreCompleto;
-
-                    AuthenticationStateChanged?.Invoke(true);
-                    return true;
-                }
-            }
-            catch (Exception)
+            // Si la API no está levantada, LoginAsync lanza ApiNoDisponibleException
+            // y esa excepción tiene que llegar a la pantalla de login, que la
+            // muestra como "Error de conexión". Tragársela acá hacía que el
+            // escritorio dijera "usuario o contraseña incorrectos".
+            if (response != null && response.Exito)
             {
-                // Ignorar error de red
+                _currentToken = response.Token;
+                _tokenExpiration = response.ExpiresAt ?? DateTime.UtcNow.AddMinutes(60);
+                _currentUsername = response.NombreUsuario;
+                _currentRole = response.Rol;
+                _currentNombreCompleto = response.NombreCompleto;
+
+                AuthenticationStateChanged?.Invoke(true);
+                return true;
             }
 
             return false;

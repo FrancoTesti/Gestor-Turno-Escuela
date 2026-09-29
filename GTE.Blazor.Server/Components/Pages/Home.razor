@@ -1,7 +1,137 @@
-﻿@page "/"
+@page "/"
+@attribute [Authorize]
+@inject IAuthService AuthService
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Inicio</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="mb-4">
+    <h2 class="mb-1">Hola, @nombreCompleto</h2>
+    <p class="text-muted mb-0">
+        Entraste como <strong>@rol</strong>. Estas son las secciones que tenés disponibles.
+    </p>
+</div>
 
-Welcome to your new app.
+<div class="row g-3">
+    <AuthorizeView Roles="Secretario,Portero">
+        <Authorized>
+            <div class="col-md-4">
+                <a class="card h-100 text-decoration-none shadow-sm" href="alumnos">
+                    <div class="card-body">
+                        <h5 class="card-title">Alumnos</h5>
+                        <p class="card-text text-muted mb-0">
+                            Consultá el listado, buscá por curso o turno y administrá los legajos.
+                        </p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a class="card h-100 text-decoration-none shadow-sm" href="retiros">
+                    <div class="card-body">
+                        <h5 class="card-title">Retiros</h5>
+                        <p class="card-text text-muted mb-0">
+                            Registrá la entrega de alumnos a un tutor autorizado.
+                        </p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a class="card h-100 text-decoration-none shadow-sm" href="horariosespeciales">
+                    <div class="card-body">
+                        <h5 class="card-title">Horarios especiales</h5>
+                        <p class="card-text text-muted mb-0">
+                            Cargá las salidas a una hora distinta por una actividad puntual.
+                        </p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a class="card h-100 text-decoration-none shadow-sm" href="tutores">
+                    <div class="card-body">
+                        <h5 class="card-title">Tutores</h5>
+                        <p class="card-text text-muted mb-0">
+                            Datos de contacto de los adultos autorizados a retirar.
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </Authorized>
+    </AuthorizeView>
+
+    <AuthorizeView Roles="Secretario">
+        <Authorized>
+            <div class="col-md-4">
+                <a class="card h-100 text-decoration-none shadow-sm" href="autorizaciones">
+                    <div class="card-body">
+                        <h5 class="card-title">Autorizaciones</h5>
+                        <p class="card-text text-muted mb-0">
+                            Definí qué tutor puede retirar a cada alumno.
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </Authorized>
+    </AuthorizeView>
+
+    <div class="col-md-4">
+        <a class="card h-100 text-decoration-none shadow-sm" href="cursos">
+            <div class="card-body">
+                <h5 class="card-title">Cursos</h5>
+                <p class="card-text text-muted mb-0">
+                    Grados, divisiones, turnos y horario de salida de cada curso.
+                </p>
+            </div>
+        </a>
+    </div>
+
+    <AuthorizeView Roles="Tutor">
+        <Authorized>
+            <div class="col-md-4">
+                <a class="card h-100 text-decoration-none shadow-sm" href="mis-alumnos">
+                    <div class="card-body">
+                        <h5 class="card-title">Mis alumnos</h5>
+                        <p class="card-text text-muted mb-0">
+                            Los alumnos a tu cargo, con su curso, horario de salida y estado.
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </Authorized>
+    </AuthorizeView>
+
+    <AuthorizeView Roles="Secretario,Portero">
+        <Authorized>
+            <div class="col-md-4">
+                <a class="card h-100 text-decoration-none shadow-sm" href="reportealumnos">
+                    <div class="card-body">
+                        <h5 class="card-title">Reporte de alumnos</h5>
+                        <p class="card-text text-muted mb-0">
+                            Cantidad de alumnos por curso y turno, con gráfico.
+                        </p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a class="card h-100 text-decoration-none shadow-sm" href="reporteretiros">
+                    <div class="card-body">
+                        <h5 class="card-title">Reporte de retiros</h5>
+                        <p class="card-text text-muted mb-0">
+                            Retiros de un período, con el detalle de los alumnos.
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </Authorized>
+    </AuthorizeView>
+</div>
+
+@code {
+    private string? nombreCompleto;
+    private string? rol;
+
+    protected override async Task OnInitializedAsync()
+    {
+        nombreCompleto = await AuthService.GetNombreCompletoAsync()
+            ?? await AuthService.GetUsernameAsync();
+        rol = await AuthService.GetRoleAsync();
+    }
+}

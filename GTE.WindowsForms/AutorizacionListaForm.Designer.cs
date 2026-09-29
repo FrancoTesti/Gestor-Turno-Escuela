@@ -146,6 +146,7 @@ namespace GTE.WindowsForms
             this.dgvAlumnosAutorizados.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvAlumnosAutorizados.Location = new System.Drawing.Point(24, 220);
             this.dgvAlumnosAutorizados.Name = "dgvAlumnosAutorizados";
+            this.dgvAlumnosAutorizados.ReadOnly = true;
             this.dgvAlumnosAutorizados.RowHeadersWidth = 51;
             this.dgvAlumnosAutorizados.RowTemplate.Height = 29;
             this.dgvAlumnosAutorizados.Size = new System.Drawing.Size(730, 280);

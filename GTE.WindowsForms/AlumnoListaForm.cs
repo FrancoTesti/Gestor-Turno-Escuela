@@ -20,36 +20,16 @@ namespace GTE.WindowsForms
 
         private void ApplyStyles()
         {
-            this.BackColor = Color.FromArgb(248, 249, 250);
+            Tema.Ventana(this);
+            Tema.Titulo(lblTitle);
+            Tema.Etiqueta(lblSearch);
 
-            lblTitle.ForeColor = Color.FromArgb(33, 37, 41);
-            lblSearch.ForeColor = Color.FromArgb(73, 80, 87);
+            Tema.BotonSecundario(btnBuscar);
+            Tema.BotonExito(btnNuevo);
+            Tema.BotonPrimario(btnEditar);
+            Tema.BotonPeligro(btnEliminar);
 
-            btnBuscar.BackColor = Color.FromArgb(108, 117, 125);
-            btnBuscar.ForeColor = Color.White;
-            btnBuscar.FlatStyle = FlatStyle.Flat;
-            btnBuscar.FlatAppearance.BorderSize = 0;
-
-            btnNuevo.BackColor = Color.FromArgb(40, 167, 69);
-            btnNuevo.ForeColor = Color.White;
-            btnNuevo.FlatStyle = FlatStyle.Flat;
-            btnNuevo.FlatAppearance.BorderSize = 0;
-
-            btnEditar.BackColor = Color.FromArgb(23, 162, 184);
-            btnEditar.ForeColor = Color.White;
-            btnEditar.FlatStyle = FlatStyle.Flat;
-            btnEditar.FlatAppearance.BorderSize = 0;
-
-            btnEliminar.BackColor = Color.FromArgb(220, 53, 69);
-            btnEliminar.ForeColor = Color.White;
-            btnEliminar.FlatStyle = FlatStyle.Flat;
-            btnEliminar.FlatAppearance.BorderSize = 0;
-
-            dgvAlumnos.BackgroundColor = Color.White;
-            dgvAlumnos.BorderStyle = BorderStyle.None;
-            dgvAlumnos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvAlumnos.MultiSelect = false;
-            dgvAlumnos.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(241, 243, 245);
+            Tema.Grilla(dgvAlumnos);
         }
 
         private async void AlumnoListaForm_Load(object sender, EventArgs e)
