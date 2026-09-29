@@ -1,0 +1,115 @@
+using GTE.DTOs;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
+
+namespace GTE.Clients
+{
+    public class TutorApiClient : BaseApiClient
+    {
+        public TutorApiClient()
+        {
+        }
+
+        public TutorApiClient(IAuthService authService) : base(authService)
+        {
+        }
+
+        public async Task<List<TutorDTO>> GetAllAsync()
+        {
+            await EnsureAuthenticatedAsync();
+            using var client = await CreateHttpClientAsync();
+
+            var response = await client.GetAsync("tutores");
+            await HandleUnauthorizedResponseAsync(response);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<List<TutorDTO>>() ?? new List<TutorDTO>();
+            }
+
+            throw new Exception("Error al obtener tutores.");
+        }
+
+        public async Task<TutorDTO?> GetAsync(int id)
+        {
+            await EnsureAuthenticatedAsync();
+            using var client = await CreateHttpClientAsync();
+
+            var response = await client.GetAsync($"tutores/{id}");
+            await HandleUnauthorizedResponseAsync(response);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<TutorDTO>();
+            }
+
+            return null;
+        }
+
+        public async Task<TutorDTO> AddAsync(TutorDTO dto)
+        {
+            await EnsureAuthenticatedAsync();
+            using var client = await CreateHttpClientAsync();
+
+            var response = await client.PostAsJsonAsync("tutores", dto);
+            await HandleUnauthorizedResponseAsync(response);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<TutorDTO>() ?? dto;
+            }
+
+            throw new Exception(await LeerMensajeDeErrorAsync(response, "Error al agregar tutor."));
+        }
+
+        public async Task<bool> UpdateAsync(TutorDTO dto)
+        {
+            await EnsureAuthenticatedAsync();
+            using var client = await CreateHttpClientAsync();
+
+            var response = await client.PutAsJsonAsync("tutores", dto);
+            await HandleUnauthorizedResponseAsync(response);
+
+            if (response.IsSuccessStatusCode)
+                return true;
+
+            if ((int)response.StatusCode == 400)
+                throw new Exception(await LeerMensajeDeErrorAsync(response, "No se pudo modificar el tutor."));
+
+            return false;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            await EnsureAuthenticatedAsync();
+            using var client = await CreateHttpClientAsync();
+
+            var response = await client.DeleteAsync($"tutores/{id}");
+            await HandleUnauthorizedResponseAsync(response);
+
+            return response.IsSuccessStatusCode;
+        }
+
+        /// <summary>La API devuelve los errores de negocio en un campo "error".</summary>
+        private static async Task<string> LeerMensajeDeErrorAsync(HttpResponseMessage response, string porDefecto)
+        {
+            try
+            {
+                var cuerpo = await response.Content.ReadFromJsonAsync<RespuestaDeError>();
+                return string.IsNullOrWhiteSpace(cuerpo?.Error) ? porDefecto : cuerpo!.Error!;
+            }
+            catch (Exception)
+            {
+                return porDefecto;
+            }
+        }
+
+        private sealed class RespuestaDeError
+        {
+            public string? Error { get; set; }
+        }
+    }
+}

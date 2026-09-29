@@ -97,25 +97,6 @@ namespace GTE.WebAPI
             .WithOpenApi()
             .RequireAuthorization(Politicas.GestionRetiros);
 
-            app.MapGet("/tutores", async (ITutorRepository tutorRepo) =>
-            {
-                var tutores = await tutorRepo.GetAllAsync();
-                return Results.Ok(tutores.Select(t => new TutorDTO
-                {
-                    IdTutor = t.IdTutor,
-                    Nombre = t.Nombre,
-                    Apellido = t.Apellido,
-                    Dni = t.Dni,
-                    Parentesco = t.Parentesco,
-                    Telefono = t.Telefono,
-                    TieneRestriccion = t.TieneRestriccion
-                }).ToList());
-            })
-            .WithName("GetAllTutores")
-            .Produces<List<TutorDTO>>(StatusCodes.Status200OK)
-            .WithOpenApi()
-            .RequireAuthorization(Politicas.GestionRetiros);
-
             app.MapGet("/personal", async (GTEContext db) =>
             {
                 var lista = await db.Personal.ToListAsync();

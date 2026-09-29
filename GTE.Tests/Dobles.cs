@@ -61,18 +61,83 @@ internal sealed class RetiroServiceFalso : IRetiroService
 
 internal sealed class TutorRepositoryFalso : ITutorRepository
 {
-    public Task AddAsync(Tutor tutor) => Task.CompletedTask;
+    private readonly List<Tutor> _tutores;
+
+    public TutorRepositoryFalso()
+    {
+        _tutores = new List<Tutor>();
+    }
+
+    public TutorRepositoryFalso(IEnumerable<Tutor> tutores)
+    {
+        _tutores = tutores.ToList();
+    }
+
+    public Tutor? UltimoAgregado { get; private set; }
+
+    public Task AddAsync(Tutor tutor)
+    {
+        _tutores.Add(tutor);
+        UltimoAgregado = tutor;
+        return Task.CompletedTask;
+    }
 
     public Task<bool> DeleteAsync(int id) => Task.FromResult(true);
 
-    public Task<Tutor?> GetAsync(int id) => Task.FromResult<Tutor?>(null);
+    public Task<Tutor?> GetAsync(int id) =>
+        Task.FromResult(_tutores.FirstOrDefault(t => t.IdTutor == id));
 
     public Task<IEnumerable<Tutor>> GetAllAsync() =>
-        Task.FromResult<IEnumerable<Tutor>>(Array.Empty<Tutor>());
+        Task.FromResult<IEnumerable<Tutor>>(_tutores.ToList());
 
     public Task<bool> UpdateAsync(Tutor tutor) => Task.FromResult(true);
 
-    public Task<bool> DniExisteAsync(string dni, int? excludeId = null) => Task.FromResult(false);
+    public Task<bool> DniExisteAsync(string dni, int? excludeId = null) =>
+        Task.FromResult(_tutores.Any(t =>
+            t.Dni == dni && (!excludeId.HasValue || t.IdTutor != excludeId.Value)));
+}
+
+/// <summary>Repositorio de usuarios en memoria, para las pruebas de servicios.</summary>
+internal sealed class UsuarioRepositoryFalso : IUsuarioRepository
+{
+    private readonly List<Usuario> _usuarios;
+
+    public UsuarioRepositoryFalso(IEnumerable<Usuario>? usuarios = null)
+    {
+        _usuarios = usuarios?.ToList() ?? new List<Usuario>();
+    }
+
+    public Usuario? UltimoAgregado { get; private set; }
+
+    public List<int> Eliminados { get; } = new();
+
+    public Task AddAsync(Usuario usuario)
+    {
+        _usuarios.Add(usuario);
+        UltimoAgregado = usuario;
+        return Task.CompletedTask;
+    }
+
+    public Task<bool> DeleteAsync(int id)
+    {
+        Eliminados.Add(id);
+        return Task.FromResult(true);
+    }
+
+    public Task<Usuario?> GetAsync(int id) =>
+        Task.FromResult(_usuarios.FirstOrDefault(u => u.IdUsuario == id));
+
+    public Task<IEnumerable<Usuario>> GetAllAsync() =>
+        Task.FromResult<IEnumerable<Usuario>>(_usuarios.ToList());
+
+    public Task<bool> UpdateAsync(Usuario usuario) => Task.FromResult(true);
+
+    public Task<Usuario?> GetByNombreUsuarioAsync(string nombreUsuario) =>
+        Task.FromResult(_usuarios.FirstOrDefault(u => u.NombreUsuario == nombreUsuario));
+
+    public Task<bool> NombreUsuarioExisteAsync(string nombreUsuario, int? excludeId = null) =>
+        Task.FromResult(_usuarios.Any(u =>
+            u.NombreUsuario == nombreUsuario && (!excludeId.HasValue || u.IdUsuario != excludeId.Value)));
 }
 
 /// <summary>Servicio de reportes vacio, para poder mapear los endpoints en las pruebas.</summary>
@@ -83,6 +148,21 @@ internal sealed class ReporteServiceFalso : IReporteService
 
     public Task<IEnumerable<RetiroDTO>> GetRetirosAsync(DateTime? desde, DateTime? hasta) =>
         Task.FromResult<IEnumerable<RetiroDTO>>(Array.Empty<RetiroDTO>());
+}
+
+/// <summary>Servicio de tutores vacio, para poder mapear los endpoints en las pruebas.</summary>
+internal sealed class TutorServiceFalso : ITutorService
+{
+    public Task<IEnumerable<TutorDTO>> GetAllAsync() =>
+        Task.FromResult<IEnumerable<TutorDTO>>(Array.Empty<TutorDTO>());
+
+    public Task<TutorDTO?> GetAsync(int id) => Task.FromResult<TutorDTO?>(null);
+
+    public Task<TutorDTO> AddAsync(TutorDTO dto) => Task.FromResult(dto);
+
+    public Task<bool> UpdateAsync(TutorDTO dto) => Task.FromResult(true);
+
+    public Task<bool> DeleteAsync(int id) => Task.FromResult(true);
 }
 
 /// <summary>Repositorio de alumnos en memoria, para las pruebas de servicios.</summary>
