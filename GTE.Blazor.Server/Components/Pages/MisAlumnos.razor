@@ -1,0 +1,62 @@
+@page "/mis-alumnos"
+@attribute [Authorize(Roles = "Tutor")]
+@inherits PaginaConApiBase
+@inject TutorApiClient TutoresClient
+
+<PageTitle>Mis alumnos</PageTitle>
+
+<h3>Mis alumnos a cargo</h3>
+
+@if (!string.IsNullOrEmpty(MensajeError))
+{
+    <div class="alert alert-danger alerta-flotante">@MensajeError</div>
+}
+
+@if (alumnos == null)
+{
+    <p><em>Cargando...</em></p>
+}
+else if (alumnos.Count == 0)
+{
+    <div class="alert alert-info">
+        Todavía no tenés alumnos autorizados a tu cargo. Consultá con la secretaría.
+    </div>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Alumno</th>
+                <th>Curso</th>
+                <th>Turno</th>
+                <th>Horario de salida</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var a in alumnos)
+            {
+                <tr>
+                    <td>@a.Nombre @a.Apellido</td>
+                    <td>@a.Grado @a.Curso</td>
+                    <td>@a.Turno</td>
+                    <td>@a.HorarioSalida.ToString(@"hh\:mm")</td>
+                    <td><EstadoBadge Estado="@a.Estado" /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<AlumnoACargoDTO>? alumnos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await EjecutarAsync(async () =>
+        {
+            alumnos = await TutoresClient.GetMisAlumnosAsync();
+        });
+    }
+}

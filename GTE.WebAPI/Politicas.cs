@@ -29,6 +29,9 @@ public static class Politicas
     /// <summary>Pueden operar los retiros el Secretario y el Portero.</summary>
     public const string GestionRetiros = "GestionRetiros";
 
+    /// <summary>Solo el Tutor, para sus propias pantallas.</summary>
+    public const string SoloTutor = "SoloTutor";
+
     /// <summary>
     /// Registra las políticas de autorización de la aplicación.
     /// </summary>
@@ -47,6 +50,9 @@ public static class Politicas
 
             options.AddPolicy(GestionRetiros, politica =>
                 politica.RequireRole(RolSecretario, RolPortero));
+
+            options.AddPolicy(SoloTutor, politica =>
+                politica.RequireRole(RolTutor));
         });
 
         return services;

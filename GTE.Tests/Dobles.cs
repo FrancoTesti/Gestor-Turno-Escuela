@@ -161,6 +161,32 @@ internal sealed class UsuarioRepositoryFalso : IUsuarioRepository
             u.NombreUsuario == nombreUsuario && (!excludeId.HasValue || u.IdUsuario != excludeId.Value)));
 }
 
+/// <summary>Repositorio de autorizaciones vacio, para poder mapear los endpoints.</summary>
+internal sealed class AutorizacionRepositoryFalso : IAutorizacionRepository
+{
+    public Task<IEnumerable<Autorizacion>> GetAllAsync() =>
+        Task.FromResult<IEnumerable<Autorizacion>>(Array.Empty<Autorizacion>());
+
+    public Task<Autorizacion?> GetByIdAsync(int id) => Task.FromResult<Autorizacion?>(null);
+
+    public Task<IEnumerable<Autorizacion>> GetByTutorIdAsync(int tutorId) =>
+        Task.FromResult<IEnumerable<Autorizacion>>(Array.Empty<Autorizacion>());
+
+    public Task<IEnumerable<Alumno>> GetAlumnosByTutorIdAsync(int tutorId) =>
+        Task.FromResult<IEnumerable<Alumno>>(Array.Empty<Alumno>());
+
+    public Task<Autorizacion?> GetByTutorAndAlumnoAsync(int tutorId, int alumnoId) =>
+        Task.FromResult<Autorizacion?>(null);
+
+    public Task<bool> EstaAutorizadoAsync(int tutorId, int alumnoId) => Task.FromResult(false);
+
+    public Task AddAsync(Autorizacion autorizacion) => Task.CompletedTask;
+
+    public Task<bool> DeleteAsync(int id) => Task.FromResult(true);
+
+    public Task<bool> DeleteByTutorAndAlumnoAsync(int tutorId, int alumnoId) => Task.FromResult(true);
+}
+
 /// <summary>Servicio de reportes vacio, para poder mapear los endpoints en las pruebas.</summary>
 internal sealed class ReporteServiceFalso : IReporteService
 {

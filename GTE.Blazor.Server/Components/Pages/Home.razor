@@ -82,6 +82,21 @@
         </a>
     </div>
 
+    <AuthorizeView Roles="Tutor">
+        <Authorized>
+            <div class="col-md-4">
+                <a class="card h-100 text-decoration-none shadow-sm" href="mis-alumnos">
+                    <div class="card-body">
+                        <h5 class="card-title">Mis alumnos</h5>
+                        <p class="card-text text-muted mb-0">
+                            Los alumnos a tu cargo, con su curso, horario de salida y estado.
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </Authorized>
+    </AuthorizeView>
+
     <AuthorizeView Roles="Secretario,Portero">
         <Authorized>
             <div class="col-md-4">

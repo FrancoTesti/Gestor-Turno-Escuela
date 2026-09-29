@@ -39,6 +39,7 @@ public class EndpointPolicyTests
     [InlineData("GET", "/reportes/alumnos-por-curso", Politicas.LecturaAlumnos)]
     [InlineData("GET", "/reportes/retiros", Politicas.LecturaAlumnos)]
     [InlineData("GET", "/tutores", Politicas.LecturaAlumnos)]
+    [InlineData("GET", "/mis-alumnos", Politicas.SoloTutor)]
     [InlineData("GET", "/tutores/{id:int}", Politicas.LecturaAlumnos)]
     [InlineData("POST", "/tutores", Politicas.SoloSecretario)]
     [InlineData("PUT", "/tutores", Politicas.SoloSecretario)]
@@ -100,6 +101,7 @@ public class EndpointPolicyTests
         builder.Services.AddSingleton<IReporteService, ReporteServiceFalso>();
         builder.Services.AddSingleton<ITutorService, TutorServiceFalso>();
         builder.Services.AddSingleton<ITutorRepository, TutorRepositoryFalso>();
+        builder.Services.AddSingleton<IAutorizacionRepository, AutorizacionRepositoryFalso>();
         builder.Services.AddDbContext<GTEContext>(opciones =>
             opciones.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=SoloParaMapear;Trusted_Connection=True"));
 
