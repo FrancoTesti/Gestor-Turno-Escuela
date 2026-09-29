@@ -208,7 +208,7 @@ else
                                                                    @onchange="@(e => OnHoraSalidaDetalleChanged(det, e.Value?.ToString()))" />
                                                         </td>
                                                         <td>
-                                                            <span class="badge bg-warning text-dark">@det.Estado</span>
+                                                            <EstadoBadge Estado="@det.Estado" />
                                                         </td>
                                                         <td class="text-center">
                                                             <button class="btn btn-danger btn-sm py-0 px-2" @onclick="() => QuitarAlumnoDeDetalle(det.IdAlumno)">
