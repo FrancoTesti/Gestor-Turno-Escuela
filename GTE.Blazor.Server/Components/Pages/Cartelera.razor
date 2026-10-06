@@ -1,0 +1,196 @@
+@page "/cartelera"
+@layout EmptyLayout
+@inject CarteleraApiClient CarteleraClient
+@implements IDisposable
+
+<PageTitle>Salida de cursos</PageTitle>
+
+@* Pantalla para dejar abierta en la puerta del colegio: letra grande, sin menú
+   y sin nombres de alumnos, porque la ve cualquiera que pase. *@
+
+<div class="cartelera">
+    <div class="cartelera-encabezado">
+        <h1>Salida de cursos</h1>
+        <span class="cartelera-reloj">@horaActual.ToString(@"HH\:mm")</span>
+    </div>
+
+    @if (hayError)
+    {
+        <div class="cartelera-centro">
+            <p class="cartelera-grande">Sin conexión</p>
+            <p class="cartelera-chico">Reintentando...</p>
+        </div>
+    }
+    else if (cartelera.EnSalida.Count == 0)
+    {
+        <div class="cartelera-centro">
+            <p class="cartelera-grande">No hay ningún curso saliendo</p>
+            @if (cartelera.Proximo is not null)
+            {
+                <p class="cartelera-chico">
+                    Próximo: @cartelera.Proximo.Grado @cartelera.Proximo.Curso
+                    a las @cartelera.Proximo.HorarioSalida.ToString(@"hh\:mm")
+                </p>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="cartelera-cursos">
+            @foreach (var curso in cartelera.EnSalida)
+            {
+                <div class="cartelera-curso">
+                    <p class="cartelera-curso-nombre">@curso.Grado @curso.Curso</p>
+                    <p class="cartelera-curso-dato">Turno @curso.Turno</p>
+                    <p class="cartelera-curso-dato">
+                        @(curso.CantidadDeAlumnos == 1 ? "1 alumno" : $"{curso.CantidadDeAlumnos} alumnos")
+                    </p>
+                    <p class="cartelera-curso-pie">
+                        Sale por @curso.Puerta desde las @curso.FechaHoraInicio.ToString(@"HH\:mm")
+                    </p>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    .cartelera {
+        min-height: 88vh;
+        background: #0d1b2a;
+        color: #f8f9fa;
+        border-radius: 12px;
+        padding: 24px 32px 32px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .cartelera-encabezado {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        border-bottom: 1px solid #1b3a5c;
+        padding-bottom: 12px;
+    }
+
+    .cartelera-encabezado h1 {
+        font-size: 2.2rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .cartelera-reloj {
+        font-size: 2.2rem;
+        font-weight: 600;
+        color: #8ecae6;
+    }
+
+    .cartelera-centro {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .cartelera-grande {
+        font-size: 3.4rem;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .cartelera-chico {
+        font-size: 1.8rem;
+        color: #a9c5dd;
+        margin-top: 12px;
+    }
+
+    .cartelera-cursos {
+        flex: 1;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: center;
+        justify-content: center;
+        gap: 24px;
+        padding-top: 24px;
+    }
+
+    .cartelera-curso {
+        min-width: 340px;
+        background: #16324f;
+        border: 1px solid #2a5b8c;
+        border-radius: 16px;
+        padding: 28px 32px;
+        text-align: center;
+    }
+
+    .cartelera-curso-nombre {
+        font-size: 5rem;
+        font-weight: 700;
+        line-height: 1;
+        margin: 0;
+    }
+
+    .cartelera-curso-dato {
+        font-size: 1.6rem;
+        color: #a9c5dd;
+        margin: 10px 0 0;
+    }
+
+    .cartelera-curso-pie {
+        font-size: 1.2rem;
+        color: #7fa1bf;
+        margin: 18px 0 0;
+    }
+</style>
+
+@code {
+    private CarteleraDTO cartelera = new();
+    private DateTime horaActual = DateTime.Now;
+    private bool hayError;
+    private readonly CancellationTokenSource cancelacion = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ActualizarAsync();
+
+        // La pantalla se refresca sola: nadie va a apretar F5 en la puerta.
+        _ = RefrescarCadaCincoSegundosAsync();
+    }
+
+    private async Task RefrescarCadaCincoSegundosAsync()
+    {
+        try
+        {
+            while (!cancelacion.IsCancellationRequested)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(5), cancelacion.Token);
+                await ActualizarAsync();
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // La pantalla se cerró: no hay nada más que hacer.
+        }
+    }
+
+    private async Task ActualizarAsync()
+    {
+        horaActual = DateTime.Now;
+
+        try
+        {
+            cartelera = await CarteleraClient.GetAsync();
+            hayError = false;
+        }
+        catch (Exception)
+        {
+            // Si se cortó la conexión, la pantalla avisa y sigue intentando sola.
+            hayError = true;
+        }
+    }
+
+    public void Dispose() => cancelacion.Cancel();
+}

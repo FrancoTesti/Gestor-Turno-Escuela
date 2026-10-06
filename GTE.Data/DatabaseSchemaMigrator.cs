@@ -98,6 +98,24 @@ IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_DetalleRetiros_IdRetir
 
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_DetalleRetiros_IdAlumno' AND object_id = OBJECT_ID('DetalleRetiros'))
     CREATE INDEX IX_DetalleRetiros_IdAlumno ON DetalleRetiros(IdAlumno);");
+
+            // 3. Crear la tabla de salidas de curso, que usa la pantalla de la puerta.
+            await context.Database.ExecuteSqlRawAsync(@"
+IF OBJECT_ID('SalidasDeCurso', 'U') IS NULL
+BEGIN
+    CREATE TABLE SalidasDeCurso (
+        IdSalidaDeCurso int IDENTITY(1,1) NOT NULL PRIMARY KEY,
+        IdCurso int NOT NULL,
+        IdPersonal int NOT NULL,
+        FechaHoraInicio datetime2 NOT NULL,
+        FechaHoraFin datetime2 NULL,
+        CONSTRAINT FK_SalidasDeCurso_Cursos_IdCurso FOREIGN KEY (IdCurso) REFERENCES Cursos(IdCurso),
+        CONSTRAINT FK_SalidasDeCurso_Personal_IdPersonal FOREIGN KEY (IdPersonal) REFERENCES Personal(IdPersonal)
+    );
+END;
+
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_SalidasDeCurso_IdCurso_FechaHoraFin' AND object_id = OBJECT_ID('SalidasDeCurso'))
+    CREATE INDEX IX_SalidasDeCurso_IdCurso_FechaHoraFin ON SalidasDeCurso(IdCurso, FechaHoraFin);");
         }
     }
 }

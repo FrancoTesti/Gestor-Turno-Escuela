@@ -49,6 +49,7 @@ public class PoliticasTests
     [InlineData(Politicas.LecturaAlumnos)]
     [InlineData(Politicas.LecturaCursos)]
     [InlineData(Politicas.GestionRetiros)]
+    [InlineData(Politicas.GestionSalidas)]
     [InlineData(Politicas.SoloTutor)]
     public async Task Un_usuario_sin_rol_no_puede_autorizar(string politica)
     {
@@ -75,6 +76,17 @@ public class PoliticasTests
     public async Task SoloTutor_solo_lo_permite_al_tutor(string rol, bool esperado)
     {
         bool autorizado = await AutorizarAsync(Politicas.SoloTutor, rol);
+
+        Assert.Equal(esperado, autorizado);
+    }
+
+    [Theory]
+    [InlineData(Secretario, true)]
+    [InlineData(Portero, true)]
+    [InlineData(Tutor, false)]
+    public async Task GestionSalidas_lo_permite_al_secretario_y_al_portero(string rol, bool esperado)
+    {
+        bool autorizado = await AutorizarAsync(Politicas.GestionSalidas, rol);
 
         Assert.Equal(esperado, autorizado);
     }

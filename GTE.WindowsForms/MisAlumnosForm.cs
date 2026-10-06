@@ -25,10 +25,21 @@ namespace GTE.WindowsForms
             Tema.Ventana(this);
             Tema.Titulo(lblTitle);
             Tema.Etiqueta(lblSub);
+            Tema.BotonSecundario(btnActualizar);
             Tema.Grilla(dgvAlumnos);
         }
 
         private async void MisAlumnosForm_Load(object sender, EventArgs e)
+        {
+            await CargarAsync();
+        }
+
+        private async void btnActualizar_Click(object sender, EventArgs e)
+        {
+            await CargarAsync();
+        }
+
+        private async Task CargarAsync()
         {
             try
             {
@@ -54,6 +65,8 @@ namespace GTE.WindowsForms
                     dgvAlumnos.Columns["HorarioSalida"].Width = 140;
                     dgvAlumnos.Columns["Estado"].HeaderText = "Estado";
                     dgvAlumnos.Columns["Estado"].Width = 100;
+                    dgvAlumnos.Columns["EstaSaliendo"].HeaderText = "¿Está saliendo?";
+                    dgvAlumnos.Columns["EstaSaliendo"].Width = 130;
                 }
 
                 if (alumnos.Count == 0)

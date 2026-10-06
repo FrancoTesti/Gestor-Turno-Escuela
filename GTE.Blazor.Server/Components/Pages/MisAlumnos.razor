@@ -7,6 +7,10 @@
 
 <h3>Mis alumnos a cargo</h3>
 
+<button class="btn btn-outline-primary btn-sm mb-3" @onclick="CargarAsync" disabled="@cargando">
+    @(cargando ? "Actualizando..." : "Actualizar")
+</button>
+
 @if (!string.IsNullOrEmpty(MensajeError))
 {
     <div class="alert alert-danger alerta-flotante">@MensajeError</div>
@@ -42,7 +46,15 @@ else
                     <td>@a.Grado @a.Curso</td>
                     <td>@a.Turno</td>
                     <td>@a.HorarioSalida.ToString(@"hh\:mm")</td>
-                    <td><EstadoBadge Estado="@a.Estado" /></td>
+                    <td>
+                        <EstadoBadge Estado="@a.Estado" />
+                        @if (a.EstaSaliendo)
+                        {
+                            @* Sin nombres en la pantalla de la puerta, el aviso de
+                               que el curso está saliendo le llega al tutor acá. *@
+                            <span class="badge bg-primary ms-1">Su curso está saliendo</span>
+                        }
+                    </td>
                 </tr>
             }
         </tbody>
@@ -51,12 +63,22 @@ else
 
 @code {
     private List<AlumnoACargoDTO>? alumnos;
+    private bool cargando;
 
     protected override async Task OnInitializedAsync()
     {
+        await CargarAsync();
+    }
+
+    private async Task CargarAsync()
+    {
+        cargando = true;
+
         await EjecutarAsync(async () =>
         {
             alumnos = await TutoresClient.GetMisAlumnosAsync();
         });
+
+        cargando = false;
     }
 }

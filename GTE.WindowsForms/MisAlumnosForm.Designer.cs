@@ -17,6 +17,7 @@ namespace GTE.WindowsForms
         {
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblSub = new System.Windows.Forms.Label();
+            this.btnActualizar = new System.Windows.Forms.Button();
             this.dgvAlumnos = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAlumnos)).BeginInit();
             this.SuspendLayout();
@@ -40,6 +41,17 @@ namespace GTE.WindowsForms
             this.lblSub.TabIndex = 1;
             this.lblSub.Text = "Alumnos autorizados a retirar, con su curso, horario de salida y estado.";
             // 
+            // btnActualizar
+            // 
+            this.btnActualizar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnActualizar.Location = new System.Drawing.Point(650, 26);
+            this.btnActualizar.Name = "btnActualizar";
+            this.btnActualizar.Size = new System.Drawing.Size(110, 32);
+            this.btnActualizar.TabIndex = 3;
+            this.btnActualizar.Text = "Actualizar";
+            this.btnActualizar.UseVisualStyleBackColor = true;
+            this.btnActualizar.Click += new System.EventHandler(this.btnActualizar_Click);
+            // 
             // dgvAlumnos
             // 
             this.dgvAlumnos.AllowUserToAddRows = false;
@@ -61,6 +73,7 @@ namespace GTE.WindowsForms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(780, 530);
             this.Controls.Add(this.dgvAlumnos);
+            this.Controls.Add(this.btnActualizar);
             this.Controls.Add(this.lblSub);
             this.Controls.Add(this.lblTitle);
             this.Name = "MisAlumnosForm";
@@ -73,6 +86,7 @@ namespace GTE.WindowsForms
 
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label lblSub;
+        private System.Windows.Forms.Button btnActualizar;
         private System.Windows.Forms.DataGridView dgvAlumnos;
     }
 }

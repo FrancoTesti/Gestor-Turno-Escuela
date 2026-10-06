@@ -30,6 +30,9 @@ public class EndpointPolicyTests
     [InlineData("DELETE", "/retiros/{id:int}", Politicas.GestionRetiros)]
     [InlineData("GET", "/tutores/{id:int}/alumnos", Politicas.GestionRetiros)]
     [InlineData("GET", "/personal", Politicas.GestionRetiros)]
+    [InlineData("GET", "/salidas", Politicas.GestionSalidas)]
+    [InlineData("POST", "/salidas", Politicas.GestionSalidas)]
+    [InlineData("POST", "/salidas/{id:int}/finalizar", Politicas.GestionSalidas)]
     [InlineData("GET", "/autorizaciones", Politicas.LecturaAlumnos)]
     [InlineData("GET", "/autorizaciones/{id:int}", Politicas.LecturaAlumnos)]
     [InlineData("GET", "/autorizaciones/tutor/{tutorId:int}", Politicas.LecturaAlumnos)]
@@ -77,6 +80,18 @@ public class EndpointPolicyTests
         Assert.Empty(repetidos);
     }
 
+    [Fact]
+    public void La_cartelera_de_la_puerta_es_publica()
+    {
+        // La pantalla que está en la calle no tiene usuario que inicie sesión, así
+        // que este endpoint queda abierto. A cambio, no devuelve nombres de nadie.
+        Endpoint? endpoint = BuscarEndpoint("GET", "/cartelera");
+
+        Assert.NotNull(endpoint);
+        Assert.NotNull(endpoint!.Metadata.GetMetadata<IAllowAnonymous>());
+        Assert.Null(endpoint.Metadata.GetOrderedMetadata<IAuthorizeData>().FirstOrDefault());
+    }
+
     private static Endpoint? BuscarEndpoint(string metodo, string ruta)
     {
         return ConstruirEndpoints().FirstOrDefault(endpoint =>
@@ -100,7 +115,9 @@ public class EndpointPolicyTests
         builder.Services.AddSingleton<IAutorizacionService, AutorizacionServiceFalso>();
         builder.Services.AddSingleton<IReporteService, ReporteServiceFalso>();
         builder.Services.AddSingleton<ITutorService, TutorServiceFalso>();
+        builder.Services.AddSingleton<ISalidaDeCursoService, SalidaDeCursoServiceFalso>();
         builder.Services.AddSingleton<ITutorRepository, TutorRepositoryFalso>();
+        builder.Services.AddSingleton<ISalidaDeCursoRepository, SalidaDeCursoRepositoryFalso>();
         builder.Services.AddSingleton<IAutorizacionRepository, AutorizacionRepositoryFalso>();
         builder.Services.AddDbContext<GTEContext>(opciones =>
             opciones.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=SoloParaMapear;Trusted_Connection=True"));
@@ -110,6 +127,7 @@ public class EndpointPolicyTests
         app.MapCursoEscolarEndpoints();
         app.MapAutorizacionEndpoints();
         app.MapRetiroEndpoints();
+        app.MapSalidaDeCursoEndpoints();
         app.MapReporteEndpoints();
         app.MapTutorEndpoints();
 

@@ -16,5 +16,8 @@ namespace GTE.DTOs
         public string Turno { get; set; } = string.Empty;
         public TimeSpan HorarioSalida { get; set; }
         public string Estado { get; set; } = string.Empty;
+
+        /// <summary>Verdadero si el curso del alumno está saliendo en este momento.</summary>
+        public bool EstaSaliendo { get; set; }
     }
 }

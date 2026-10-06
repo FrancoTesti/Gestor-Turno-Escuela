@@ -343,3 +343,59 @@ internal sealed class AutenticacionConfigurable : GTE.Clients.IAuthService
 
     public Task CheckTokenExpirationAsync() => Task.CompletedTask;
 }
+
+/// <summary>Repositorio de salidas de curso en memoria, para las pruebas.</summary>
+internal sealed class SalidaDeCursoRepositoryFalso : ISalidaDeCursoRepository
+{
+    private readonly List<SalidaDeCurso> _salidas;
+    private int _proximoId;
+
+    public SalidaDeCursoRepositoryFalso(params SalidaDeCurso[] salidas)
+    {
+        _salidas = salidas.ToList();
+        _proximoId = salidas.Length + 1;
+    }
+
+    public Task AddAsync(SalidaDeCurso salida)
+    {
+        salida.SetIdSalidaDeCurso(_proximoId++);
+        _salidas.Add(salida);
+        return Task.CompletedTask;
+    }
+
+    public Task<IEnumerable<SalidaDeCurso>> GetDelDiaAsync(DateTime dia) =>
+        Task.FromResult<IEnumerable<SalidaDeCurso>>(
+            _salidas.Where(s => s.FechaHoraInicio.Date == dia.Date).ToList());
+
+    public Task<IEnumerable<SalidaDeCurso>> GetEnCursoAsync() =>
+        Task.FromResult<IEnumerable<SalidaDeCurso>>(_salidas.Where(s => s.EstaEnCurso).ToList());
+
+    public Task<SalidaDeCurso?> GetAsync(int id) =>
+        Task.FromResult(_salidas.FirstOrDefault(s => s.IdSalidaDeCurso == id));
+
+    public Task<bool> UpdateAsync(SalidaDeCurso salida)
+    {
+        var existente = _salidas.FirstOrDefault(s => s.IdSalidaDeCurso == salida.IdSalidaDeCurso);
+        if (existente is null) return Task.FromResult(false);
+
+        if (existente.EstaEnCurso && !salida.EstaEnCurso)
+            existente.Finalizar(salida.FechaHoraFin!.Value);
+
+        return Task.FromResult(true);
+    }
+}
+
+/// <summary>Servicio de salidas vacio, para poder mapear los endpoints en las pruebas.</summary>
+internal sealed class SalidaDeCursoServiceFalso : ISalidaDeCursoService
+{
+    public Task<CarteleraDTO> GetCarteleraAsync() => Task.FromResult(new CarteleraDTO());
+
+    public Task<IEnumerable<SalidaDeCursoDTO>> GetDelDiaAsync(DateTime dia) =>
+        Task.FromResult<IEnumerable<SalidaDeCursoDTO>>(Array.Empty<SalidaDeCursoDTO>());
+
+    public Task<(bool Exito, string Mensaje, SalidaDeCursoDTO? Salida)> IniciarAsync(int idCurso, Personal personal) =>
+        Task.FromResult((true, string.Empty, (SalidaDeCursoDTO?)null));
+
+    public Task<(bool Exito, string Mensaje)> FinalizarAsync(int idSalida) =>
+        Task.FromResult((true, string.Empty));
+}

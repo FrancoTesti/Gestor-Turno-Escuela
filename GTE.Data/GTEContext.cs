@@ -18,6 +18,7 @@ namespace GTE.Data
         public DbSet<Retiro> Retiros { get; set; }
         public DbSet<DetalleRetiro> DetalleRetiros { get; set; }
         public DbSet<HorarioEspecial> HorariosEspeciales { get; set; }
+        public DbSet<SalidaDeCurso> SalidasDeCurso { get; set; }
 
         public GTEContext(DbContextOptions<GTEContext> options) : base(options)
         {
@@ -175,6 +176,29 @@ namespace GTE.Data
                 entity.Property(e => e.IdAlumno).IsRequired();
                 entity.Property(e => e.DescripcionActividad).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.HoraSalidaEspecial).IsRequired();
+            });
+
+            modelBuilder.Entity<SalidaDeCurso>(entity =>
+            {
+                entity.HasKey(e => e.IdSalidaDeCurso);
+                entity.Property(e => e.IdSalidaDeCurso).ValueGeneratedOnAdd();
+                entity.Property(e => e.IdCurso).IsRequired();
+                entity.Property(e => e.IdPersonal).IsRequired();
+                entity.Property(e => e.FechaHoraInicio).IsRequired();
+                entity.Property(e => e.FechaHoraFin);
+
+                entity.HasOne(e => e.CursoEscolar)
+                      .WithMany()
+                      .HasForeignKey(e => e.IdCurso)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.Personal)
+                      .WithMany()
+                      .HasForeignKey(e => e.IdPersonal)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                // La pantalla de la puerta consulta por los que todavía están en curso.
+                entity.HasIndex(e => new { e.IdCurso, e.FechaHoraFin });
             });
 
 

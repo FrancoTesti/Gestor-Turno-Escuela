@@ -31,7 +31,7 @@ namespace GTE.WindowsForms
 
             foreach (var boton in new[]
                      {
-                         btnInicio, btnAlumnos, btnCursos, btnTutores, btnRetiros, btnAutorizaciones,
+                         btnInicio, btnSalidas, btnAlumnos, btnCursos, btnTutores, btnRetiros, btnAutorizaciones,
                          btnReporteAlumnos, btnReporteRetiros, btnOtros, btnMisAlumnos
                      })
             {
@@ -91,6 +91,9 @@ namespace GTE.WindowsForms
             // El tutor solo tiene, además de cursos, su pantalla de alumnos a cargo.
             btnMisAlumnos.Visible = role == "Tutor";
 
+            // El portero es quien marca en la puerta qué curso está saliendo.
+            btnSalidas.Visible = role == "Secretario" || role == "Portero";
+
             MostrarInicio();
         }
 
@@ -116,6 +119,9 @@ namespace GTE.WindowsForms
             Agregar(btnRetiros, "Retiros",
                 "Registrá la entrega de alumnos a un tutor autorizado.",
                 () => new RetiroListaForm());
+            Agregar(btnSalidas, "Salidas de curso",
+                "Marcá qué curso está saliendo. La pantalla de la puerta lo muestra al instante.",
+                () => new SalidaDeCursoForm());
             Agregar(btnOtros, "Horarios especiales",
                 "Cargá las salidas a una hora distinta por una actividad puntual.",
                 () => new HorarioEspecialListaForm());
@@ -163,6 +169,11 @@ namespace GTE.WindowsForms
         private void btnInicio_Click(object sender, EventArgs e)
         {
             MostrarInicio();
+        }
+
+        private void btnSalidas_Click(object sender, EventArgs e)
+        {
+            Abrir(btnSalidas, () => new SalidaDeCursoForm());
         }
 
         private void btnAlumnos_Click(object sender, EventArgs e)
@@ -214,7 +225,7 @@ namespace GTE.WindowsForms
         {
             foreach (var boton in new[]
                      {
-                         btnInicio, btnAlumnos, btnCursos, btnTutores, btnRetiros, btnAutorizaciones,
+                         btnInicio, btnSalidas, btnAlumnos, btnCursos, btnTutores, btnRetiros, btnAutorizaciones,
                          btnReporteAlumnos, btnReporteRetiros, btnOtros, btnMisAlumnos
                      })
             {

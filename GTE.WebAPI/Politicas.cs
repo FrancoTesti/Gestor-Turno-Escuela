@@ -29,6 +29,9 @@ public static class Politicas
     /// <summary>Pueden operar los retiros el Secretario y el Portero.</summary>
     public const string GestionRetiros = "GestionRetiros";
 
+    /// <summary>Pueden marcar la salida de un curso el Secretario y el Portero.</summary>
+    public const string GestionSalidas = "GestionSalidas";
+
     /// <summary>Solo el Tutor, para sus propias pantallas.</summary>
     public const string SoloTutor = "SoloTutor";
 
@@ -49,6 +52,9 @@ public static class Politicas
                 politica.RequireRole(RolSecretario, RolPortero, RolTutor));
 
             options.AddPolicy(GestionRetiros, politica =>
+                politica.RequireRole(RolSecretario, RolPortero));
+
+            options.AddPolicy(GestionSalidas, politica =>
                 politica.RequireRole(RolSecretario, RolPortero));
 
             options.AddPolicy(SoloTutor, politica =>

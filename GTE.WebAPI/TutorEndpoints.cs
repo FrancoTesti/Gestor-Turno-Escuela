@@ -12,7 +12,8 @@ namespace GTE.WebAPI
             app.MapGet("/mis-alumnos", async (
                 System.Security.Claims.ClaimsPrincipal usuario,
                 ITutorRepository tutorRepository,
-                IAutorizacionRepository autorizacionRepository) =>
+                IAutorizacionRepository autorizacionRepository,
+                ISalidaDeCursoRepository salidaRepository) =>
             {
                 string? idTexto = usuario.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
@@ -27,6 +28,12 @@ namespace GTE.WebAPI
 
                 var alumnos = await autorizacionRepository.GetAlumnosByTutorIdAsync(tutor.IdTutor);
 
+                // Los cursos que están saliendo ahora: así el tutor ve en su
+                // pantalla cuáles de sus alumnos están saliendo en este momento.
+                var cursosSaliendo = (await salidaRepository.GetEnCursoAsync())
+                    .Select(salida => salida.IdCurso)
+                    .ToHashSet();
+
                 var dtos = alumnos.Select(alumno => new AlumnoACargoDTO
                 {
                     IdAlumno = alumno.IdAlumno,
@@ -36,7 +43,8 @@ namespace GTE.WebAPI
                     Curso = alumno.CursoEscolar?.Curso ?? string.Empty,
                     Turno = alumno.CursoEscolar?.Turno ?? string.Empty,
                     HorarioSalida = alumno.CursoEscolar?.HorarioSalida ?? TimeSpan.Zero,
-                    Estado = alumno.Estado
+                    Estado = alumno.Estado,
+                    EstaSaliendo = cursosSaliendo.Contains(alumno.IdCurso)
                 }).ToList();
 
                 return Results.Ok(dtos);
