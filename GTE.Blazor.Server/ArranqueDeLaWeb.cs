@@ -14,15 +14,12 @@ namespace GTE.Blazor.Server
     /// </summary>
     public static class ArranqueDeLaWeb
     {
-        /// <summary>Dirección en la que corre la API.</summary>
-        public const string DireccionDeLaApi = "http://localhost:5117";
-
         public static IServiceCollection AgregarServiciosDeLaWeb(this IServiceCollection services)
         {
             services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
-            services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(DireccionDeLaApi) });
+            services.AddScoped(_ => new HttpClient { BaseAddress = ApiConfig.Uri });
 
             // Los clientes de la API reciben el servicio de autenticación por
             // inyección de dependencias, así que cada circuito de Blazor usa su
@@ -35,6 +32,10 @@ namespace GTE.Blazor.Server
             services.AddScoped<RetiroApiClient>();
             services.AddScoped<ReporteApiClient>();
             services.AddScoped<HorarioEspecialApiClient>();
+            services.AddScoped<SalidaDeCursoApiClient>();
+
+            // La cartelera es pública: la pantalla de la puerta no inicia sesión.
+            services.AddScoped<CarteleraApiClient>();
 
             // No hay que registrar la sesión en el proveedor global: hacerlo
             // dejaría una instancia de otro alcance, que nunca recibe el token del

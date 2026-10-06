@@ -111,23 +111,5 @@ namespace GTE.Clients
             return response.IsSuccessStatusCode;
         }
 
-        /// <summary>La API devuelve los errores de negocio en un campo "error".</summary>
-        private static async Task<string> LeerMensajeDeErrorAsync(HttpResponseMessage response, string porDefecto)
-        {
-            try
-            {
-                var cuerpo = await response.Content.ReadFromJsonAsync<RespuestaDeError>();
-                return string.IsNullOrWhiteSpace(cuerpo?.Error) ? porDefecto : cuerpo!.Error!;
-            }
-            catch (Exception)
-            {
-                return porDefecto;
-            }
-        }
-
-        private sealed class RespuestaDeError
-        {
-            public string? Error { get; set; }
-        }
     }
 }

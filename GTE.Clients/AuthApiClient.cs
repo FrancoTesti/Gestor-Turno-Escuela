@@ -11,7 +11,7 @@ namespace GTE.Clients
         public async Task<LoginResponse?> LoginAsync(LoginRequest request)
         {
             using var client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:5117/");
+            client.BaseAddress = ApiConfig.Uri;
 
             try
             {

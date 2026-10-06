@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace GTE.Clients
@@ -30,8 +31,6 @@ namespace GTE.Clients
 
     public abstract class BaseApiClient
     {
-        protected const string BaseUrl = "http://localhost:5117/";
-
         private readonly IAuthService? _authService;
 
         protected BaseApiClient()
@@ -62,7 +61,7 @@ namespace GTE.Clients
 
         protected async Task<HttpClient> CreateHttpClientAsync()
         {
-            var client = new HttpClient { BaseAddress = new Uri(BaseUrl) };
+            var client = new HttpClient { BaseAddress = ApiConfig.Uri };
             var auth = Autenticacion;
             var token = await auth.GetTokenAsync();
             if (!string.IsNullOrEmpty(token))
@@ -70,6 +69,20 @@ namespace GTE.Clients
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
             return client;
+        }
+
+        /// <summary>La API devuelve los errores de negocio en un campo "error".</summary>
+        protected static async Task<string> LeerMensajeDeErrorAsync(HttpResponseMessage respuesta, string porDefecto)
+        {
+            try
+            {
+                var cuerpo = await respuesta.Content.ReadFromJsonAsync<RespuestaDeError>();
+                return string.IsNullOrWhiteSpace(cuerpo?.Error) ? porDefecto : cuerpo!.Error!;
+            }
+            catch (Exception)
+            {
+                return porDefecto;
+            }
         }
 
         protected async Task HandleUnauthorizedResponseAsync(HttpResponseMessage response)
@@ -87,6 +100,11 @@ namespace GTE.Clients
                 // La sesión es válida, pero el rol del usuario no alcanza.
                 throw new SinPermisoException("No tiene permisos para realizar esta operación.");
             }
+        }
+
+        private sealed class RespuestaDeError
+        {
+            public string? Error { get; set; }
         }
     }
 }
