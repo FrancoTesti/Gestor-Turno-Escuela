@@ -40,7 +40,7 @@ namespace GTE.WindowsForms
             // lblFiltroNombre
             // 
             this.lblFiltroNombre.AutoSize = true;
-            this.lblFiltroNombre.Location = new System.Drawing.Point(20, 24);
+            this.lblFiltroNombre.Location = new System.Drawing.Point(20, 72);
             this.lblFiltroNombre.Name = "lblFiltroNombre";
             this.lblFiltroNombre.Size = new System.Drawing.Size(170, 20);
             this.lblFiltroNombre.TabIndex = 20;
@@ -48,15 +48,15 @@ namespace GTE.WindowsForms
             // 
             // txtFiltroNombre
             // 
-            this.txtFiltroNombre.Location = new System.Drawing.Point(20, 48);
+            this.txtFiltroNombre.Location = new System.Drawing.Point(20, 96);
             this.txtFiltroNombre.Name = "txtFiltroNombre";
-            this.txtFiltroNombre.Size = new System.Drawing.Size(180, 30);
+            this.txtFiltroNombre.Size = new System.Drawing.Size(300, 30);
             this.txtFiltroNombre.TabIndex = 21;
             // 
             // lblFiltroCurso
             // 
             this.lblFiltroCurso.AutoSize = true;
-            this.lblFiltroCurso.Location = new System.Drawing.Point(212, 24);
+            this.lblFiltroCurso.Location = new System.Drawing.Point(340, 72);
             this.lblFiltroCurso.Name = "lblFiltroCurso";
             this.lblFiltroCurso.Size = new System.Drawing.Size(120, 20);
             this.lblFiltroCurso.TabIndex = 22;
@@ -65,9 +65,9 @@ namespace GTE.WindowsForms
             // cmbFiltroCurso
             // 
             this.cmbFiltroCurso.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbFiltroCurso.Location = new System.Drawing.Point(212, 48);
+            this.cmbFiltroCurso.Location = new System.Drawing.Point(340, 96);
             this.cmbFiltroCurso.Name = "cmbFiltroCurso";
-            this.cmbFiltroCurso.Size = new System.Drawing.Size(190, 30);
+            this.cmbFiltroCurso.Size = new System.Drawing.Size(300, 30);
             this.cmbFiltroCurso.TabIndex = 23;
             // 
             // btnNuevo
@@ -114,11 +114,11 @@ namespace GTE.WindowsForms
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvTutores.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvTutores.Location = new System.Drawing.Point(20, 90);
+            this.dgvTutores.Location = new System.Drawing.Point(20, 140);
             this.dgvTutores.Name = "dgvTutores";
             this.dgvTutores.ReadOnly = true;
             this.dgvTutores.RowHeadersWidth = 51;
-            this.dgvTutores.Size = new System.Drawing.Size(740, 420);
+            this.dgvTutores.Size = new System.Drawing.Size(740, 370);
             this.dgvTutores.TabIndex = 4;
             // 
             // TutorListaForm

@@ -69,7 +69,10 @@ namespace GTE.WindowsForms
             combo.FlatStyle = FlatStyle.Flat;
             combo.Font = new Font("Segoe UI", TamanioDeEntrada);
 
-            if (combo.DropDownStyle != ComboBoxStyle.Simple)
+            // No se toca el estilo de los que se pueden escribir: son los que usan
+            // autocompletado para buscar por nombre.
+            if (combo.DropDownStyle != ComboBoxStyle.Simple
+                && combo.AutoCompleteMode == AutoCompleteMode.None)
                 combo.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
