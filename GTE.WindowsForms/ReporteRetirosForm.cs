@@ -36,13 +36,14 @@ namespace GTE.WindowsForms
             Tema.Grilla(dgvDetalle);
         }
 
-        private async void ReporteRetirosForm_Load(object sender, EventArgs e)
+        private void ReporteRetirosForm_Load(object sender, EventArgs e)
         {
-            // Por defecto se muestra el mes en curso.
+            // Por defecto queda cargado el mes en curso, pero no se consulta nada:
+            // la consulta la pide el usuario con el botón.
             dtpDesde.Value = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
             dtpHasta.Value = DateTime.Today;
 
-            await Consultar();
+            lblTotal.Text = "Elegí un período y apretá Consultar.";
         }
 
         private async void btnConsultar_Click(object sender, EventArgs e)
@@ -65,15 +66,17 @@ namespace GTE.WindowsForms
                     Observaciones = retiro.Observaciones
                 }).ToList();
 
-                lblTotal.Text = $"Retiros: {_retiros.Count}    " +
-                                $"Alumnos retirados: {_retiros.Sum(r => r.Detalles.Count)}";
-
                 dgvDetalle.DataSource = null;
 
+                // Sin cartel: el aviso va en la misma pantalla, arriba de la tabla.
                 if (_retiros.Count == 0)
                 {
-                    MessageBox.Show("No hay retiros registrados en el período elegido.", "Sin resultados",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    lblTotal.Text = "No hay retiros registrados en el período elegido.";
+                }
+                else
+                {
+                    lblTotal.Text = $"Retiros: {_retiros.Count}    " +
+                                    $"Alumnos retirados: {_retiros.Sum(r => r.Detalles.Count)}";
                 }
             }
             catch (Exception ex)

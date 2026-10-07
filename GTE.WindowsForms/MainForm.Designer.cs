@@ -110,6 +110,7 @@ namespace GTE.WindowsForms
             this.pnlSidebar.Name = "pnlSidebar";
             this.pnlSidebar.Size = new System.Drawing.Size(220, 530);
             this.pnlSidebar.TabIndex = 1;
+            this.pnlSidebar.AutoScroll = true;
             // 
             // btnInicio
             // 

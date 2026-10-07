@@ -96,6 +96,11 @@ namespace GTE.WindowsForms
                 dgvTutores.Columns["NombreUsuario"].Width = 110;
                 dgvTutores.Columns["TieneRestriccion"].HeaderText = "Restricción";
                 dgvTutores.Columns["TieneRestriccion"].Width = 90;
+
+                // La contraseña se usa al crear o modificar el tutor, pero no se
+                // muestra en la lista.
+                if (dgvTutores.Columns.Contains("Contrasena"))
+                    dgvTutores.Columns["Contrasena"].Visible = false;
             }
         }
 

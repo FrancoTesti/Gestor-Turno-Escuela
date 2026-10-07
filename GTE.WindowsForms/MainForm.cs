@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using GTE.Clients;
 
@@ -16,6 +17,10 @@ namespace GTE.WindowsForms
         {
             InitializeComponent();
             ApplyStyles();
+
+            // Cuando cambia el alto de la ventana se reparte de nuevo el menú.
+            pnlSidebar.Resize += (_, _) => AcomodarMenu();
+
             LoadUserData();
         }
 
@@ -123,6 +128,49 @@ namespace GTE.WindowsForms
             // están visibles, así que en ese momento no se puede saber cuáles
             // quedaron para el rol que entró.
             AcomodarSecciones();
+            AcomodarMenu();
+        }
+
+        /// <summary>
+        /// Reparte el alto de la barra entre las opciones visibles, así con la
+        /// ventana maximizada el menú ocupa toda la altura. Si no entra, la barra
+        /// se puede desplazar y ninguna opción queda fuera de alcance.
+        /// </summary>
+        private void AcomodarMenu()
+        {
+            const int AltoDelTitulo = 30;
+            const int AltoMinimoDeOpcion = 44;
+
+            var opciones = new[]
+            {
+                btnInicio, btnSalidas, btnRetiros, btnAlumnos, btnOtros, btnMisAlumnos,
+                btnCursos, btnTutores, btnAutorizaciones, btnReporteAlumnos, btnReporteRetiros, btnCartelera
+            }.Where(opcion => opcion.Visible).ToList();
+
+            var titulos = new[]
+            {
+                lblSeccionDiaADia, lblSeccionAdministracion, lblSeccionReportes, lblSeccionPantalla
+            }.Where(titulo => titulo.Visible).ToList();
+
+            foreach (var titulo in titulos)
+            {
+                if (titulo.Height != AltoDelTitulo)
+                    titulo.Height = AltoDelTitulo;
+            }
+
+            if (opciones.Count == 0)
+                return;
+
+            int disponible = pnlSidebar.ClientSize.Height - (titulos.Count * AltoDelTitulo);
+            int alto = Math.Max(AltoMinimoDeOpcion, disponible / opciones.Count);
+
+            foreach (var opcion in opciones)
+            {
+                // Solo se cambia si hace falta: volver a asignar el mismo alto
+                // dispararía de nuevo el evento y quedaría girando.
+                if (opcion.Height != alto)
+                    opcion.Height = alto;
+            }
         }
 
         /// <summary>

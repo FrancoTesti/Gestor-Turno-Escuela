@@ -127,11 +127,48 @@ namespace GTE.WindowsForms
             {
                 var lista = await _apiClient.GetAllAsync();
                 dgvHorarios.DataSource = lista;
+                ConfigurarColumnas();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al cargar horarios: {ex.Message}");
             }
+        }
+
+        /// <summary>
+        /// Nombres de columna para la persona que usa el sistema: los del DTO son
+        /// los nombres de las propiedades de la clase.
+        /// </summary>
+        private void ConfigurarColumnas()
+        {
+            if (dgvHorarios.Columns.Count == 0)
+                return;
+
+            OcultarColumna("IdHorarioEspecial");
+            OcultarColumna("IdAlumno");
+
+            ConfigurarColumna("AlumnoNombreCompleto", "Alumno", 250);
+            ConfigurarColumna("DescripcionActividad", "Descripción de la actividad", 300);
+            ConfigurarColumna("HoraSalidaEspecial", "Hora de salida", 140, @"hh\:mm");
+        }
+
+        private void OcultarColumna(string nombre)
+        {
+            if (dgvHorarios.Columns.Contains(nombre))
+                dgvHorarios.Columns[nombre].Visible = false;
+        }
+
+        private void ConfigurarColumna(string nombre, string titulo, int ancho, string? formato = null)
+        {
+            if (!dgvHorarios.Columns.Contains(nombre))
+                return;
+
+            var columna = dgvHorarios.Columns[nombre];
+            columna.HeaderText = titulo;
+            columna.Width = ancho;
+
+            if (formato != null)
+                columna.DefaultCellStyle.Format = formato;
         }
 
         private async void btnNuevo_Click(object sender, EventArgs e)

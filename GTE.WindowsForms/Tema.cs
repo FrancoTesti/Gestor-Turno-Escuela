@@ -120,7 +120,9 @@ namespace GTE.WindowsForms
             boton.BackColor = Barra;
             boton.ForeColor = Color.FromArgb(222, 226, 230);
             boton.FlatStyle = FlatStyle.Flat;
-            boton.FlatAppearance.BorderSize = 0;
+            // Un borde apenas más claro que la barra separa una opción de la otra.
+            boton.FlatAppearance.BorderSize = 1;
+            boton.FlatAppearance.BorderColor = Color.FromArgb(52, 58, 64);
             boton.TextAlign = ContentAlignment.MiddleLeft;
             boton.Padding = new Padding(15, 0, 0, 0);
             boton.Font = new Font("Segoe UI Semibold", 10.5F, FontStyle.Bold);
@@ -133,9 +135,11 @@ namespace GTE.WindowsForms
         /// </summary>
         public static void EtiquetaSeccion(Label etiqueta)
         {
-            etiqueta.BackColor = Barra;
-            etiqueta.ForeColor = Color.FromArgb(214, 222, 230);
-            etiqueta.Font = new Font("Segoe UI Semibold", 8.25F, FontStyle.Bold);
+            // Fondo un poco más claro y letra celeste: así el título del grupo se
+            // distingue de las opciones, que van en blanco grisáceo.
+            etiqueta.BackColor = Color.FromArgb(52, 58, 64);
+            etiqueta.ForeColor = Color.FromArgb(142, 202, 230);
+            etiqueta.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             etiqueta.TextAlign = ContentAlignment.MiddleLeft;
             etiqueta.Padding = new Padding(15, 0, 0, 0);
         }
