@@ -1,4 +1,6 @@
 @inherits LayoutComponentBase
+@inject IAuthService AuthService
+@inject NavigationManager Nav
 
 <div class="page">
     <div class="sidebar">
@@ -9,8 +11,9 @@
         <div class="top-row px-4 auth">
             <AuthorizeView>
                 <Authorized>
+
                     <span class="me-3">Hola, @NombreParaSaludar(context)!</span>
-                    <a class="btn btn-outline-danger btn-sm" href="/cuenta/salir">Cerrar Sesión</a>
+                    <button class="btn btn-outline-danger btn-sm" @onclick="CerrarSesion">Cerrar Sesión</button>
                 </Authorized>
                 <NotAuthorized>
                     <a href="login" class="btn btn-outline-primary btn-sm">Iniciar Sesión</a>
@@ -29,5 +32,12 @@
     {
         string? nombreCompleto = estado.User.FindFirst("NombreCompleto")?.Value;
         return string.IsNullOrWhiteSpace(nombreCompleto) ? estado.User.Identity?.Name : nombreCompleto;
+    }
+
+    private async Task CerrarSesion()
+    {
+        await AuthService.LogoutAsync();
+
+        Nav.NavigateTo("/login");
     }
 }
