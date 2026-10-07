@@ -68,11 +68,12 @@ namespace GTE.WindowsForms
             // 
             // lblTutor
             // 
-            this.lblTutor.AutoSize = true;
+            this.lblTutor.AutoSize = false;
             this.lblTutor.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblTutor.Location = new System.Drawing.Point(15, 19);
+            this.lblTutor.Location = new System.Drawing.Point(15, 16);
             this.lblTutor.Name = "lblTutor";
-            this.lblTutor.Size = new System.Drawing.Size(129, 23);
+            this.lblTutor.Size = new System.Drawing.Size(129, 31);
+            this.lblTutor.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblTutor.TabIndex = 0;
             this.lblTutor.Text = "Seleccionar Tutor:";
             // 
@@ -129,11 +130,12 @@ namespace GTE.WindowsForms
             // 
             // lblAlumno
             // 
-            this.lblAlumno.AutoSize = true;
+            this.lblAlumno.AutoSize = false;
             this.lblAlumno.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblAlumno.Location = new System.Drawing.Point(15, 19);
+            this.lblAlumno.Location = new System.Drawing.Point(15, 16);
             this.lblAlumno.Name = "lblAlumno";
-            this.lblAlumno.Size = new System.Drawing.Size(129, 23);
+            this.lblAlumno.Size = new System.Drawing.Size(129, 31);
+            this.lblAlumno.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblAlumno.TabIndex = 0;
             this.lblAlumno.Text = "Agregar Alumno:";
             // 

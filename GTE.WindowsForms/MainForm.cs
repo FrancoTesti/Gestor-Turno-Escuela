@@ -144,36 +144,47 @@ namespace GTE.WindowsForms
             const int AltoDelTitulo = 30;
             const int AltoMinimoDeOpcion = 44;
 
-            var opciones = new[]
+            // Orden en el que se ven las opciones, de arriba hacia abajo.
+            var menu = new Control[]
             {
-                btnInicio, btnSalidas, btnRetiros, btnAlumnos, btnOtros, btnMisAlumnos,
-                btnCursos, btnTutores, btnAutorizaciones, btnReporteAlumnos, btnReporteRetiros, btnCartelera
-            }.Where(opcion => opcion.Visible).ToList();
+                btnInicio,
+                lblSeccionDiaADia, btnSalidas, btnRetiros, btnAlumnos, btnOtros, btnMisAlumnos,
+                lblSeccionAdministracion, btnCursos, btnTutores, btnAutorizaciones,
+                lblSeccionReportes, btnReporteAlumnos, btnReporteRetiros,
+                lblSeccionPantalla, btnCartelera
+            };
 
-            var titulos = new[]
-            {
-                lblSeccionDiaADia, lblSeccionAdministracion, lblSeccionReportes, lblSeccionPantalla
-            }.Where(titulo => titulo.Visible).ToList();
-
-            foreach (var titulo in titulos)
-            {
-                if (titulo.Height != AltoDelTitulo)
-                    titulo.Height = AltoDelTitulo;
-            }
-
-            if (opciones.Count == 0)
+            var visibles = menu.Where(control => control.Visible).ToList();
+            if (visibles.Count == 0)
                 return;
 
-            int disponible = pnlSidebar.ClientSize.Height - (titulos.Count * AltoDelTitulo);
-            int alto = Math.Max(AltoMinimoDeOpcion, disponible / opciones.Count);
+            var titulos = visibles.Where(control => control is Label).ToList();
+            var opciones = visibles.Where(control => control is Button).ToList();
 
-            foreach (var opcion in opciones)
+            int disponible = pnlSidebar.ClientSize.Height - (titulos.Count * AltoDelTitulo);
+            int alto = opciones.Count > 0
+                ? Math.Max(AltoMinimoDeOpcion, disponible / opciones.Count)
+                : AltoMinimoDeOpcion;
+
+            // Los controles se ubican uno debajo del otro a mano y no con Dock: la
+            // barra de desplazamiento de un panel con controles anclados calcula de
+            // más y dejaba un espacio en blanco después de la última opción.
+            // El ancho deja libre el lugar de la barra de desplazamiento, así nunca
+            // aparece la barra horizontal con espacio de más abajo.
+            int anchoDeLaBarra = Math.Max(120, pnlSidebar.Width - 20);
+            int y = 0;
+
+            foreach (var control in visibles)
             {
-                // Solo se cambia si hace falta: volver a asignar el mismo alto
-                // dispararía de nuevo el evento y quedaría girando.
-                if (opcion.Height != alto)
-                    opcion.Height = alto;
+                control.Dock = DockStyle.None;
+                control.Height = control is Label ? AltoDelTitulo : alto;
+                control.Location = new Point(0, y);
+                control.Width = anchoDeLaBarra;
+
+                y += control.Height;
             }
+
+            pnlSidebar.PerformLayout();
         }
 
         /// <summary>

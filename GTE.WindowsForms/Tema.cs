@@ -21,7 +21,7 @@ namespace GTE.WindowsForms
         public static readonly Color Barra = Color.FromArgb(33, 37, 41);
 
         /// <summary>Alto que comparten todos los botones de las pantallas.</summary>
-        public const int AltoDeBoton = 36;
+        public const int AltoDeBoton = 32;
 
         /// <summary>Tamaño de letra que comparten los casilleros y los desplegables.</summary>
         private const float TamanioDeEntrada = 11F;
@@ -51,6 +51,15 @@ namespace GTE.WindowsForms
             campo.ForeColor = Texto;
             campo.BorderStyle = BorderStyle.FixedSingle;
             campo.Font = new Font("Segoe UI", TamanioDeEntrada);
+
+            // Un casillero de una línea se ajusta solo al alto de la letra, así que
+            // hay que apagarle el ajuste automático para que quede del mismo alto
+            // que el botón que tiene al lado.
+            if (!campo.Multiline)
+            {
+                campo.AutoSize = false;
+                campo.Height = AltoDeBoton;
+            }
         }
 
         public static void Entrada(ComboBox combo)
@@ -132,6 +141,10 @@ namespace GTE.WindowsForms
                         break;
                     case TextBox campo:
                         Entrada(campo);
+                        // Un casillero de una línea se estira para quedar del mismo
+                        // alto que el botón que tiene al lado.
+                        if (!campo.Multiline)
+                            campo.Height = AltoDeBoton;
                         break;
                     case ComboBox combo:
                         Entrada(combo);

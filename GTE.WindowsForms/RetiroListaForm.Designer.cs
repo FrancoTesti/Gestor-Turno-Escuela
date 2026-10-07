@@ -40,7 +40,7 @@ namespace GTE.WindowsForms
             // 
             this.lblSearch.AutoSize = true;
             this.lblSearch.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblSearch.Location = new System.Drawing.Point(20, 75);
+            this.lblSearch.Location = new System.Drawing.Point(20, 66);
             this.lblSearch.Name = "lblSearch";
             this.lblSearch.Size = new System.Drawing.Size(195, 21);
             this.lblSearch.TabIndex = 0;

@@ -119,8 +119,18 @@ namespace GTE.WindowsForms
             {
                 tarjeta.Width = ancho;
 
-                if (tarjeta.Controls["lblDescripcion"] is Label descripcion)
-                    descripcion.Width = ancho - 32;
+                var titulo = tarjeta.Controls["lblTituloTarjeta"] as Label;
+                var descripcion = tarjeta.Controls["lblDescripcion"] as Label;
+
+                if (titulo == null || descripcion == null)
+                    continue;
+
+                // El texto puede necesitar más de una línea cuando la ventana es
+                // angosta: se mide y la tarjeta crece para que no se corte nada.
+                descripcion.Width = ancho - 32;
+                descripcion.Top = titulo.Bottom + 8;
+                descripcion.Height = Math.Max(40, descripcion.PreferredHeight);
+                tarjeta.Height = descripcion.Bottom + 14;
             }
         }
 
