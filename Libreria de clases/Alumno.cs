@@ -14,7 +14,6 @@ namespace GTE.Dominio
         public int IdCurso { get; private set; }
         public CursoEscolar CursoEscolar { get; private set; } = null!;
         public string Estado { get; private set; }
-        // Constructor privado sin parámetros requerido por Entity Framework para la materialización de entidades
         private Alumno() { }
         public Alumno(int id, string nombre, string apellido, int idCurso)
         {

@@ -72,8 +72,7 @@ else
                             <strong>@a.Nombre @a.Apellido</strong>
                             @if (a.EstaSaliendo)
                             {
-                                @* La pantalla de la puerta no muestra nombres, así que el
-                                   aviso de que el curso está saliendo llega acá. *@
+
                                 <span class="badge bg-primary ms-2">Está saliendo</span>
                             }
                         </td>
@@ -100,8 +99,7 @@ else
     </div>
 }
 
-@* Los estilos van en la pantalla y no en la hoja compartida: así se ven aunque el
-   navegador tenga guardada una versión vieja del css. *@
+
 <style>
     .ma-resumen {
         color: #495057;
@@ -147,13 +145,11 @@ else
         color: #495057;
     }
 
-    /* Más aire arriba del título de cada parte que abajo: así se lee por bloques. */
     .ma-seccion {
         margin-top: 2rem;
         margin-bottom: 0.75rem;
     }
 
-    /* Las horas se leen como una columna de números y no como texto suelto. */
     .ma-hora {
         font-variant-numeric: tabular-nums;
         font-weight: 600;
@@ -184,8 +180,6 @@ else
     {
         await CargarAsync();
 
-        // El tutor deja esta pantalla abierta mientras espera en la puerta: así
-        // el aviso de que el curso está saliendo aparece solo, sin recargar.
         _ = RefrescarCadaVeinteSegundosAsync();
     }
 
@@ -209,24 +203,20 @@ else
             {
                 await Task.Delay(TimeSpan.FromSeconds(20), cancelacion.Token);
 
-                // Sin el cartel de "Actualizando": es un refresco de fondo.
                 alumnos = await TutoresClient.GetMisAlumnosAsync();
                 await InvokeAsync(StateHasChanged);
             }
         }
         catch (OperationCanceledException)
         {
-            // La pantalla se cerró: no hay nada más que hacer.
         }
         catch (Exception)
         {
-            // Si el refresco de fondo falla, queda el botón Actualizar.
         }
     }
 
     public void Dispose() => cancelacion.Cancel();
 
-    /// <summary>Los alumnos por orden de salida: es el orden en que se van del colegio.</summary>
     private List<AlumnoACargoDTO> AlumnosOrdenados =>
         (alumnos ?? new List<AlumnoACargoDTO>())
             .OrderBy(a => a.HorarioSalida)
@@ -236,7 +226,6 @@ else
     private List<AlumnoACargoDTO> AlumnosSaliendo =>
         AlumnosOrdenados.Where(a => a.EstaSaliendo).ToList();
 
-    /// <summary>Una línea con cuántos alumnos son y a qué hora salen hoy.</summary>
     private string Resumen
     {
         get
@@ -271,7 +260,6 @@ else
         }
     }
 
-    /// <summary>Qué sale después, para cuando todavía no empezó ninguna salida.</summary>
     private string TextoSiguiente
     {
         get
@@ -292,7 +280,6 @@ else
         }
     }
 
-    /// <summary>Une los elementos como se habla: "a, b y c".</summary>
     private static string Listar(IEnumerable<string> elementos)
     {
         var lista = elementos.ToList();

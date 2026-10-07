@@ -41,7 +41,7 @@ namespace GTE.Blazor.Server.Auth
         public async Task<bool> LoginAsync(string username, string password)
         {
             var result = await _authApiClient.LoginAsync(new LoginRequest { NombreUsuario = username, Contrasena = password });
-            
+
             if (result != null && !string.IsNullOrEmpty(result.Token))
             {
                 _token = result.Token;

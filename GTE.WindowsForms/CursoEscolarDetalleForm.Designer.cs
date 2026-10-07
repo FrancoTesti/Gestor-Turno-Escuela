@@ -27,9 +27,6 @@ namespace GTE.WindowsForms
             this.btnGuardar = new System.Windows.Forms.Button();
             this.btnCancelar = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // lblTitle
-            // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblTitle.Location = new System.Drawing.Point(30, 25);
@@ -37,9 +34,6 @@ namespace GTE.WindowsForms
             this.lblTitle.Size = new System.Drawing.Size(248, 32);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Detalle Curso Escolar";
-            // 
-            // lblGrado
-            // 
             this.lblGrado.AutoSize = true;
             this.lblGrado.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblGrado.Location = new System.Drawing.Point(30, 85);
@@ -47,17 +41,11 @@ namespace GTE.WindowsForms
             this.lblGrado.Size = new System.Drawing.Size(53, 21);
             this.lblGrado.TabIndex = 0;
             this.lblGrado.Text = "Grado";
-            // 
-            // txtGrado
-            // 
             this.txtGrado.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtGrado.Location = new System.Drawing.Point(30, 110);
             this.txtGrado.Name = "txtGrado";
             this.txtGrado.Size = new System.Drawing.Size(320, 30);
             this.txtGrado.TabIndex = 1;
-            // 
-            // lblCurso
-            // 
             this.lblCurso.AutoSize = true;
             this.lblCurso.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblCurso.Location = new System.Drawing.Point(30, 160);
@@ -65,17 +53,11 @@ namespace GTE.WindowsForms
             this.lblCurso.Size = new System.Drawing.Size(119, 21);
             this.lblCurso.TabIndex = 0;
             this.lblCurso.Text = "Curso / División";
-            // 
-            // txtCurso
-            // 
             this.txtCurso.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtCurso.Location = new System.Drawing.Point(30, 185);
             this.txtCurso.Name = "txtCurso";
             this.txtCurso.Size = new System.Drawing.Size(320, 30);
             this.txtCurso.TabIndex = 2;
-            // 
-            // lblTurno
-            // 
             this.lblTurno.AutoSize = true;
             this.lblTurno.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblTurno.Location = new System.Drawing.Point(30, 235);
@@ -83,9 +65,6 @@ namespace GTE.WindowsForms
             this.lblTurno.Size = new System.Drawing.Size(50, 21);
             this.lblTurno.TabIndex = 0;
             this.lblTurno.Text = "Turno";
-            // 
-            // cmbTurno
-            // 
             this.cmbTurno.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.cmbTurno.FormattingEnabled = true;
             this.cmbTurno.Items.AddRange(new object[] { "Mañana", "Tarde", "Noche" });
@@ -93,9 +72,6 @@ namespace GTE.WindowsForms
             this.cmbTurno.Name = "cmbTurno";
             this.cmbTurno.Size = new System.Drawing.Size(320, 31);
             this.cmbTurno.TabIndex = 3;
-            // 
-            // lblHorario
-            // 
             this.lblHorario.AutoSize = true;
             this.lblHorario.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblHorario.Location = new System.Drawing.Point(30, 310);
@@ -103,17 +79,11 @@ namespace GTE.WindowsForms
             this.lblHorario.Size = new System.Drawing.Size(183, 21);
             this.lblHorario.TabIndex = 0;
             this.lblHorario.Text = "Horario Salida (Ej: 12:15)";
-            // 
-            // txtHorario
-            // 
             this.txtHorario.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtHorario.Location = new System.Drawing.Point(30, 335);
             this.txtHorario.Name = "txtHorario";
             this.txtHorario.Size = new System.Drawing.Size(320, 30);
             this.txtHorario.TabIndex = 4;
-            // 
-            // btnGuardar
-            // 
             this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnGuardar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGuardar.Location = new System.Drawing.Point(68, 411);
@@ -123,9 +93,6 @@ namespace GTE.WindowsForms
             this.btnGuardar.Text = "Guardar";
             this.btnGuardar.UseVisualStyleBackColor = true;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
-            // 
-            // btnCancelar
-            // 
             this.btnCancelar.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnCancelar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancelar.Location = new System.Drawing.Point(220, 411);
@@ -135,9 +102,6 @@ namespace GTE.WindowsForms
             this.btnCancelar.Text = "Cancelar";
             this.btnCancelar.UseVisualStyleBackColor = true;
             this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
-            // 
-            // CursoEscolarDetalleForm
-            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(380, 465);

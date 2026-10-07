@@ -40,9 +40,6 @@ namespace GTE.WindowsForms
             this.pnlHeader.SuspendLayout();
             this.pnlSidebar.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // pnlHeader
-            // 
             this.pnlHeader.Controls.Add(this.btnLogOut);
             this.pnlHeader.Controls.Add(this.lblUserSub);
             this.pnlHeader.Controls.Add(this.lblUserTitle);
@@ -51,9 +48,6 @@ namespace GTE.WindowsForms
             this.pnlHeader.Name = "pnlHeader";
             this.pnlHeader.Size = new System.Drawing.Size(1000, 70);
             this.pnlHeader.TabIndex = 0;
-            // 
-            // btnLogOut
-            // 
             this.btnLogOut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnLogOut.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnLogOut.Location = new System.Drawing.Point(860, 15);
@@ -63,9 +57,6 @@ namespace GTE.WindowsForms
             this.btnLogOut.Text = "Cerrar Sesión";
             this.btnLogOut.UseVisualStyleBackColor = true;
             this.btnLogOut.Click += new System.EventHandler(this.btnLogOut_Click);
-            // 
-            // lblUserSub
-            // 
             this.lblUserSub.AutoSize = true;
             this.lblUserSub.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblUserSub.Location = new System.Drawing.Point(20, 38);
@@ -73,9 +64,6 @@ namespace GTE.WindowsForms
             this.lblUserSub.Size = new System.Drawing.Size(95, 20);
             this.lblUserSub.TabIndex = 1;
             this.lblUserSub.Text = "Rol: -";
-            // 
-            // lblUserTitle
-            // 
             this.lblUserTitle.AutoSize = true;
             this.lblUserTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblUserTitle.Location = new System.Drawing.Point(18, 10);
@@ -83,12 +71,6 @@ namespace GTE.WindowsForms
             this.lblUserTitle.Size = new System.Drawing.Size(81, 28);
             this.lblUserTitle.TabIndex = 0;
             this.lblUserTitle.Text = "Usuario";
-            // 
-            // pnlSidebar
-            // 
-            // El orden de estos Add es el orden en que se ven los controles: el
-            // último que se agrega queda más arriba. Es el mismo orden y las
-            // mismas secciones que el menú de la web.
             this.pnlSidebar.Controls.Add(this.btnCartelera);
             this.pnlSidebar.Controls.Add(this.lblSeccionPantalla);
             this.pnlSidebar.Controls.Add(this.btnReporteRetiros);
@@ -111,9 +93,6 @@ namespace GTE.WindowsForms
             this.pnlSidebar.Size = new System.Drawing.Size(220, 530);
             this.pnlSidebar.TabIndex = 1;
             this.pnlSidebar.AutoScroll = true;
-            // 
-            // btnInicio
-            // 
             this.btnInicio.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnInicio.Location = new System.Drawing.Point(0, 0);
             this.btnInicio.Name = "btnInicio";
@@ -122,46 +101,30 @@ namespace GTE.WindowsForms
             this.btnInicio.Text = "Inicio";
             this.btnInicio.UseVisualStyleBackColor = true;
             this.btnInicio.Click += new System.EventHandler(this.btnInicio_Click);
-            // 
-            // 
-            // lblSeccionDiaADia
-            // 
             this.lblSeccionDiaADia.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblSeccionDiaADia.Location = new System.Drawing.Point(0, 50);
             this.lblSeccionDiaADia.Name = "lblSeccionDiaADia";
             this.lblSeccionDiaADia.Size = new System.Drawing.Size(220, 28);
             this.lblSeccionDiaADia.TabIndex = 20;
             this.lblSeccionDiaADia.Text = "DÍA A DÍA";
-            // 
-            // lblSeccionAdministracion
-            // 
             this.lblSeccionAdministracion.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblSeccionAdministracion.Location = new System.Drawing.Point(0, 328);
             this.lblSeccionAdministracion.Name = "lblSeccionAdministracion";
             this.lblSeccionAdministracion.Size = new System.Drawing.Size(220, 28);
             this.lblSeccionAdministracion.TabIndex = 21;
             this.lblSeccionAdministracion.Text = "ADMINISTRACIÓN";
-            // 
-            // lblSeccionReportes
-            // 
             this.lblSeccionReportes.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblSeccionReportes.Location = new System.Drawing.Point(0, 506);
             this.lblSeccionReportes.Name = "lblSeccionReportes";
             this.lblSeccionReportes.Size = new System.Drawing.Size(220, 28);
             this.lblSeccionReportes.TabIndex = 22;
             this.lblSeccionReportes.Text = "REPORTES";
-            // 
-            // lblSeccionPantalla
-            // 
             this.lblSeccionPantalla.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblSeccionPantalla.Location = new System.Drawing.Point(0, 634);
             this.lblSeccionPantalla.Name = "lblSeccionPantalla";
             this.lblSeccionPantalla.Size = new System.Drawing.Size(220, 28);
             this.lblSeccionPantalla.TabIndex = 23;
             this.lblSeccionPantalla.Text = "PANTALLA DE LA PUERTA";
-            // 
-            // btnCartelera
-            // 
             this.btnCartelera.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnCartelera.Location = new System.Drawing.Point(0, 662);
             this.btnCartelera.Name = "btnCartelera";
@@ -171,9 +134,6 @@ namespace GTE.WindowsForms
             this.btnCartelera.UseVisualStyleBackColor = true;
             this.btnCartelera.Visible = false;
             this.btnCartelera.Click += new System.EventHandler(this.btnCartelera_Click);
-            // 
-            // btnSalidas
-            // 
             this.btnSalidas.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnSalidas.Location = new System.Drawing.Point(0, 50);
             this.btnSalidas.Name = "btnSalidas";
@@ -183,9 +143,6 @@ namespace GTE.WindowsForms
             this.btnSalidas.UseVisualStyleBackColor = true;
             this.btnSalidas.Visible = false;
             this.btnSalidas.Click += new System.EventHandler(this.btnSalidas_Click);
-            // 
-            // btnMisAlumnos
-            // 
             this.btnMisAlumnos.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnMisAlumnos.Location = new System.Drawing.Point(0, 278);
             this.btnMisAlumnos.Name = "btnMisAlumnos";
@@ -195,9 +152,6 @@ namespace GTE.WindowsForms
             this.btnMisAlumnos.UseVisualStyleBackColor = true;
             this.btnMisAlumnos.Visible = false;
             this.btnMisAlumnos.Click += new System.EventHandler(this.btnMisAlumnos_Click);
-            // 
-            // btnOtros
-            // 
             this.btnOtros.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnOtros.Location = new System.Drawing.Point(0, 228);
             this.btnOtros.Name = "btnOtros";
@@ -207,9 +161,6 @@ namespace GTE.WindowsForms
             this.btnOtros.UseVisualStyleBackColor = true;
             this.btnOtros.Visible = false;
             this.btnOtros.Click += new System.EventHandler(this.btnOtros_Click);
-            // 
-            // btnAutorizaciones
-            // 
             this.btnAutorizaciones.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnAutorizaciones.Location = new System.Drawing.Point(0, 456);
             this.btnAutorizaciones.Name = "btnAutorizaciones";
@@ -218,9 +169,6 @@ namespace GTE.WindowsForms
             this.btnAutorizaciones.Text = "Autorizaciones";
             this.btnAutorizaciones.UseVisualStyleBackColor = true;
             this.btnAutorizaciones.Click += new System.EventHandler(this.btnAutorizaciones_Click);
-            // 
-            // btnReporteAlumnos
-            // 
             this.btnReporteAlumnos.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnReporteAlumnos.Location = new System.Drawing.Point(0, 534);
             this.btnReporteAlumnos.Name = "btnReporteAlumnos";
@@ -229,9 +177,6 @@ namespace GTE.WindowsForms
             this.btnReporteAlumnos.Text = "Reporte de Alumnos";
             this.btnReporteAlumnos.UseVisualStyleBackColor = true;
             this.btnReporteAlumnos.Click += new System.EventHandler(this.btnReporteAlumnos_Click);
-            // 
-            // btnReporteRetiros
-            // 
             this.btnReporteRetiros.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnReporteRetiros.Location = new System.Drawing.Point(0, 584);
             this.btnReporteRetiros.Name = "btnReporteRetiros";
@@ -240,9 +185,6 @@ namespace GTE.WindowsForms
             this.btnReporteRetiros.Text = "Reporte de Retiros";
             this.btnReporteRetiros.UseVisualStyleBackColor = true;
             this.btnReporteRetiros.Click += new System.EventHandler(this.btnReporteRetiros_Click);
-            // 
-            // btnRetiros
-            // 
             this.btnRetiros.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnRetiros.Location = new System.Drawing.Point(0, 128);
             this.btnRetiros.Name = "btnRetiros";
@@ -251,9 +193,6 @@ namespace GTE.WindowsForms
             this.btnRetiros.Text = "Retiros";
             this.btnRetiros.UseVisualStyleBackColor = true;
             this.btnRetiros.Click += new System.EventHandler(this.btnRetiros_Click);
-            // 
-            // btnTutores
-            // 
             this.btnTutores.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnTutores.Location = new System.Drawing.Point(0, 406);
             this.btnTutores.Name = "btnTutores";
@@ -262,9 +201,6 @@ namespace GTE.WindowsForms
             this.btnTutores.Text = "Tutores";
             this.btnTutores.UseVisualStyleBackColor = true;
             this.btnTutores.Click += new System.EventHandler(this.btnTutores_Click);
-            // 
-            // btnCursos
-            // 
             this.btnCursos.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnCursos.Location = new System.Drawing.Point(0, 356);
             this.btnCursos.Name = "btnCursos";
@@ -273,9 +209,6 @@ namespace GTE.WindowsForms
             this.btnCursos.Text = "Cursos";
             this.btnCursos.UseVisualStyleBackColor = true;
             this.btnCursos.Click += new System.EventHandler(this.btnCursos_Click);
-            // 
-            // btnAlumnos
-            // 
             this.btnAlumnos.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnAlumnos.Location = new System.Drawing.Point(0, 178);
             this.btnAlumnos.Name = "btnAlumnos";
@@ -284,17 +217,11 @@ namespace GTE.WindowsForms
             this.btnAlumnos.Text = "Alumnos";
             this.btnAlumnos.UseVisualStyleBackColor = true;
             this.btnAlumnos.Click += new System.EventHandler(this.btnAlumnos_Click);
-            // 
-            // pnlContent
-            // 
             this.pnlContent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlContent.Location = new System.Drawing.Point(220, 70);
             this.pnlContent.Name = "pnlContent";
             this.pnlContent.Size = new System.Drawing.Size(780, 530);
             this.pnlContent.TabIndex = 2;
-            // 
-            // MainForm
-            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1000, 600);

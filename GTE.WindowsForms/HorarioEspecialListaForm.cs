@@ -24,50 +24,41 @@ namespace GTE.WindowsForms
             this.dgvHorarios = new DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dgvHorarios)).BeginInit();
             this.SuspendLayout();
-            
-            // lblTitle
+
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
             this.lblTitle.Location = new Point(12, 9);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new Size(300, 30);
             this.lblTitle.Text = "Gestión de Horarios Especiales";
-            
-            // btnNuevo
+
             this.btnNuevo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             this.btnNuevo.Location = new Point(430, 50);
             this.btnNuevo.Name = "btnNuevo";
             this.btnNuevo.Size = new Size(110, 36);
             this.btnNuevo.Text = "Nuevo";
             this.btnNuevo.Click += new EventHandler(this.btnNuevo_Click);
-            
-            // btnEditar
+
             this.btnEditar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             this.btnEditar.Location = new Point(550, 50);
             this.btnEditar.Name = "btnEditar";
             this.btnEditar.Size = new Size(110, 36);
             this.btnEditar.Text = "Editar";
             this.btnEditar.Click += new EventHandler(this.btnEditar_Click);
-            
-            // btnEliminar
+
             this.btnEliminar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             this.btnEliminar.Location = new Point(670, 50);
             this.btnEliminar.Name = "btnEliminar";
             this.btnEliminar.Size = new Size(110, 36);
             this.btnEliminar.Text = "Eliminar";
             this.btnEliminar.Click += new EventHandler(this.btnEliminar_Click);
-            
-            // dgvHorarios
-            // Con los cuatro anclajes la tabla acompaña el tamaño de la ventana.
+
             this.dgvHorarios.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             this.dgvHorarios.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvHorarios.Location = new Point(17, 95);
             this.dgvHorarios.Name = "dgvHorarios";
             this.dgvHorarios.Size = new Size(766, 340);
-            
-            // Form
-            // Las mismas medidas de referencia que las demás pantallas, así el
-            // sistema las escala igual en monitores con otra resolución.
+
             this.AutoScaleDimensions = new SizeF(8F, 20F);
             this.AutoScaleMode = AutoScaleMode.Font;
             this.ClientSize = new Size(800, 450);
@@ -120,7 +111,6 @@ namespace GTE.WindowsForms
             string? rol = await AuthServiceProvider.Instance.GetRoleAsync();
             bool esSecretario = rol == "Secretario";
             bool esPortero = rol == "Portero";
-            // Secretario y Portero pueden leer y escribir. Tutor no tiene acceso.
             btnNuevo.Visible = esSecretario || esPortero;
             btnEditar.Visible = esSecretario || esPortero;
             btnEliminar.Visible = esSecretario || esPortero;
@@ -140,10 +130,6 @@ namespace GTE.WindowsForms
             }
         }
 
-        /// <summary>
-        /// Nombres de columna para la persona que usa el sistema: los del DTO son
-        /// los nombres de las propiedades de la clase.
-        /// </summary>
         private void ConfigurarColumnas()
         {
             if (dgvHorarios.Columns.Count == 0)

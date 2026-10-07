@@ -127,7 +127,6 @@ namespace GTE.WindowsForms
         {
             try
             {
-                // Cargar tutores y personal
                 _tutores = await _apiClient.GetTutoresAsync();
                 _personal = await _apiClient.GetPersonalAsync();
 
@@ -164,10 +163,8 @@ namespace GTE.WindowsForms
                     dtpFechaHora.Value = _retiroExistente.FechaHora;
                     txtObservaciones.Text = _retiroExistente.Observaciones;
 
-                    // Cargar alumnos autorizados
                     await CargarAlumnosAutorizados(_retiroExistente.IdTutor);
 
-                    // Cargar líneas existentes
                     _detalles.Clear();
                     foreach (var det in _retiroExistente.Detalles)
                     {
@@ -208,10 +205,6 @@ namespace GTE.WindowsForms
             }
         }
 
-        /// <summary>
-        /// Al elegir un alumno, el desplegable de estado muestra el estado que
-        /// tiene hoy, no el resultado del retiro.
-        /// </summary>
         private void cmbAlumno_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cmbAlumno.SelectedValue is not int idAlumno || idAlumno <= 0)
@@ -256,7 +249,6 @@ namespace GTE.WindowsForms
                 return;
             }
 
-            // Validar si ya está agregado en la grilla
             if (_detalles.Any(d => d.IdAlumno == idAlumno))
             {
                 MessageBox.Show("El alumno ya se encuentra agregado a la lista de este retiro.", "Alumno Duplicado",
@@ -354,7 +346,6 @@ namespace GTE.WindowsForms
             }
             catch (Exception ex)
             {
-                // Manejo de errores de negocio sin cerrar el formulario
                 MessageBox.Show(ex.Message, "Error de Validación de Retiro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }

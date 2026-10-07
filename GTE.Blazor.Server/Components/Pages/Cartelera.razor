@@ -5,8 +5,7 @@
 
 <PageTitle>Salida de cursos</PageTitle>
 
-@* Pantalla para dejar abierta en la puerta del colegio: letra grande, sin menú
-   y sin nombres de alumnos, porque la ve cualquiera que pase. *@
+
 
 <div class="cartelera">
     <div class="cartelera-encabezado">
@@ -14,7 +13,14 @@
         <span class="cartelera-reloj">@horaActual.ToString(@"HH\:mm")</span>
     </div>
 
-    @if (hayError)
+    @if (!cargado && !hayError)
+    {
+        <div class="cartelera-centro">
+            <p class="cartelera-grande">Conectando...</p>
+            <p class="cartelera-chico">Esperando la información de la escuela</p>
+        </div>
+    }
+    else if (!cargado)
     {
         <div class="cartelera-centro">
             <p class="cartelera-grande">Sin conexión</p>
@@ -32,6 +38,7 @@
                     a las @cartelera.Proximo.HorarioSalida.ToString(@"hh\:mm")
                 </p>
             }
+            <p class="cartelera-chico">Actualizado a las @ultimaActualizacion?.ToString(@"HH\:mm")</p>
         </div>
     }
     else
@@ -50,7 +57,16 @@
                     </p>
                 </div>
             }
+
+            <p class="cartelera-actualizado">Actualizado a las @ultimaActualizacion?.ToString(@"HH\:mm")</p>
         </div>
+    }
+
+    @if (hayError && cargado)
+    {
+        <p class="cartelera-aviso">
+            Sin conexión: se muestra la última información y se sigue intentando.
+        </p>
     }
 </div>
 
@@ -83,6 +99,7 @@
         font-size: 2.2rem;
         font-weight: 600;
         color: #8ecae6;
+        font-variant-numeric: tabular-nums;
     }
 
     .cartelera-centro {
@@ -143,49 +160,60 @@
         color: #7fa1bf;
         margin: 18px 0 0;
     }
+
+    .cartelera-aviso {
+        margin: 12px 0 0;
+        text-align: center;
+        color: #ffd166;
+        font-size: 1.1rem;
+    }
+
+    .cartelera-actualizado {
+        width: 100%;
+        margin: 24px 0 0;
+        text-align: center;
+        color: #7fa1bf;
+        font-size: 1rem;
+        font-variant-numeric: tabular-nums;
+    }
 </style>
 
 @code {
     private CarteleraDTO cartelera = new();
     private DateTime horaActual = DateTime.Now;
+    private DateTime? ultimaActualizacion;
+    private bool cargado;
     private bool hayError;
     private readonly CancellationTokenSource cancelacion = new();
 
-    /// <summary>
-    /// El pie de cada curso en la cartelera. La puerta se muestra sólo cuando la
-    /// salida la marcó un portero: si la marcó el secretario, ese dato no existe.
-    /// </summary>
-    private static string TextoDeLaPuerta(CursoEnSalidaDTO curso)
+    protected override async Task OnAfterRenderAsync(bool primerRender)
     {
-        string hora = curso.FechaHoraInicio.ToString(@"HH\:mm");
+        if (!primerRender)
+            return;
 
-        return string.IsNullOrWhiteSpace(curso.Puerta)
-            ? $"Desde las {hora}"
-            : $"Sale por {curso.Puerta} desde las {hora}";
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
         await ActualizarAsync();
+        StateHasChanged();
 
-        // La pantalla se refresca sola: nadie va a apretar F5 en la puerta.
-        _ = RefrescarCadaCincoSegundosAsync();
+        _ = RefrescarCadaTresSegundosAsync();
     }
 
-    private async Task RefrescarCadaCincoSegundosAsync()
+    private async Task RefrescarCadaTresSegundosAsync()
     {
-        try
+        while (!cancelacion.IsCancellationRequested)
         {
-            while (!cancelacion.IsCancellationRequested)
+            try
             {
-                await Task.Delay(TimeSpan.FromSeconds(5), cancelacion.Token);
+                await Task.Delay(TimeSpan.FromSeconds(3), cancelacion.Token);
                 await ActualizarAsync();
                 await InvokeAsync(StateHasChanged);
             }
-        }
-        catch (OperationCanceledException)
-        {
-            // La pantalla se cerró: no hay nada más que hacer.
+            catch (OperationCanceledException)
+            {
+                break;
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 
@@ -196,13 +224,23 @@
         try
         {
             cartelera = await CarteleraClient.GetAsync();
+            ultimaActualizacion = DateTime.Now;
+            cargado = true;
             hayError = false;
         }
         catch (Exception)
         {
-            // Si se cortó la conexión, la pantalla avisa y sigue intentando sola.
             hayError = true;
         }
+    }
+
+    private static string TextoDeLaPuerta(CursoEnSalidaDTO curso)
+    {
+        string hora = curso.FechaHoraInicio.ToString(@"HH\:mm");
+
+        return string.IsNullOrWhiteSpace(curso.Puerta)
+            ? $"Desde las {hora}"
+            : $"Sale por {curso.Puerta} desde las {hora}";
     }
 
     public void Dispose() => cancelacion.Cancel();

@@ -8,7 +8,6 @@ namespace GTE.Application.Services
 {
     public interface ISalidaDeCursoService
     {
-        /// <summary>Lo que muestra la pantalla de la puerta, sin datos personales.</summary>
         Task<CarteleraDTO> GetCarteleraAsync();
 
         Task<IEnumerable<SalidaDeCursoDTO>> GetDelDiaAsync(DateTime dia);

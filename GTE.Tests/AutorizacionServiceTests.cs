@@ -102,7 +102,6 @@ namespace GTE.Tests
         [Fact]
         public async Task NoSePuedeAutorizarDosVecesAlMismoTutorParaElMismoAlumno()
         {
-            // Arrange
             var curso = new CursoEscolar(1, "1°", "A", "Mañana", new TimeSpan(12, 0, 0));
             var alumno = new Alumno(1, "Juan", "Perez", 1);
             alumno.SetCursoEscolar(curso);
@@ -117,14 +116,11 @@ namespace GTE.Tests
 
             var service = new AutorizacionService(autoRepo, tutorRepo, alumnoRepo);
 
-            // Primera autorización exitosa
             var primera = await service.AddAsync(new AutorizacionDTO { TutorId = 1, AlumnoId = 1 });
             Assert.True(primera.Exito);
 
-            // Act - Segunda autorización con mismo tutor y alumno
             var segunda = await service.AddAsync(new AutorizacionDTO { TutorId = 1, AlumnoId = 1 });
 
-            // Assert
             Assert.False(segunda.Exito);
             Assert.Contains("ya se encuentra autorizado", segunda.Mensaje, StringComparison.OrdinalIgnoreCase);
         }

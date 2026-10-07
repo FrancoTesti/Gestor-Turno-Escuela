@@ -39,8 +39,6 @@ namespace GTE.WindowsForms
 
         private void ReporteRetirosForm_Load(object sender, EventArgs e)
         {
-            // Por defecto queda cargado el mes en curso, pero no se consulta nada:
-            // la consulta la pide el usuario con el botón.
             dtpDesde.Value = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
             dtpHasta.Value = DateTime.Today;
 
@@ -69,7 +67,6 @@ namespace GTE.WindowsForms
 
                 dgvDetalle.DataSource = null;
 
-                // Sin cartel: el aviso va en la misma pantalla, arriba de la tabla.
                 if (_retiros.Count == 0)
                 {
                     lblTotal.Text = "No hay retiros registrados en el período elegido.";

@@ -3,6 +3,7 @@
 @inherits PaginaConApiBase
 @inject CursoEscolarApiClient CursosClient
 @inject SalidaDeCursoApiClient SalidasClient
+@implements IDisposable
 
 <PageTitle>Salidas de curso</PageTitle>
 
@@ -70,8 +71,7 @@ else
                 <tr>
                     <td>@salida.Grado @salida.Curso</td>
                     <td>@salida.Turno</td>
-                    @* Cuando la marca alguien que no es portero (por ejemplo el
-                       secretario) no hay puerta asignada: queda vacío. *@
+
                     <td>@(string.IsNullOrWhiteSpace(salida.Puerta) ? "—" : salida.Puerta)</td>
                     <td>@salida.FechaHoraInicio.ToString("HH:mm")</td>
                     <td>@(salida.FechaHoraFin?.ToString("HH:mm") ?? "-")</td>
@@ -107,6 +107,7 @@ else
     private int idCursoElegido;
     private bool ocupado;
     private string? mensaje;
+    private readonly CancellationTokenSource cancelacion = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -115,7 +116,35 @@ else
             cursos = await CursosClient.GetAllAsync();
             salidas = await SalidasClient.GetDelDiaAsync();
         });
+
+        _ = RefrescarCadaDiezSegundosAsync();
     }
+
+    private async Task RefrescarCadaDiezSegundosAsync()
+    {
+        while (!cancelacion.IsCancellationRequested)
+        {
+            try
+            {
+                await Task.Delay(TimeSpan.FromSeconds(10), cancelacion.Token);
+
+                if (ocupado)
+                    continue;
+
+                salidas = await SalidasClient.GetDelDiaAsync();
+                await InvokeAsync(StateHasChanged);
+            }
+            catch (OperationCanceledException)
+            {
+                break;
+            }
+            catch (Exception)
+            {
+            }
+        }
+    }
+
+    public void Dispose() => cancelacion.Cancel();
 
     private async Task IniciarAsync()
     {

@@ -100,10 +100,6 @@ namespace GTE.WindowsForms
             }
         }
 
-        /// <summary>
-        /// El tutor elegido en el desplegable. Como se puede escribir el nombre, si
-        /// no hay nada seleccionado se busca por el texto que quedó escrito.
-        /// </summary>
         private int TutorElegido()
         {
             if (cmbTutores.SelectedValue is int seleccionado && seleccionado > 0)
@@ -125,8 +121,6 @@ namespace GTE.WindowsForms
             {
                 _alumnosAutorizados = await _apiClient.GetAlumnosAutorizadosByTutorAsync(tutorId);
 
-                // El parentesco viene con cada autorización: el mismo tutor puede
-                // ser padre de un alumno y tío de otro.
                 var autorizacionesDelTutor = await _apiClient.GetByTutorIdAsync(tutorId);
                 var parentescos = autorizacionesDelTutor
                     .GroupBy(a => a.AlumnoId)
@@ -278,10 +272,6 @@ namespace GTE.WindowsForms
             }
         }
 
-        /// <summary>
-        /// Alumno autorizado como se muestra en la grilla, con el parentesco que
-        /// tiene con ese tutor.
-        /// </summary>
         private sealed class FilaDeAlumnoAutorizado
         {
             public FilaDeAlumnoAutorizado(AlumnoDTO alumno, string parentesco)

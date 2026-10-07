@@ -11,7 +11,7 @@
         <div class="top-row px-4 auth">
             <AuthorizeView>
                 <Authorized>
-                    @* Se saluda con el nombre y apellido; si no lo tiene, con el usuario. *@
+
                     <span class="me-3">Hola, @NombreParaSaludar(context)!</span>
                     <button class="btn btn-outline-danger btn-sm" @onclick="CerrarSesion">Cerrar Sesión</button>
                 </Authorized>
@@ -38,9 +38,6 @@
     {
         await AuthService.LogoutAsync();
 
-        // Navegación dentro del circuito: recargar la página entera mientras el
-        // usuario no autorizado también redirige dejaba la aplicación en un
-        // estado inconsistente y el siguiente login no funcionaba.
         Nav.NavigateTo("/login");
     }
 }

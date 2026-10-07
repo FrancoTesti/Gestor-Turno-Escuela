@@ -33,7 +33,6 @@ namespace GTE.Clients
             throw new Exception("Error al obtener tutores.");
         }
 
-        /// <summary>Alumnos que el tutor conectado tiene a cargo.</summary>
         public async Task<List<AlumnoACargoDTO>> GetMisAlumnosAsync()
         {
             await EnsureAuthenticatedAsync();

@@ -84,9 +84,6 @@ public class SalidaDeCursoServiceTests
     [Fact]
     public void La_cartelera_no_expone_datos_personales()
     {
-        // La pantalla de la puerta la ve cualquiera que pase por la calle. Si
-        // alguien agrega el nombre de un alumno o del portero a este DTO, la
-        // prueba lo marca: el detalle de cada alumno va solo al celular del tutor.
         var propiedades = typeof(CursoEnSalidaDTO)
             .GetProperties()
             .Select(p => p.Name.ToLowerInvariant())
@@ -100,9 +97,6 @@ public class SalidaDeCursoServiceTests
     [Fact]
     public async Task La_cartelera_avisa_cual_es_el_proximo_curso()
     {
-        // Se usan horas extremas a propósito, así la prueba no depende del
-        // momento del día en que se ejecute: un curso de las 00:00 ya salió y uno
-        // de las 23:59 todavía no.
         var cursos = new CursoEscolarRepositoryFalso(
             CursoDe(1, "1°", "A", "Mañana", TimeSpan.Zero),
             CursoDe(2, "6°", "A", "Noche", new TimeSpan(23, 59, 59)));

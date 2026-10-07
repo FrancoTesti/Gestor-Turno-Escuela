@@ -18,7 +18,6 @@ namespace GTE.Dominio
         public bool TieneRestriccion { get; private set; }
         public Usuario Usuario { get; private set; }
 
-        // Constructor privado sin parámetros para Entity Framework
         private Tutor() { }
 
         public Tutor(string nombre, string apellido, string dni, string parentesco, string telefono, Usuario usuario)

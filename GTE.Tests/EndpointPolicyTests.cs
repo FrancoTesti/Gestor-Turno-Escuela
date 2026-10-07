@@ -62,9 +62,6 @@ public class EndpointPolicyTests
     [Fact]
     public void No_hay_dos_endpoints_con_la_misma_ruta_y_metodo()
     {
-        // Dos endpoints con la misma combinacion de ruta y metodo hacen que la
-        // aplicacion falle al atender el pedido, porque no puede decidir cual
-        // corresponde. Paso al mover el listado de tutores a su propio archivo.
         var repetidos = ConstruirEndpoints()
             .SelectMany(endpoint => MetodosDe(endpoint).Select(metodo => new
             {
@@ -83,8 +80,6 @@ public class EndpointPolicyTests
     [Fact]
     public void La_cartelera_de_la_puerta_es_publica()
     {
-        // La pantalla que está en la calle no tiene usuario que inicie sesión, así
-        // que este endpoint queda abierto. A cambio, no devuelve nombres de nadie.
         Endpoint? endpoint = BuscarEndpoint("GET", "/cartelera");
 
         Assert.NotNull(endpoint);

@@ -6,22 +6,16 @@ using System.Threading.Tasks;
 
 namespace GTE.Clients
 {
-    /// <summary>Se lanza cuando el token expiró o no es válido (HTTP 401).</summary>
     public class SesionExpiradaException : Exception
     {
         public SesionExpiradaException(string mensaje) : base(mensaje) { }
     }
 
-    /// <summary>Se lanza cuando el usuario está autenticado pero no tiene permisos (HTTP 403).</summary>
     public class SinPermisoException : Exception
     {
         public SinPermisoException(string mensaje) : base(mensaje) { }
     }
 
-    /// <summary>
-    /// Se lanza cuando la API no responde, por ejemplo porque el proyecto
-    /// GTE.WebAPI no está en ejecución.
-    /// </summary>
     public class ApiNoDisponibleException : Exception
     {
         public ApiNoDisponibleException(string mensaje) : base(mensaje) { }
@@ -42,13 +36,6 @@ namespace GTE.Clients
             _authService = authService;
         }
 
-        /// <summary>
-        /// Sesión que usa el cliente. Cuando la interfaz la inyecta se usa esa
-        /// instancia, que es la correcta en Blazor porque cada circuito tiene
-        /// su propia sesión. Si no se inyectó, se recurre al proveedor global
-        /// que registran las aplicaciones que crean los clientes con new, como
-        /// el escritorio.
-        /// </summary>
         protected IAuthService Autenticacion => _authService ?? AuthServiceProvider.Instance;
 
         protected async Task EnsureAuthenticatedAsync()
@@ -71,7 +58,6 @@ namespace GTE.Clients
             return client;
         }
 
-        /// <summary>La API devuelve los errores de negocio en un campo "error".</summary>
         protected static async Task<string> LeerMensajeDeErrorAsync(HttpResponseMessage respuesta, string porDefecto)
         {
             try
@@ -89,15 +75,12 @@ namespace GTE.Clients
         {
             if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
-                // El token venció o no es válido: se cierra la sesión para obligar
-                // a volver a iniciar sesión.
                 await Autenticacion.LogoutAsync();
                 throw new SesionExpiradaException("La sesión expiró. Vuelva a iniciar sesión.");
             }
 
             if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
             {
-                // La sesión es válida, pero el rol del usuario no alcanza.
                 throw new SinPermisoException("No tiene permisos para realizar esta operación.");
             }
         }

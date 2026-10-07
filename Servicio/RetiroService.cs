@@ -53,11 +53,9 @@ namespace GTE.Application.Services
             if (dto.FechaHora > DateTime.Now.AddMinutes(5))
                 return (false, "La fecha y hora del retiro no puede ser futura.", null);
 
-            // Validar que no haya alumnos repetidos en el detalle
             if (dto.Detalles.GroupBy(d => d.IdAlumno).Any(g => g.Count() > 1))
                 return (false, "No se puede incluir al mismo alumno más de una vez en el retiro.", null);
 
-            // Validar tutor
             var tutor = await _tutorRepository.GetAsync(dto.IdTutor);
             if (tutor == null)
                 return (false, "El tutor especificado no existe.", null);
@@ -65,7 +63,6 @@ namespace GTE.Application.Services
             if (tutor.TieneRestriccion)
                 return (false, $"El tutor {tutor.Nombre} {tutor.Apellido} posee restricciones legales para retirar alumnos.", null);
 
-            // Validaciones por cada alumno
             foreach (var det in dto.Detalles)
             {
                 var alumno = await _alumnoRepository.GetAsync(det.IdAlumno);
@@ -80,7 +77,6 @@ namespace GTE.Application.Services
                     return (false, $"El tutor {tutor.Nombre} {tutor.Apellido} no se encuentra autorizado para retirar al alumno {alumno.Nombre} {alumno.Apellido}.", null);
             }
 
-            // Construir entidad de dominio y agregar líneas
             var retiro = new Retiro(
                 dto.IdTutor,
                 dto.IdPersonal,
@@ -97,10 +93,8 @@ namespace GTE.Application.Services
 
             retiro.Validar();
 
-            // Guardar retiro
             await _retiroRepository.AddAsync(retiro);
 
-            // Actualizar estado de los alumnos a "Retirado"
             foreach (var det in dto.Detalles)
             {
                 var alumno = await _alumnoRepository.GetAsync(det.IdAlumno);
@@ -111,7 +105,6 @@ namespace GTE.Application.Services
                 }
             }
 
-            // Recuperar completo con relaciones
             var creado = await _retiroRepository.GetAsync(retiro.IdRetiro);
             return (true, "Retiro registrado correctamente.", creado == null ? null : MapToDTO(creado));
         }

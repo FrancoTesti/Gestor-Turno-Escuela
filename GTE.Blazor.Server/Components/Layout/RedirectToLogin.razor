@@ -1,7 +1,5 @@
 @inject NavigationManager Nav
 @code {
-    // Se navega después de renderizar: hacerlo durante la inicialización
-    // compite con la navegación que dispara el cierre de sesión.
     protected override void OnAfterRender(bool firstRender)
     {
         if (firstRender)

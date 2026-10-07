@@ -1,9 +1,5 @@
 namespace GTE.DTOs
 {
-    /// <summary>
-    /// Cantidad de alumnos de un curso escolar. Lo usa el reporte
-    /// "Alumnos por curso y turno".
-    /// </summary>
     public class AlumnosPorCursoDTO
     {
         public int IdCurso { get; set; }

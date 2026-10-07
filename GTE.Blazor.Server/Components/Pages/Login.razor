@@ -32,11 +32,7 @@
                     </div>
                 }
 
-                @* Los casilleros y el botón se habilitan cuando el circuito ya está
-                   conectado. Mientras tanto el formulario se ve (por el
-                   prerenderizado) pero no se puede usar: si no, lo que alguien
-                   escriba se pierde cuando Blazor toma el control, y un envío
-                   apurado saldría como POST normal contra el servidor. *@
+
                 <button type="submit" class="btn btn-primary w-100 py-2" disabled="@(cargando || !interactivo)">
                     @(cargando ? "Ingresando..." : "Ingresar")
                 </button>
@@ -69,8 +65,6 @@
 
     protected override void OnAfterRender(bool primerRender)
     {
-        // Con el prerenderizado el formulario ya se ve antes de que Blazor esté
-        // activo; recién acá el circuito está escuchando de verdad.
         if (primerRender)
         {
             interactivo = true;
@@ -92,8 +86,6 @@
         }
         catch (ApiNoDisponibleException ex)
         {
-            // Sin este caso aparte, cuando la API no está levantada la pantalla
-            // decía "usuario o contraseña incorrectos" y no se entendía el problema.
             mensajeError = ex.Message;
         }
         catch (Exception ex)

@@ -5,14 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/" />
     <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
-    @* El "?v=" se cambia cuando se toca el css. Sin eso el navegador sigue
-       usando la copia que tenía guardada y parece que los cambios no entraron. *@
+
     <link rel="stylesheet" href="app.css?v=2" />
     <link rel="stylesheet" href="GTE.Blazor.Server.styles.css?v=2" />
     <link rel="icon" type="image/png" href="favicon.png" />
 
-    @* Los estilos del aviso van acá y no en app.css: así viajan con la página y
-       no dependen de que el navegador tenga la hoja de estilos actualizada. *@
+
     <style>
         #components-reconnect-modal {
             display: none;
@@ -52,11 +50,6 @@
             margin: 6px 0 12px;
         }
 
-        /* Título de cada grupo del menú lateral (día a día, administración,
-           reportes). Va acá y no en el css del menú para que no dependa de que el
-           navegador tenga la hoja de estilos actualizada: con la versión vieja
-           guardada, estos títulos quedaban con el color por defecto y no se veían
-           sobre el fondo oscuro. */
         .nav-seccion {
             color: #ffffff;
             background-color: rgba(255, 255, 255, 0.1);
@@ -65,28 +58,15 @@
             letter-spacing: 0.08em;
             text-transform: uppercase;
             padding: 0.7rem 1.25rem 0.55rem;
-            /* El espacio de abajo separa el título del primer botón: si no, al
-               pasar el mouse el fondo del botón se pega con el del título. */
             margin: 0.6rem 0 0.45rem;
         }
     </style>
 
-    @* Con prerenderizado: la pantalla se arma en el servidor y llega en el
-       primer HTML, así nunca queda en blanco esperando que se conecte el
-       circuito de Blazor (que es lo que pasaba al abrir la aplicación).
 
-       Como el formulario existe antes de que Blazor esté activo, lleva nombre
-       propio (FormName) y su botón queda deshabilitado hasta que el circuito
-       contesta: si no, un envío muy rápido saldría como POST normal contra el
-       servidor en lugar de pasar por el circuito. *@
     <HeadOutlet @rendermode="InteractiveServer" />
 </head>
 <body>
-    @* Aviso para cuando se corta la conexión con el servidor. El framework de
-       Blazor usa este mismo elemento para mostrar su propio cartel, pero el suyo
-       está en inglés y tapa toda la pantalla, así que parecía que la aplicación
-       se había quedado en blanco. Acá se avisa en castellano y se deja ver la
-       pantalla que hay detrás. *@
+
     <div id="components-reconnect-modal">
         <div class="aviso-de-conexion">
             <p class="aviso-titulo">Se perdió la conexión con el servidor</p>

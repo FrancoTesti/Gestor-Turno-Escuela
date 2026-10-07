@@ -18,7 +18,6 @@ namespace GTE.WindowsForms
             InitializeComponent();
             ApplyStyles();
 
-            // Cuando cambia el alto de la ventana se reparte de nuevo el menú.
             pnlSidebar.Resize += (_, _) => AcomodarMenu();
 
             LoadUserData();
@@ -44,8 +43,6 @@ namespace GTE.WindowsForms
                 Tema.BotonMenu(boton);
             }
 
-            // La pantalla de salida es un enlace al navegador, pero se ve como los
-            // demás botones del menú.
             Tema.BotonMenu(btnCartelera);
 
             foreach (var etiqueta in new[]
@@ -82,8 +79,6 @@ namespace GTE.WindowsForms
             }
             else if (role == "Portero")
             {
-                // El portero ve los mismos listados que el secretario, pero sin
-                // los botones para modificar (eso lo controla la API).
                 btnAlumnos.Visible = true;
                 btnCursos.Visible = true;
                 btnRetiros.Visible = true;
@@ -102,18 +97,13 @@ namespace GTE.WindowsForms
                 btnOtros.Visible = false;
             }
 
-            // Reportes: el de alumnos es de gestión (sólo secretaría) y el de
-            // retiros lo usa también la portería, que es la que retira.
             btnReporteAlumnos.Visible = PermisosDeUsuario.PuedeVerReporteDeAlumnos(role);
             btnReporteRetiros.Visible = PermisosDeUsuario.PuedeVerReporteDeRetiros(role);
 
-            // El tutor solo tiene, además de cursos, su pantalla de alumnos a cargo.
             btnMisAlumnos.Visible = role == "Tutor";
 
-            // El portero es quien marca en la puerta qué curso está saliendo.
             btnSalidas.Visible = role == "Secretario" || role == "Portero";
 
-            // La pantalla de la puerta se abre en el navegador, como en la web.
             btnCartelera.Visible = role == "Secretario" || role == "Portero";
 
         }
@@ -122,28 +112,17 @@ namespace GTE.WindowsForms
         {
             base.OnShown(e);
 
-            // Se acomodan acá y no en el constructor: los controles todavía no
-            // están visibles, así que en ese momento no se puede saber cuáles
-            // quedaron para el rol que entró.
             AcomodarSecciones();
             AcomodarMenu();
 
-            // El inicio se arma recién acá: las tarjetas se filtran por los botones
-            // visibles, y eso no se puede saber antes de mostrar la ventana.
             MostrarInicio();
         }
 
-        /// <summary>
-        /// Reparte el alto de la barra entre las opciones visibles, así con la
-        /// ventana maximizada el menú ocupa toda la altura. Si no entra, la barra
-        /// se puede desplazar y ninguna opción queda fuera de alcance.
-        /// </summary>
         private void AcomodarMenu()
         {
             const int AltoDelTitulo = 30;
             const int AltoMinimoDeOpcion = 44;
 
-            // Orden en el que se ven las opciones, de arriba hacia abajo.
             var menu = new Control[]
             {
                 btnInicio,
@@ -165,11 +144,6 @@ namespace GTE.WindowsForms
                 ? Math.Max(AltoMinimoDeOpcion, disponible / opciones.Count)
                 : AltoMinimoDeOpcion;
 
-            // Los controles se ubican uno debajo del otro a mano y no con Dock: la
-            // barra de desplazamiento de un panel con controles anclados calcula de
-            // más y dejaba un espacio en blanco después de la última opción.
-            // El ancho deja libre el lugar de la barra de desplazamiento, así nunca
-            // aparece la barra horizontal con espacio de más abajo.
             int anchoDeLaBarra = Math.Max(120, pnlSidebar.Width - 20);
             int y = 0;
 
@@ -186,10 +160,6 @@ namespace GTE.WindowsForms
             pnlSidebar.PerformLayout();
         }
 
-        /// <summary>
-        /// El título de cada grupo del menú se muestra solo si el grupo tiene
-        /// alguna opción disponible para el rol que entró.
-        /// </summary>
         private void AcomodarSecciones()
         {
             lblSeccionDiaADia.Visible = btnSalidas.Visible || btnRetiros.Visible || btnAlumnos.Visible
@@ -202,10 +172,6 @@ namespace GTE.WindowsForms
             lblSeccionPantalla.Visible = btnCartelera.Visible;
         }
 
-        /// <summary>
-        /// Abre la pantalla que se deja fija en la puerta del colegio. Es la misma
-        /// que el enlace del menú de la web.
-        /// </summary>
         private void btnCartelera_Click(object sender, EventArgs e)
         {
             try
@@ -222,10 +188,6 @@ namespace GTE.WindowsForms
             }
         }
 
-        /// <summary>
-        /// Pantalla de inicio: saluda al usuario y le muestra una tarjeta por
-        /// cada sección que tiene habilitada, con el mismo aspecto que la web.
-        /// </summary>
         private void MostrarInicio()
         {
             HighlightButton(btnInicio);
@@ -240,7 +202,6 @@ namespace GTE.WindowsForms
                     grupo.Add(new AccesoDirecto(titulo, descripcion, () => Abrir(boton, pantalla)));
             }
 
-            // Mismo orden y mismos grupos que el menú de la izquierda.
             Agregar(diaADia, btnSalidas, "Salidas de curso",
                 "Marcá qué curso está saliendo. La pantalla de la puerta lo muestra al instante.",
                 () => new SalidaDeCursoForm());
@@ -296,7 +257,6 @@ namespace GTE.WindowsForms
             childForm.Show();
         }
 
-        /// <summary>Abre una pantalla del menú y deja su botón resaltado.</summary>
         private void Abrir(Button boton, Func<Form> pantalla)
         {
             HighlightButton(boton);

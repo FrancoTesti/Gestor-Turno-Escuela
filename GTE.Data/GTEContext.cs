@@ -76,7 +76,6 @@ namespace GTE.Data
                 entity.HasIndex(e => new { e.Grado, e.Curso, e.Turno }).IsUnique();
             });
 
-            // Mapeo de Tutor
             modelBuilder.Entity<Tutor>(entity =>
             {
                 entity.HasKey(e => e.IdTutor);
@@ -198,23 +197,11 @@ namespace GTE.Data
                       .HasForeignKey(e => e.IdPersonal)
                       .OnDelete(DeleteBehavior.Restrict);
 
-                // La pantalla de la puerta consulta por los que todavía están en curso.
                 entity.HasIndex(e => new { e.IdCurso, e.FechaHoraFin });
             });
 
 
-            // ------------------------------------------------------------------
-            // Datos de ejemplo: una escuela con doce cursos, sus alumnos, los
-            // tutores que los retiran y los retiros de los últimos días.
-            //
-            // Se arma con listas y bucles para que la escuela tenga un tamaño
-            // realista sin escribir cientos de filas a mano. Los usuarios que ya
-            // usaba el grupo (admin, porteria1, tutor1, ...) se mantienen con la
-            // misma contraseña, así se sigue entrando igual que antes.
-            // ------------------------------------------------------------------
             const int CantidadDeCursos = 12;
-            // Cada familia tiene un tutor titular; en unas pocas, además, el otro
-            // progenitor también quedó registrado con su propio usuario.
             const int CantidadDeFamilias = 60;
             const int FamiliasConDosProgenitores = 8;
             const int AlumnosPorCurso = 12;
@@ -239,8 +226,6 @@ namespace GTE.Data
                 "Pilar", "Dante", "Valentino", "Malena", "Bruno", "Ámbar"
             };
 
-            // Nombres de tutores y de tutoras por separado, así el parentesco que se
-            // carga (padre o madre) es coherente con el nombre.
             string[] nombresDeTutores =
             {
                 "Marcelo", "Gustavo", "Diego", "Fernando", "Alejandro", "Sergio",
@@ -299,15 +284,12 @@ namespace GTE.Data
                 new { IdUsuario = 5, NombreUsuario = "tutor2", Contrasena = "tutor123", EstaActivo = true }
             };
 
-            // Cada familia tiene un tutor titular. Las dos primeras familias son
-            // las que ya usaba el grupo, con sus mismos usuarios.
             int[] usuariosDeLasFamilias = new int[CantidadDeFamilias + 1];
             usuariosDeLasFamilias[1] = 3;
             usuariosDeLasFamilias[2] = 5;
 
             int proximoIdUsuario = 6;
 
-            // Parentesco habitual del tutor con los chicos de su familia.
             bool EsMadre(int familia) => familia == 2 || (familia > 2 && familia % 2 == 0);
 
             var tutoresDeEjemplo = new List<object>();
@@ -339,16 +321,11 @@ namespace GTE.Data
                     Dni = (30000000 + (familia * 137)).ToString(),
                     Parentesco = esMujer ? "Madre" : "Padre",
                     Telefono = $"11-{4000 + familia}-{1000 + (familia * 7)}",
-                    // Un tutor con restricción, para poder probar que el sistema no
-                    // lo deja retirar alumnos.
                     TieneRestriccion = familia == 7,
                     IdUsuario = usuariosDeLasFamilias[familia]
                 });
             }
 
-            // Las familias no son todas iguales: las hay con un solo hijo en la
-            // escuela y otras con tres o cuatro. Entre todas suman los 144 alumnos
-            // de la escuela.
             int[] tamaniosDeFamilia = new int[CantidadDeFamilias];
             var tamaniosMezclados = new List<int>();
             tamaniosMezclados.AddRange(Enumerable.Repeat(1, 12));
@@ -356,19 +333,14 @@ namespace GTE.Data
             tamaniosMezclados.AddRange(Enumerable.Repeat(3, 18));
             tamaniosMezclados.AddRange(Enumerable.Repeat(4, 9));
 
-            // Se mezclan de una forma fija (sin azar), así las familias chicas y
-            // las grandes no quedan todas juntas en el listado.
             for (int familia = 0; familia < CantidadDeFamilias; familia++)
                 tamaniosDeFamilia[familia] = tamaniosMezclados[(familia * 29) % CantidadDeFamilias];
 
-            // Un lugar por cada hijo, con la familia que le toca: de ahí sale el
-            // reparto de hermanos entre los cursos.
             var familiasPorHijo = new List<int>();
             for (int familia = 1; familia <= CantidadDeFamilias; familia++)
                 for (int hijo = 0; hijo < tamaniosDeFamilia[familia - 1]; hijo++)
                     familiasPorHijo.Add(familia);
 
-            // El salto hace que los hermanos no caigan en el mismo curso.
             const int SaltoEntreHermanos = 7;
 
             var hijosDeCadaFamilia = new Dictionary<int, List<int>>();
@@ -381,8 +353,6 @@ namespace GTE.Data
             {
                 for (int alumno = 1; alumno <= AlumnosPorCurso; alumno++)
                 {
-                    // Los hermanos comparten el apellido con su familia y van a
-                    // cursos distintos, como en una escuela de verdad.
                     int familia = familiasPorHijo[((proximoAlumno - 1) * SaltoEntreHermanos) % familiasPorHijo.Count];
 
                     familiaDeCadaAlumno[proximoAlumno] = familia;
@@ -416,8 +386,6 @@ namespace GTE.Data
                 }
             }
 
-            // En las primeras familias el otro progenitor también quedó registrado,
-            // así hay alumnos con dos adultos autorizados para retirarlos.
             for (int familia = 1; familia <= FamiliasConDosProgenitores; familia++)
             {
                 int idTutor = CantidadDeFamilias + familia;
@@ -437,7 +405,6 @@ namespace GTE.Data
                     IdTutor = idTutor,
                     Nombre = esMujer ? nombresDeTutoras[idTutor % nombresDeTutoras.Length]
                         : nombresDeTutores[idTutor % nombresDeTutores.Length],
-                    // El otro progenitor suele tener otro apellido.
                     Apellido = apellidos[CantidadDeFamilias + familia - 1],
                     Dni = (30000000 + (idTutor * 137)).ToString(),
                     Parentesco = esMujer ? "Madre" : "Padre",
@@ -458,9 +425,6 @@ namespace GTE.Data
                 }
             }
 
-            // Unos pocos alumnos quedaron autorizados para un tío o un abuelo. El
-            // adulto extra sale de las familias con un solo hijo, así ninguna
-            // familia termina con demasiados chicos a cargo.
             var familiasConUnSoloHijo = new List<int>();
             for (int familia = 1; familia <= CantidadDeFamilias; familia++)
                 if (tamaniosDeFamilia[familia - 1] == 1)
@@ -486,8 +450,6 @@ namespace GTE.Data
                     IdAutorizacion = autorizacionesDeEjemplo.Count + 1,
                     AlumnoId = alumno,
                     TutorId = familiaExtra,
-                    // Con este otro adulto el parentesco es distinto: eso es lo que
-                    // antes no se podía representar.
                     Parentesco = parentescosDeConfianza[i % parentescosDeConfianza.Length]
                 });
             }
@@ -506,8 +468,6 @@ namespace GTE.Data
             modelBuilder.Entity<Alumno>().HasData(alumnosDeEjemplo);
             modelBuilder.Entity<Autorizacion>().HasData(autorizacionesDeEjemplo);
 
-            // Las primeras doce familias ya pasaron a retirar a sus hijos, en días
-            // distintos del último mes.
             var retirosDeEjemplo = new List<object>();
             var detallesDeEjemplo = new List<object>();
             int proximoDetalle = 1;
@@ -525,7 +485,6 @@ namespace GTE.Data
                     Observaciones = motivosDeRetiro[t % motivosDeRetiro.Length]
                 });
 
-                // Cada familia se llevó a sus hijos: algunas uno, otras dos o más.
                 foreach (int hijo in hijosDeCadaFamilia[t])
                 {
                     detallesDeEjemplo.Add(new

@@ -68,8 +68,7 @@
                 </select>
             </div>
         </div>
-        @* Grado, división, turno y estado son datos del alumno: sirven para
-           encontrar a los tutores que tienen autorizado algún chico así. *@
+
         <div class="row g-2 align-items-end mt-1">
             <div class="col-md-4">
                 <label class="form-label">Parentesco</label>
@@ -232,7 +231,6 @@ else
             .Distinct()
             .OrderBy(p => p);
 
-    /// <summary>Grados, divisiones y turnos que existen, para no escribir texto libre.</summary>
     private IEnumerable<string> GradosDisponibles =>
         cursos.Select(c => c.Grado).Distinct().OrderBy(g => g);
 
@@ -242,7 +240,6 @@ else
     private IEnumerable<string> TurnosDisponibles =>
         cursos.Select(c => c.Turno).Distinct().OrderBy(t => t);
 
-    /// <summary>Tutores que pasan los filtros de la pantalla.</summary>
     private IEnumerable<TutorDTO> TutoresFiltrados =>
         (tutores ?? new List<TutorDTO>()).Where(t =>
             (string.IsNullOrWhiteSpace(filtroTexto)
@@ -255,11 +252,6 @@ else
                 || (filtroRestriccion == "no" && !t.TieneRestriccion))
             && TutoresConAlumnosQueCumplen().Contains(t.IdTutor));
 
-    /// <summary>
-    /// Tutores que tienen autorizado al menos un alumno que cumple el grado, la
-    /// división, el turno y el estado elegidos. Si no se eligió ninguno de esos
-    /// filtros, no se descarta a nadie.
-    /// </summary>
     private HashSet<int> TutoresConAlumnosQueCumplen()
     {
         bool hayFiltroDelAlumno = !string.IsNullOrEmpty(filtroGrado)
@@ -304,8 +296,6 @@ else
     {
         tutores = await TutoresClient.GetAllAsync();
 
-        // Los filtros de grado, división, turno y estado son del alumno, así que
-        // también se necesitan los alumnos y qué tutor tiene autorizado a cada uno.
         alumnos = await AlumnosClient.GetAllAsync();
         autorizaciones = await AutorizacionesClient.GetAllAsync();
         cursos = await CursosClient.GetAllAsync();

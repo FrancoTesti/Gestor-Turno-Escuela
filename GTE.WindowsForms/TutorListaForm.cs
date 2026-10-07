@@ -26,7 +26,6 @@ namespace GTE.WindowsForms
             ApplyStyles();
             Tema.AcomodarControles(this);
 
-            // Los filtros se aplican mientras se escribe o se cambia alguno.
             txtFiltroNombre.TextChanged += (_, _) => AplicarFiltros();
             cmbFiltroGrado.SelectedIndexChanged += (_, _) => AplicarFiltros();
             cmbFiltroDivision.SelectedIndexChanged += (_, _) => AplicarFiltros();
@@ -64,8 +63,6 @@ namespace GTE.WindowsForms
 
             try
             {
-                // Para poder filtrar por curso hace falta saber qué alumnos tiene
-                // autorizado cada tutor.
                 _alumnos = await _alumnosClient.GetAllAsync();
                 _autorizaciones = await _autorizacionesClient.GetAllAsync();
 
@@ -94,10 +91,6 @@ namespace GTE.WindowsForms
             await RefreshGrid();
         }
 
-        /// <summary>
-        /// Oculta las acciones que el rol del usuario no puede realizar.
-        /// La restricción real la aplica la API.
-        /// </summary>
         private async Task AplicarPermisosSegunRol()
         {
             string? rol = await AuthServiceProvider.Instance.GetRoleAsync();
@@ -122,10 +115,6 @@ namespace GTE.WindowsForms
             }
         }
 
-        /// <summary>
-        /// Muestra los tutores que pasan los filtros: por nombre, apellido o DNI, y
-        /// por el curso de alguno de los alumnos que tiene autorizados.
-        /// </summary>
         private void AplicarFiltros()
         {
             IEnumerable<TutorDTO> visibles = _tutores;
@@ -139,8 +128,6 @@ namespace GTE.WindowsForms
                     || t.Dni.Contains(texto, StringComparison.OrdinalIgnoreCase));
             }
 
-            // Los filtros de grado, división, turno y estado son del alumno: se
-            // buscan los tutores que tienen autorizado algún alumno que los cumpla.
             string? grado = Elegido(cmbFiltroGrado);
             string? division = Elegido(cmbFiltroDivision);
             string? turno = Elegido(cmbFiltroTurno);
@@ -169,7 +156,6 @@ namespace GTE.WindowsForms
             ConfigureColumns();
         }
 
-        /// <summary>El texto elegido en un filtro, o nulo si está en "todos".</summary>
         private static string? Elegido(ComboBox combo) =>
             combo.SelectedIndex <= 0 ? null : combo.SelectedItem?.ToString();
 
@@ -194,8 +180,6 @@ namespace GTE.WindowsForms
                 dgvTutores.Columns["TieneRestriccion"].HeaderText = "Restricción";
                 dgvTutores.Columns["TieneRestriccion"].Width = 90;
 
-                // La contraseña se usa al crear o modificar el tutor, pero no se
-                // muestra en la lista.
                 if (dgvTutores.Columns.Contains("Contrasena"))
                     dgvTutores.Columns["Contrasena"].Visible = false;
             }

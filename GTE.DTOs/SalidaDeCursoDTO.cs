@@ -2,10 +2,6 @@ using System;
 
 namespace GTE.DTOs
 {
-    /// <summary>
-    /// Salida de un curso, con todo lo que necesita el portero para saber qué
-    /// está saliendo y quién lo marcó. Solo la ven los usuarios del sistema.
-    /// </summary>
     public class SalidaDeCursoDTO
     {
         public int IdSalidaDeCurso { get; set; }

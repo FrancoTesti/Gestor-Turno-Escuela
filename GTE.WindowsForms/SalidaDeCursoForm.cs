@@ -7,20 +7,21 @@ using GTE.DTOs;
 
 namespace GTE.WindowsForms
 {
-    /// <summary>
-    /// Pantalla del portero: marca qué curso está saliendo y cuándo terminó de
-    /// salir. Eso mismo es lo que aparece en la pantalla de la puerta.
-    /// </summary>
     public partial class SalidaDeCursoForm : Form
     {
         private readonly CursoEscolarApiClient _cursosClient = new CursoEscolarApiClient();
         private readonly SalidaDeCursoApiClient _salidasClient = new SalidaDeCursoApiClient();
+        private readonly System.Windows.Forms.Timer _refresco = new();
+        private bool _actualizando;
 
         public SalidaDeCursoForm()
         {
             InitializeComponent();
             ApplyStyles();
             Tema.AcomodarControles(this);
+
+            _refresco.Interval = 10000;
+            _refresco.Tick += async (_, _) => await RefrescarEnSegundoPlanoAsync();
         }
 
         private void ApplyStyles()
@@ -50,11 +51,64 @@ namespace GTE.WindowsForms
                     cmbCursos.SelectedIndex = 0;
 
                 await CargarSalidasAsync();
+                _refresco.Start();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"No se pudieron cargar los cursos: {ex.Message}", "Salidas de curso",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            _refresco.Stop();
+            _refresco.Dispose();
+
+            base.OnFormClosed(e);
+        }
+
+        private async Task RefrescarEnSegundoPlanoAsync()
+        {
+            if (_actualizando || !Visible)
+                return;
+
+            _actualizando = true;
+            _refresco.Stop();
+
+            try
+            {
+                int? elegida = (dgvSalidas.CurrentRow?.DataBoundItem as SalidaDeCursoDTO)?.IdSalidaDeCurso;
+
+                var salidas = await _salidasClient.GetDelDiaAsync();
+
+                dgvSalidas.DataSource = null;
+                dgvSalidas.DataSource = salidas;
+                ConfigurarColumnas();
+
+                if (elegida is int id)
+                    SeleccionarSalida(id);
+            }
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                _actualizando = false;
+                _refresco.Start();
+            }
+        }
+
+        private void SeleccionarSalida(int idSalida)
+        {
+            foreach (DataGridViewRow fila in dgvSalidas.Rows)
+            {
+                if (fila.DataBoundItem is SalidaDeCursoDTO salida && salida.IdSalidaDeCurso == idSalida)
+                {
+                    fila.Selected = true;
+                    dgvSalidas.CurrentCell = fila.Cells[0];
+                    return;
+                }
             }
         }
 
@@ -140,7 +194,6 @@ namespace GTE.WindowsForms
             });
         }
 
-        /// <summary>Ejecuta una acción contra la API y vuelve a mostrar la lista.</summary>
         private async Task EjecutarAsync(Func<Task> accion)
         {
             btnIniciar.Enabled = false;
@@ -163,7 +216,6 @@ namespace GTE.WindowsForms
             }
         }
 
-        /// <summary>Un curso como se muestra en la lista desplegable.</summary>
         private sealed class OpcionDeCurso
         {
             public OpcionDeCurso(CursoEscolarDTO curso)

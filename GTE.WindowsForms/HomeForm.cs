@@ -6,7 +6,6 @@ using System.Windows.Forms;
 
 namespace GTE.WindowsForms
 {
-    /// <summary>Sección que se puede abrir desde el inicio, con su descripción.</summary>
     public sealed class AccesoDirecto
     {
         public AccesoDirecto(string titulo, string descripcion, Action abrir)
@@ -21,7 +20,6 @@ namespace GTE.WindowsForms
         public Action Abrir { get; }
     }
 
-    /// <summary>Grupo de pantallas del inicio, con el mismo título que el menú.</summary>
     public sealed class SeccionDelInicio
     {
         public SeccionDelInicio(string titulo, IEnumerable<AccesoDirecto> accesos)
@@ -34,10 +32,6 @@ namespace GTE.WindowsForms
         public IReadOnlyList<AccesoDirecto> Accesos { get; }
     }
 
-    /// <summary>
-    /// Pantalla de inicio del escritorio: saluda al usuario y le muestra una
-    /// tarjeta por cada sección que tiene habilitada, agrupadas igual que en la web.
-    /// </summary>
     public class HomeForm : Form
     {
         private const int AnchoTarjeta = 300;
@@ -89,7 +83,6 @@ namespace GTE.WindowsForms
                 }
             }
 
-            // Al cambiar el tamaño de la ventana se reparte de nuevo el ancho.
             pnlTarjetas.Resize += (_, _) => AcomodarTarjetas();
             AcomodarTarjetas();
 
@@ -98,11 +91,6 @@ namespace GTE.WindowsForms
             Controls.Add(pnlTarjetas);
         }
 
-        /// <summary>
-        /// Reparte el ancho disponible entre las tarjetas, en tres columnas cuando
-        /// hay lugar. Sin esto, con la ventana maximizada las tarjetas se quedaban
-        /// de 300 píxeles y sobraba un hueco al costado de cada fila.
-        /// </summary>
         private void AcomodarTarjetas()
         {
             int disponible = pnlTarjetas.ClientSize.Width - 24;
@@ -125,8 +113,6 @@ namespace GTE.WindowsForms
                 if (titulo == null || descripcion == null)
                     continue;
 
-                // El texto puede necesitar más de una línea cuando la ventana es
-                // angosta: se mide y la tarjeta crece para que no se corte nada.
                 descripcion.Width = ancho - 32;
                 descripcion.Top = titulo.Bottom + 8;
                 descripcion.Height = Math.Max(40, descripcion.PreferredHeight);
@@ -134,10 +120,6 @@ namespace GTE.WindowsForms
             }
         }
 
-        /// <summary>
-        /// El título ocupa todo el ancho, así el grupo arranca en una fila nueva y
-        /// las tarjetas quedan separadas de la sección anterior.
-        /// </summary>
         private Label CrearTituloDeSeccion(string titulo)
         {
             return new Label
@@ -153,10 +135,6 @@ namespace GTE.WindowsForms
             };
         }
 
-        /// <summary>
-        /// Tarjeta con el nombre de la sección y una línea que explica para qué
-        /// sirve. Se puede clickear en cualquier parte, como las de la web.
-        /// </summary>
         private Panel CrearTarjeta(AccesoDirecto seccion)
         {
             var tarjeta = new Panel
@@ -209,11 +187,6 @@ namespace GTE.WindowsForms
             lblTitulo.ForeColor = encendido ? Tema.Primario : Tema.Texto;
         }
 
-        /// <summary>
-        /// Al salir de la tarjeta o de una de sus etiquetas hay que fijarse si el
-        /// mouse sigue adentro, si no el resaltado parpadea al pasar por encima
-        /// del título o de la descripción.
-        /// </summary>
         private static bool EstaAdentro(Control tarjeta) =>
             tarjeta.ClientRectangle.Contains(tarjeta.PointToClient(Cursor.Position));
     }

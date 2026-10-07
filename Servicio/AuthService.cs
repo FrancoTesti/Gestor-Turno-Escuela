@@ -53,7 +53,6 @@ namespace GTE.Application.Services
             if (rol == null)
                 return Fallo("El usuario no tiene un rol asignado en el sistema.");
 
-            // Generación de Token JWT combinando claims del usuario y el rol resuelto
             var (token, expiresAt) = GenerateJwtToken(usuario.IdUsuario, usuario.NombreUsuario, rol, nombreCompleto);
 
             return new LoginResponse

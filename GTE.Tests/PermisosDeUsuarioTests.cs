@@ -36,7 +36,6 @@ public class PermisosDeUsuarioTests
             await AutorizacionDePrueba.AutorizarAsync(Politicas.SoloSecretario, rol),
             PermisosDeUsuario.PuedeAdministrarTutores(rol));
 
-        // El reporte de alumnos es de gestión y el de retiros lo usan los porteros.
         Assert.Equal(
             await AutorizacionDePrueba.AutorizarAsync(Politicas.ReporteDeAlumnos, rol),
             PermisosDeUsuario.PuedeVerReporteDeAlumnos(rol));

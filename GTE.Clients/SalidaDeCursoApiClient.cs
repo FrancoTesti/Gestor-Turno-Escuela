@@ -17,7 +17,6 @@ namespace GTE.Clients
         {
         }
 
-        /// <summary>Las salidas de curso de hoy, las que terminaron y las que no.</summary>
         public async Task<List<SalidaDeCursoDTO>> GetDelDiaAsync()
         {
             await EnsureAuthenticatedAsync();
@@ -35,7 +34,6 @@ namespace GTE.Clients
             throw new Exception("Error al obtener las salidas de hoy.");
         }
 
-        /// <summary>Marca que un curso empezó a salir.</summary>
         public async Task<SalidaDeCursoDTO> IniciarAsync(int idCurso)
         {
             await EnsureAuthenticatedAsync();
@@ -53,7 +51,6 @@ namespace GTE.Clients
             throw new Exception(await LeerMensajeDeErrorAsync(response, "No se pudo marcar la salida del curso."));
         }
 
-        /// <summary>Marca que un curso terminó de salir.</summary>
         public async Task FinalizarAsync(int idSalida)
         {
             await EnsureAuthenticatedAsync();

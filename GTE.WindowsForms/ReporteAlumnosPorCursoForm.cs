@@ -63,10 +63,6 @@ namespace GTE.WindowsForms
             }
         }
 
-        /// <summary>
-        /// Dibuja el gráfico de barras a mano, sin librerías externas, para que
-        /// el reporte funcione en cualquier máquina sin dependencias extra.
-        /// </summary>
         private void pnlGrafico_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
@@ -104,7 +100,6 @@ namespace GTE.WindowsForms
             int anchoBarra = Math.Max(18, area.Width / (_filas.Count * 2));
             int separacion = (area.Width - (_filas.Count * anchoBarra)) / (_filas.Count + 1);
 
-            // Lineas guia horizontales con la referencia de cantidad.
             using var lapizGuia = new Pen(Color.FromArgb(228, 232, 236), 1);
             for (int valor = 0; valor <= maximo; valor++)
             {
@@ -145,7 +140,6 @@ namespace GTE.WindowsForms
             }
         }
 
-        /// <summary>Un color por turno, para distinguirlos de un vistazo.</summary>
         private static Color ColorDeTurno(string? turno) => turno switch
         {
             "Mañana" => Color.FromArgb(13, 110, 253),

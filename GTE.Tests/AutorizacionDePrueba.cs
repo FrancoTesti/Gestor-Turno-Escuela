@@ -6,10 +6,6 @@ using Microsoft.Extensions.Logging;
 
 namespace GTE.Tests;
 
-/// <summary>
-/// Permite evaluar una política de la API con un rol concreto, usando los
-/// mismos servicios de autorización que la aplicación real.
-/// </summary>
 internal static class AutorizacionDePrueba
 {
     public static async Task<bool> AutorizarAsync(string politica, string? rol)

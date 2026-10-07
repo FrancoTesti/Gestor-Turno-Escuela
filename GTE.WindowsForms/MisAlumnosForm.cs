@@ -6,10 +6,6 @@ using GTE.Clients;
 
 namespace GTE.WindowsForms
 {
-    /// <summary>
-    /// Pantalla del tutor: los alumnos que tiene autorizados a retirar, con su
-    /// curso, el horario de salida y el estado.
-    /// </summary>
     public partial class MisAlumnosForm : Form
     {
         private readonly TutorApiClient _apiClient = new TutorApiClient();

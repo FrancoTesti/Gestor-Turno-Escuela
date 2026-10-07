@@ -41,9 +41,6 @@ namespace GTE.WindowsForms
             this.grpDetalle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDetalles)).BeginInit();
             this.SuspendLayout();
-            // 
-            // lblTitle
-            // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblTitle.ForeColor = System.Drawing.Color.White;
@@ -52,9 +49,6 @@ namespace GTE.WindowsForms
             this.lblTitle.Size = new System.Drawing.Size(430, 37);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Registrar Retiro (Maestro/Detalle)";
-            // 
-            // pnlCabecera
-            // 
             this.pnlCabecera.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlCabecera.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(44)))), ((int)(((byte)(52)))));
@@ -71,16 +65,10 @@ namespace GTE.WindowsForms
             this.pnlCabecera.Name = "pnlCabecera";
             this.pnlCabecera.Size = new System.Drawing.Size(740, 140);
             this.pnlCabecera.TabIndex = 1;
-            // 
-            // txtObservaciones
-            // 
             this.txtObservaciones.Location = new System.Drawing.Point(390, 85);
             this.txtObservaciones.Name = "txtObservaciones";
             this.txtObservaciones.Size = new System.Drawing.Size(330, 27);
             this.txtObservaciones.TabIndex = 7;
-            // 
-            // lblObservaciones
-            // 
             this.lblObservaciones.AutoSize = true;
             this.lblObservaciones.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(206)))), ((int)(((byte)(212)))), ((int)(((byte)(218)))));
             this.lblObservaciones.Location = new System.Drawing.Point(390, 62);
@@ -88,18 +76,12 @@ namespace GTE.WindowsForms
             this.lblObservaciones.Size = new System.Drawing.Size(108, 20);
             this.lblObservaciones.TabIndex = 6;
             this.lblObservaciones.Text = "Observaciones:";
-            // 
-            // dtpFechaHora
-            // 
             this.dtpFechaHora.CustomFormat = "dd/MM/yyyy HH:mm";
             this.dtpFechaHora.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpFechaHora.Location = new System.Drawing.Point(390, 30);
             this.dtpFechaHora.Name = "dtpFechaHora";
             this.dtpFechaHora.Size = new System.Drawing.Size(330, 27);
             this.dtpFechaHora.TabIndex = 5;
-            // 
-            // lblFechaHora
-            // 
             this.lblFechaHora.AutoSize = true;
             this.lblFechaHora.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(206)))), ((int)(((byte)(212)))), ((int)(((byte)(218)))));
             this.lblFechaHora.Location = new System.Drawing.Point(390, 8);
@@ -107,18 +89,12 @@ namespace GTE.WindowsForms
             this.lblFechaHora.Size = new System.Drawing.Size(98, 20);
             this.lblFechaHora.TabIndex = 4;
             this.lblFechaHora.Text = "Fecha y Hora:";
-            // 
-            // cmbPersonal
-            // 
             this.cmbPersonal.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbPersonal.FormattingEnabled = true;
             this.cmbPersonal.Location = new System.Drawing.Point(15, 85);
             this.cmbPersonal.Name = "cmbPersonal";
             this.cmbPersonal.Size = new System.Drawing.Size(350, 28);
             this.cmbPersonal.TabIndex = 3;
-            // 
-            // lblPersonal
-            // 
             this.lblPersonal.AutoSize = true;
             this.lblPersonal.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(206)))), ((int)(((byte)(212)))), ((int)(((byte)(218)))));
             this.lblPersonal.Location = new System.Drawing.Point(15, 62);
@@ -126,9 +102,6 @@ namespace GTE.WindowsForms
             this.lblPersonal.Size = new System.Drawing.Size(175, 20);
             this.lblPersonal.TabIndex = 2;
             this.lblPersonal.Text = "Personal que Entrega (*):";
-            // 
-            // cmbTutor
-            // 
             this.cmbTutor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbTutor.FormattingEnabled = true;
             this.cmbTutor.Location = new System.Drawing.Point(15, 30);
@@ -136,9 +109,6 @@ namespace GTE.WindowsForms
             this.cmbTutor.Size = new System.Drawing.Size(350, 28);
             this.cmbTutor.TabIndex = 1;
             this.cmbTutor.SelectedIndexChanged += new System.EventHandler(this.cmbTutor_SelectedIndexChanged);
-            // 
-            // lblTutor
-            // 
             this.lblTutor.AutoSize = true;
             this.lblTutor.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(206)))), ((int)(((byte)(212)))), ((int)(((byte)(218)))));
             this.lblTutor.Location = new System.Drawing.Point(15, 8);
@@ -146,9 +116,6 @@ namespace GTE.WindowsForms
             this.lblTutor.Size = new System.Drawing.Size(155, 20);
             this.lblTutor.TabIndex = 0;
             this.lblTutor.Text = "Tutor que Retira (*):";
-            // 
-            // grpDetalle
-            // 
             this.grpDetalle.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -169,9 +136,6 @@ namespace GTE.WindowsForms
             this.grpDetalle.TabIndex = 2;
             this.grpDetalle.TabStop = false;
             this.grpDetalle.Text = "Líneas de Detalle — Alumnos a Retirar";
-            // 
-            // btnQuitarAlumno
-            // 
             this.btnQuitarAlumno.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnQuitarAlumno.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnQuitarAlumno.Location = new System.Drawing.Point(620, 50);
@@ -181,9 +145,6 @@ namespace GTE.WindowsForms
             this.btnQuitarAlumno.Text = "Quitar Línea";
             this.btnQuitarAlumno.UseVisualStyleBackColor = true;
             this.btnQuitarAlumno.Click += new System.EventHandler(this.btnQuitarAlumno_Click);
-            // 
-            // btnAgregarAlumno
-            // 
             this.btnAgregarAlumno.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAgregarAlumno.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnAgregarAlumno.Location = new System.Drawing.Point(505, 50);
@@ -193,9 +154,6 @@ namespace GTE.WindowsForms
             this.btnAgregarAlumno.Text = "+ Agregar";
             this.btnAgregarAlumno.UseVisualStyleBackColor = true;
             this.btnAgregarAlumno.Click += new System.EventHandler(this.btnAgregarAlumno_Click);
-            // 
-            // cmbEstado
-            // 
             this.cmbEstado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbEstado.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.cmbEstado.FormattingEnabled = true;
@@ -207,9 +165,6 @@ namespace GTE.WindowsForms
             this.cmbEstado.Name = "cmbEstado";
             this.cmbEstado.Size = new System.Drawing.Size(120, 28);
             this.cmbEstado.TabIndex = 6;
-            // 
-            // lblEstado
-            // 
             this.lblEstado.AutoSize = true;
             this.lblEstado.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblEstado.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(206)))), ((int)(((byte)(212)))), ((int)(((byte)(218)))));
@@ -218,9 +173,6 @@ namespace GTE.WindowsForms
             this.lblEstado.Size = new System.Drawing.Size(57, 20);
             this.lblEstado.TabIndex = 5;
             this.lblEstado.Text = "Estado:";
-            // 
-            // dtpHoraSalida
-            // 
             this.dtpHoraSalida.CustomFormat = "HH:mm";
             this.dtpHoraSalida.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.dtpHoraSalida.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
@@ -229,9 +181,6 @@ namespace GTE.WindowsForms
             this.dtpHoraSalida.ShowUpDown = true;
             this.dtpHoraSalida.Size = new System.Drawing.Size(100, 27);
             this.dtpHoraSalida.TabIndex = 4;
-            // 
-            // lblHoraSalida
-            // 
             this.lblHoraSalida.AutoSize = true;
             this.lblHoraSalida.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblHoraSalida.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(206)))), ((int)(((byte)(212)))), ((int)(((byte)(218)))));
@@ -240,9 +189,6 @@ namespace GTE.WindowsForms
             this.lblHoraSalida.Size = new System.Drawing.Size(89, 20);
             this.lblHoraSalida.TabIndex = 3;
             this.lblHoraSalida.Text = "Hora Salida:";
-            // 
-            // cmbAlumno
-            // 
             this.cmbAlumno.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbAlumno.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.cmbAlumno.FormattingEnabled = true;
@@ -251,9 +197,6 @@ namespace GTE.WindowsForms
             this.cmbAlumno.Size = new System.Drawing.Size(240, 28);
             this.cmbAlumno.TabIndex = 2;
             this.cmbAlumno.SelectedIndexChanged += new System.EventHandler(this.cmbAlumno_SelectedIndexChanged);
-            // 
-            // lblAlumno
-            // 
             this.lblAlumno.AutoSize = true;
             this.lblAlumno.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblAlumno.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(206)))), ((int)(((byte)(212)))), ((int)(((byte)(218)))));
@@ -262,9 +205,6 @@ namespace GTE.WindowsForms
             this.lblAlumno.Size = new System.Drawing.Size(147, 20);
             this.lblAlumno.TabIndex = 1;
             this.lblAlumno.Text = "Alumno Autorizado:";
-            // 
-            // dgvDetalles
-            // 
             this.dgvDetalles.AllowUserToAddRows = false;
             this.dgvDetalles.AllowUserToDeleteRows = false;
             this.dgvDetalles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -277,9 +217,6 @@ namespace GTE.WindowsForms
             this.dgvDetalles.RowHeadersWidth = 51;
             this.dgvDetalles.Size = new System.Drawing.Size(710, 185);
             this.dgvDetalles.TabIndex = 0;
-            // 
-            // btnGuardar
-            // 
             this.btnGuardar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnGuardar.Location = new System.Drawing.Point(468, 516);
@@ -289,9 +226,6 @@ namespace GTE.WindowsForms
             this.btnGuardar.Text = "Guardar Retiro";
             this.btnGuardar.UseVisualStyleBackColor = true;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
-            // 
-            // btnCancelar
-            // 
             this.btnCancelar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancelar.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnCancelar.Location = new System.Drawing.Point(620, 516);
@@ -301,9 +235,6 @@ namespace GTE.WindowsForms
             this.btnCancelar.Text = "Cancelar";
             this.btnCancelar.UseVisualStyleBackColor = true;
             this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
-            // 
-            // RetiroDetalleForm
-            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(780, 570);

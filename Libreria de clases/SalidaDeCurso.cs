@@ -2,10 +2,6 @@ using System;
 
 namespace GTE.Dominio
 {
-    /// <summary>
-    /// Salida de un curso por la puerta. Mientras no tenga hora de fin, el curso
-    /// está saliendo: eso es lo que se muestra en la pantalla de la puerta.
-    /// </summary>
     public class SalidaDeCurso
     {
         public int IdSalidaDeCurso { get; private set; }
@@ -16,11 +12,8 @@ namespace GTE.Dominio
         public DateTime FechaHoraInicio { get; private set; }
         public DateTime? FechaHoraFin { get; private set; }
 
-        /// <summary>Verdadero mientras el curso no terminó de salir.</summary>
         public bool EstaEnCurso => FechaHoraFin is null;
 
-        // Constructor privado sin parámetros requerido por Entity Framework
-        // para la materialización de entidades.
         private SalidaDeCurso() { }
 
         public SalidaDeCurso(CursoEscolar curso, Personal personal, DateTime fechaHoraInicio)
@@ -58,7 +51,6 @@ namespace GTE.Dominio
             FechaHoraInicio = fechaHoraInicio;
         }
 
-        /// <summary>Marca que el curso terminó de salir.</summary>
         public void Finalizar(DateTime fechaHoraFin)
         {
             if (!EstaEnCurso)

@@ -9,7 +9,6 @@ namespace GTE.Application.Services
         Task<IEnumerable<TutorDTO>> GetAllAsync();
         Task<TutorDTO?> GetAsync(int id);
 
-        /// <summary>Da de alta un tutor junto con su usuario. Valida el DNI y el nombre de usuario.</summary>
         Task<TutorDTO> AddAsync(TutorDTO dto);
 
         Task<bool> UpdateAsync(TutorDTO dto);

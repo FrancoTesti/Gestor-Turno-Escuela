@@ -6,8 +6,6 @@ namespace GTE.Data
     {
         public static async Task MigrateAsync(GTEContext context)
         {
-            // Compatibiliza las bases creadas por la versión anterior, que usaba
-            // Grado y Curso directamente en Alumnos y no tenía Turno en Cursos.
             await context.Database.ExecuteSqlRawAsync(@"
 IF COL_LENGTH('Cursos', 'Turno') IS NULL
     EXEC(N'ALTER TABLE Cursos ADD Turno nvarchar(20) NULL');");
@@ -59,10 +57,6 @@ IF COL_LENGTH('Alumnos', 'Curso') IS NOT NULL
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_Alumnos_IdCurso' AND object_id = OBJECT_ID('Alumnos'))
     CREATE INDEX IX_Alumnos_IdCurso ON Alumnos(IdCurso);");
 
-            // Migración para maestro-detalle de Retiros:
-            // 1. Si la tabla Retiros tiene la columna IdAlumno:
-            //    - Si la tabla Retiros contiene datos, se detiene y avisa.
-            //    - Si está vacía, se elimina la columna IdAlumno.
             await context.Database.ExecuteSqlRawAsync(@"
 IF OBJECT_ID('Retiros', 'U') IS NOT NULL AND COL_LENGTH('Retiros', 'IdAlumno') IS NOT NULL
 BEGIN
@@ -78,7 +72,6 @@ BEGIN
     ALTER TABLE Retiros DROP COLUMN IdAlumno;
 END;");
 
-            // 2. Crear la tabla DetalleRetiros si no existe
             await context.Database.ExecuteSqlRawAsync(@"
 IF OBJECT_ID('DetalleRetiros', 'U') IS NULL
 BEGIN
@@ -99,7 +92,6 @@ IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_DetalleRetiros_IdRetir
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_DetalleRetiros_IdAlumno' AND object_id = OBJECT_ID('DetalleRetiros'))
     CREATE INDEX IX_DetalleRetiros_IdAlumno ON DetalleRetiros(IdAlumno);");
 
-            // 3. Crear la tabla de salidas de curso, que usa la pantalla de la puerta.
             await context.Database.ExecuteSqlRawAsync(@"
 IF OBJECT_ID('SalidasDeCurso', 'U') IS NULL
 BEGIN

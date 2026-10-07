@@ -5,10 +5,6 @@ using GTE.DTOs;
 
 namespace GTE.Tests;
 
-/// <summary>
-/// Dobles de los servicios, usados solo para poder construir los endpoints
-/// en las pruebas sin depender de la base de datos.
-/// </summary>
 internal sealed class AlumnoServiceFalso : IAlumnoService
 {
     public Task<AlumnoDTO> AddAsync(AlumnoDTO dto) => Task.FromResult(dto);
@@ -118,7 +114,6 @@ internal sealed class TutorRepositoryFalso : ITutorRepository
             t.Dni == dni && (!excludeId.HasValue || t.IdTutor != excludeId.Value)));
 }
 
-/// <summary>Repositorio de usuarios en memoria, para las pruebas de servicios.</summary>
 internal sealed class UsuarioRepositoryFalso : IUsuarioRepository
 {
     private readonly List<Usuario> _usuarios;
@@ -161,7 +156,6 @@ internal sealed class UsuarioRepositoryFalso : IUsuarioRepository
             u.NombreUsuario == nombreUsuario && (!excludeId.HasValue || u.IdUsuario != excludeId.Value)));
 }
 
-/// <summary>Repositorio de autorizaciones vacio, para poder mapear los endpoints.</summary>
 internal sealed class AutorizacionRepositoryFalso : IAutorizacionRepository
 {
     public Task<IEnumerable<Autorizacion>> GetAllAsync() =>
@@ -187,7 +181,6 @@ internal sealed class AutorizacionRepositoryFalso : IAutorizacionRepository
     public Task<bool> DeleteByTutorAndAlumnoAsync(int tutorId, int alumnoId) => Task.FromResult(true);
 }
 
-/// <summary>Servicio de reportes vacio, para poder mapear los endpoints en las pruebas.</summary>
 internal sealed class ReporteServiceFalso : IReporteService
 {
     public Task<IEnumerable<AlumnosPorCursoDTO>> GetAlumnosPorCursoAsync() =>
@@ -197,7 +190,6 @@ internal sealed class ReporteServiceFalso : IReporteService
         Task.FromResult<IEnumerable<RetiroDTO>>(Array.Empty<RetiroDTO>());
 }
 
-/// <summary>Servicio de tutores vacio, para poder mapear los endpoints en las pruebas.</summary>
 internal sealed class TutorServiceFalso : ITutorService
 {
     public Task<IEnumerable<TutorDTO>> GetAllAsync() =>
@@ -212,7 +204,6 @@ internal sealed class TutorServiceFalso : ITutorService
     public Task<bool> DeleteAsync(int id) => Task.FromResult(true);
 }
 
-/// <summary>Repositorio de alumnos en memoria, para las pruebas de servicios.</summary>
 internal sealed class AlumnoRepositoryFalso : IAlumnoRepository
 {
     private readonly List<Alumno> _alumnos;
@@ -252,7 +243,6 @@ internal sealed class AlumnoRepositoryFalso : IAlumnoRepository
         Task.FromResult<IEnumerable<Alumno>>(_alumnos.ToList());
 }
 
-/// <summary>Repositorio de cursos en memoria, para las pruebas de servicios.</summary>
 internal sealed class CursoEscolarRepositoryFalso : ICursoEscolarRepository
 {
     private readonly List<CursoEscolar> _cursos;
@@ -279,7 +269,6 @@ internal sealed class CursoEscolarRepositoryFalso : ICursoEscolarRepository
     public Task<bool> DeleteAsync(int id) => Task.FromResult(true);
 }
 
-/// <summary>Servicio de retiros que devuelve una lista fija, para las pruebas de reportes.</summary>
 internal sealed class RetiroServiceConDatos : IRetiroService
 {
     private readonly List<RetiroDTO> _retiros;
@@ -307,10 +296,6 @@ internal sealed class RetiroServiceConDatos : IRetiroService
         Task.FromResult<IEnumerable<AlumnoDTO>>(Array.Empty<AlumnoDTO>());
 }
 
-/// <summary>
-/// Servicio de autenticación configurable, para representar la sesión de un
-/// circuito de Blazor o la de un usuario del escritorio.
-/// </summary>
 internal sealed class AutenticacionConfigurable : GTE.Clients.IAuthService
 {
     private readonly bool _sesionIniciada;
@@ -344,7 +329,6 @@ internal sealed class AutenticacionConfigurable : GTE.Clients.IAuthService
     public Task CheckTokenExpirationAsync() => Task.CompletedTask;
 }
 
-/// <summary>Repositorio de salidas de curso en memoria, para las pruebas.</summary>
 internal sealed class SalidaDeCursoRepositoryFalso : ISalidaDeCursoRepository
 {
     private readonly List<SalidaDeCurso> _salidas;
@@ -385,7 +369,6 @@ internal sealed class SalidaDeCursoRepositoryFalso : ISalidaDeCursoRepository
     }
 }
 
-/// <summary>Servicio de salidas vacio, para poder mapear los endpoints en las pruebas.</summary>
 internal sealed class SalidaDeCursoServiceFalso : ISalidaDeCursoService
 {
     public Task<CarteleraDTO> GetCarteleraAsync() => Task.FromResult(new CarteleraDTO());

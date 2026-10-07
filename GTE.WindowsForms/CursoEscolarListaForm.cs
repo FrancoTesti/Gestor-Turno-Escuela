@@ -49,11 +49,6 @@ namespace GTE.WindowsForms
             await RefreshGrid();
         }
 
-        /// <summary>
-        /// Oculta las acciones que el rol del usuario no puede realizar.
-        /// La restricción real la aplica la API; esto evita ofrecer botones
-        /// que terminarían en un error de permisos.
-        /// </summary>
         private async Task AplicarPermisosSegunRol()
         {
             string? rol = await AuthServiceProvider.Instance.GetRoleAsync();

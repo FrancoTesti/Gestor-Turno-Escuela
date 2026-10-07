@@ -36,10 +36,6 @@ namespace GTE.WindowsForms
             Tema.Grilla(dgvAlumnos);
         }
 
-        /// <summary>
-        /// Carga las opciones de los filtros: los grados, divisiones y turnos que
-        /// existen de verdad, no texto libre.
-        /// </summary>
         private async Task CargarOpcionesDeFiltro()
         {
             var cursos = await _cursosClient.GetAllAsync();
@@ -65,7 +61,6 @@ namespace GTE.WindowsForms
             cmbFiltroEstado.SelectedIndex = 0;
         }
 
-        /// <summary>El texto elegido, o nulo si está en "todos".</summary>
         private static string? Elegido(ComboBox combo) =>
             combo.SelectedIndex <= 0 ? null : combo.SelectedItem?.ToString();
 
@@ -76,7 +71,6 @@ namespace GTE.WindowsForms
             await RefreshGrid();
         }
 
-        /// <summary>Muestra los alumnos que pasan el filtro de turno elegido.</summary>
         private void MostrarAlumnos()
         {
             string? turno = Elegido(cmbFiltroTurno);
@@ -90,11 +84,6 @@ namespace GTE.WindowsForms
             ConfigureColumns();
         }
 
-        /// <summary>
-        /// Oculta las acciones que el rol del usuario no puede realizar.
-        /// La restricción real la aplica la API; esto evita ofrecer botones
-        /// que terminarían en un error de permisos.
-        /// </summary>
         private async Task AplicarPermisosSegunRol()
         {
             string? rol = await AuthServiceProvider.Instance.GetRoleAsync();
@@ -146,8 +135,6 @@ namespace GTE.WindowsForms
             string term = txtSearch.Text.Trim();
             try
             {
-                // El nombre, el grado, la división y el estado los resuelve la API;
-                // el turno se filtra acá porque la consulta no lo contempla.
                 var criteria = new AlumnoCriteriaDTO
                 {
                     Nombre = string.IsNullOrWhiteSpace(term) ? null : term,

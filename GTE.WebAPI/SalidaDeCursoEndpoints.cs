@@ -11,9 +11,6 @@ namespace GTE.WebAPI
     {
         public static void MapSalidaDeCursoEndpoints(this WebApplication app)
         {
-            // La pantalla que está en la puerta del colegio no tiene usuario que
-            // inicie sesión, así que este endpoint queda abierto: solo devuelve
-            // qué curso está saliendo, sin nombres de alumnos ni de personal.
             app.MapGet("/cartelera", async (ISalidaDeCursoService service) =>
             {
                 var cartelera = await service.GetCarteleraAsync();
@@ -71,10 +68,6 @@ namespace GTE.WebAPI
             .RequireAuthorization(Politicas.GestionSalidas);
         }
 
-        /// <summary>
-        /// El personal que marca la salida sale del token: así el portero no puede
-        /// registrar la salida a nombre de otra persona.
-        /// </summary>
         private static async Task<Personal?> PersonalDelUsuarioAsync(ClaimsPrincipal usuario, GTEContext db)
         {
             string? idTexto = usuario.FindFirst(ClaimTypes.NameIdentifier)?.Value;

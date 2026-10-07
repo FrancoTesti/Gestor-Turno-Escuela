@@ -21,7 +21,7 @@
             </div>
             <div class="col-md-2">
                 <label class="form-label">Grado</label>
-                @* Opciones limitadas: los grados que existen, no texto libre. *@
+
                 <select class="form-control" @bind="filtro.Grado">
                     <option value="">Todos</option>
                     @foreach (var grado in GradosDisponibles)
@@ -179,10 +179,6 @@ else
 
     private async Task CargarDatos() => alumnos = (await AlumnosClient.GetAllAsync()).ToList();
 
-    /// <summary>
-    /// Busca con los filtros cargados. Recorre el endpoint de criterios, que es
-    /// el que resuelve la consulta con ADO.NET del lado de la API.
-    /// </summary>
     private async Task Buscar() => await EjecutarAsync(async () =>
         alumnos = (await AlumnosClient.GetByCriteriaAsync(filtro.ToCriteria())).ToList());
 
@@ -215,7 +211,7 @@ else
 
     private async Task Guardar()
     {
-        if (alumnoEditando.IdCurso == 0) return; // Validación simple
+        if (alumnoEditando.IdCurso == 0) return;
 
         await EjecutarAsync(async () =>
         {

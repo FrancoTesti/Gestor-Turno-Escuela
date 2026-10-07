@@ -25,9 +25,6 @@ namespace GTE.WindowsForms
             this.dgvRetiros = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRetiros)).BeginInit();
             this.SuspendLayout();
-            // 
-            // lblTitle
-            // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblTitle.Location = new System.Drawing.Point(20, 20);
@@ -35,9 +32,6 @@ namespace GTE.WindowsForms
             this.lblTitle.Size = new System.Drawing.Size(420, 37);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Gestión de Retiros (Maestro/Detalle)";
-            // 
-            // lblSearch
-            // 
             this.lblSearch.AutoSize = true;
             this.lblSearch.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblSearch.Location = new System.Drawing.Point(20, 66);
@@ -45,17 +39,11 @@ namespace GTE.WindowsForms
             this.lblSearch.Size = new System.Drawing.Size(195, 21);
             this.lblSearch.TabIndex = 0;
             this.lblSearch.Text = "Buscar (Tutor / Observaciones)";
-            // 
-            // txtSearch
-            // 
             this.txtSearch.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtSearch.Location = new System.Drawing.Point(20, 95);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(250, 30);
             this.txtSearch.TabIndex = 1;
-            // 
-            // btnBuscar
-            // 
             this.btnBuscar.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnBuscar.Location = new System.Drawing.Point(280, 95);
             this.btnBuscar.Name = "btnBuscar";
@@ -64,9 +52,6 @@ namespace GTE.WindowsForms
             this.btnBuscar.Text = "Buscar";
             this.btnBuscar.UseVisualStyleBackColor = true;
             this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
-            // 
-            // btnNuevo
-            // 
             this.btnNuevo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnNuevo.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnNuevo.Location = new System.Drawing.Point(410, 95);
@@ -76,9 +61,6 @@ namespace GTE.WindowsForms
             this.btnNuevo.Text = "Nuevo";
             this.btnNuevo.UseVisualStyleBackColor = true;
             this.btnNuevo.Click += new System.EventHandler(this.btnNuevo_Click);
-            // 
-            // btnEditar
-            // 
             this.btnEditar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnEditar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnEditar.Location = new System.Drawing.Point(530, 95);
@@ -88,9 +70,6 @@ namespace GTE.WindowsForms
             this.btnEditar.Text = "Ver / Editar";
             this.btnEditar.UseVisualStyleBackColor = true;
             this.btnEditar.Click += new System.EventHandler(this.btnEditar_Click);
-            // 
-            // btnEliminar
-            // 
             this.btnEliminar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnEliminar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnEliminar.Location = new System.Drawing.Point(650, 95);
@@ -100,9 +79,6 @@ namespace GTE.WindowsForms
             this.btnEliminar.Text = "Eliminar";
             this.btnEliminar.UseVisualStyleBackColor = true;
             this.btnEliminar.Click += new System.EventHandler(this.btnEliminar_Click);
-            // 
-            // dgvRetiros
-            // 
             this.dgvRetiros.AllowUserToAddRows = false;
             this.dgvRetiros.AllowUserToDeleteRows = false;
             this.dgvRetiros.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -115,9 +91,6 @@ namespace GTE.WindowsForms
             this.dgvRetiros.RowHeadersWidth = 51;
             this.dgvRetiros.Size = new System.Drawing.Size(740, 360);
             this.dgvRetiros.TabIndex = 6;
-            // 
-            // RetiroListaForm
-            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(780, 530);

@@ -9,8 +9,6 @@ public class AutenticacionInyectadaTests
     [Fact]
     public async Task El_cliente_usa_la_sesion_inyectada_y_no_la_global()
     {
-        // En Blazor, el proveedor global queda apuntando a una instancia que no
-        // es la del circuito, así que la llamada debe usar la sesión inyectada.
         AuthServiceProvider.Register(new AutenticacionConfigurable(sesionIniciada: false));
 
         var sesionDelCircuito = new AutenticacionConfigurable(sesionIniciada: true, token: "token-del-circuito");
@@ -45,9 +43,6 @@ public class AutenticacionInyectadaTests
     [Fact]
     public async Task El_cliente_resuelto_por_el_contenedor_supera_la_verificacion_de_sesion()
     {
-        // Reproduce el registro del proyecto Blazor: el servicio de autenticación
-        // y los clientes se resuelven dentro del mismo alcance, que es el del
-        // circuito. El proveedor global queda con otra instancia sin sesión.
         AuthServiceProvider.Register(new AutenticacionConfigurable(sesionIniciada: false));
 
         var services = new ServiceCollection();
@@ -60,9 +55,6 @@ public class AutenticacionInyectadaTests
         using IServiceScope alcance = provider.CreateScope();
         var cliente = alcance.ServiceProvider.GetRequiredService<AlumnoApiClient>();
 
-        // Si la sesión no llegara al cliente, fallaría con "Usuario no autenticado"
-        // antes de intentar la llamada. Sin API levantada el error será de red,
-        // que es lo esperado en este test.
         Exception? error = await Record.ExceptionAsync(() => cliente.GetAllAsync());
 
         if (error is not null)

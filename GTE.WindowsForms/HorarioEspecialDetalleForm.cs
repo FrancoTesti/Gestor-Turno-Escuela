@@ -27,7 +27,7 @@ namespace GTE.WindowsForms
             this.btnGuardar = new Button();
             this.btnCancelar = new Button();
             this.SuspendLayout();
-            
+
             this.lblAlumno.Location = new Point(20, 20);
             this.lblAlumno.Text = "Alumno:";
             this.cmbAlumno.Location = new Point(120, 20);
@@ -57,7 +57,6 @@ namespace GTE.WindowsForms
             this.btnCancelar.Text = "Cancelar";
             this.btnCancelar.Click += new EventHandler(this.btnCancelar_Click);
 
-            // Las mismas medidas de referencia que las demás pantallas.
             this.AutoScaleDimensions = new SizeF(8F, 20F);
             this.AutoScaleMode = AutoScaleMode.Font;
             this.ClientSize = new Size(350, 200);
@@ -97,7 +96,7 @@ namespace GTE.WindowsForms
             base.OnLoad(e);
             var alumnos = await _alumnoClient.GetAllAsync();
             cmbAlumno.DataSource = alumnos;
-            cmbAlumno.DisplayMember = "Nombre"; // Should ideally be NombreCompleto but we just bind the whole object and display.
+            cmbAlumno.DisplayMember = "Nombre";
             cmbAlumno.ValueMember = "IdAlumno";
 
             if (_isEdit)

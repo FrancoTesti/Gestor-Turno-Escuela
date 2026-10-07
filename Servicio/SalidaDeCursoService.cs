@@ -8,10 +8,6 @@ using GTE.DTOs;
 
 namespace GTE.Application.Services
 {
-    /// <summary>
-    /// Salidas de curso por la puerta. El portero marca cuándo empieza a salir un
-    /// curso y la pantalla de la puerta muestra eso mismo sin ningún dato personal.
-    /// </summary>
     public class SalidaDeCursoService : ISalidaDeCursoService
     {
         private readonly ISalidaDeCursoRepository _salidaRepository;
@@ -46,7 +42,6 @@ namespace GTE.Application.Services
                 }).ToList()
             };
 
-            // Mientras no hay nadie saliendo, la pantalla avisa cuál es el que sigue.
             TimeSpan ahora = DateTime.Now.TimeOfDay;
             var cursos = await _cursoRepository.GetAllAsync();
             var proximo = cursos
@@ -113,11 +108,6 @@ namespace GTE.Application.Services
             return (true, $"El curso {salida.CursoEscolar.MostrarCurso()} terminó de salir.");
         }
 
-        /// <summary>
-        /// El portero tiene una puerta asignada; el resto del personal no, así que
-        /// no se muestra ninguna. Antes decía "Secretaría", pero eso confundía en la
-        /// pantalla de la puerta: parecía que el curso salía por la secretaría.
-        /// </summary>
         private static string PuertaDe(Personal personal) =>
             personal is Portero portero ? portero.PuertaAsignada : string.Empty;
 

@@ -57,9 +57,6 @@ namespace GTE.Application.Services
                 .ToList();
         }
 
-        /// <summary>
-        /// Ordena los turnos como transcurre el dia, no alfabeticamente.
-        /// </summary>
         private static int OrdenDelTurno(string? turno) => turno switch
         {
             "Mañana" => 0,

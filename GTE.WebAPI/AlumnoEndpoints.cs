@@ -17,7 +17,6 @@ namespace GTE.WebAPI
             .WithOpenApi()
             .RequireAuthorization(Politicas.LecturaAlumnos);
 
-            // Búsqueda con filtros (requisito de la consigna).
             app.MapGet("/alumnos/criteria", async (string? nombre, string? grado, string? curso, string? estado, IAlumnoService service) =>
             {
                 var criteria = new AlumnoCriteriaDTO { Nombre = nombre, Grado = grado, Curso = curso, Estado = estado };

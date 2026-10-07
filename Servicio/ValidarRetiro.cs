@@ -26,18 +26,15 @@ namespace GTE.Application.Services
             if (!existeVinculo)
                 return false;
 
-            // validar restricciones legales
             if (tutor.TieneRestriccion)
                 return false;
 
-            // validar estado del alumno
             if (alumno.Estado != "Presente")
                 return false;
 
             return true;
         }
 
-        // registrar el retiro
         public Retiro RegistrarEvento(
             int idAlu,
             int idTutor,

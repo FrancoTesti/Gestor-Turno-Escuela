@@ -8,7 +8,6 @@ namespace GTE.WebAPI
     {
         public static void MapTutorEndpoints(this WebApplication app)
         {
-            // Alumnos que el tutor que está conectado tiene autorizados.
             app.MapGet("/mis-alumnos", async (
                 System.Security.Claims.ClaimsPrincipal usuario,
                 ITutorRepository tutorRepository,
@@ -28,8 +27,6 @@ namespace GTE.WebAPI
 
                 var alumnos = await autorizacionRepository.GetAlumnosByTutorIdAsync(tutor.IdTutor);
 
-                // Los cursos que están saliendo ahora: así el tutor ve en su
-                // pantalla cuáles de sus alumnos están saliendo en este momento.
                 var cursosSaliendo = (await salidaRepository.GetEnCursoAsync())
                     .Select(salida => salida.IdCurso)
                     .ToHashSet();

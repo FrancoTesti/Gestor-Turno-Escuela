@@ -11,8 +11,7 @@
     </p>
 </div>
 
-@* Las mismas secciones y el mismo orden que el menú de la izquierda, para que
-   sea fácil ubicarse en cualquiera de las dos. *@
+
 @foreach (var seccion in secciones)
 {
     <section class="mb-4">
@@ -100,7 +99,6 @@
         .ToList();
     }
 
-    /// <summary>Una pantalla a la que se puede entrar desde el inicio.</summary>
     private sealed class Acceso
     {
         private readonly string[] rolesPermitidos;
@@ -121,7 +119,6 @@
             rol is not null && rolesPermitidos.Contains(rol, StringComparer.OrdinalIgnoreCase);
     }
 
-    /// <summary>Grupo de pantallas que se muestra con un título.</summary>
     private sealed class Seccion
     {
         public Seccion(string titulo, List<Acceso> accesos)

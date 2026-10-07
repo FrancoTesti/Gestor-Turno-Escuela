@@ -127,7 +127,6 @@ namespace GTE.Application.Services
             if (yaAutorizado)
                 return (false, "El tutor ya se encuentra autorizado para retirar a este alumno.", null);
 
-            // Si no se eligió un parentesco se usa el que tiene cargado el tutor.
             string parentesco = string.IsNullOrWhiteSpace(dto.Parentesco) ? tutor.Parentesco : dto.Parentesco;
 
             var autorizacion = new Autorizacion(dto.AlumnoId, dto.TutorId, parentesco);

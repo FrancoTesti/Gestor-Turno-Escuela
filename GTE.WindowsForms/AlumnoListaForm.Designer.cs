@@ -33,9 +33,6 @@ namespace GTE.WindowsForms
             this.dgvAlumnos = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAlumnos)).BeginInit();
             this.SuspendLayout();
-            // 
-            // lblTitle
-            // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblTitle.Location = new System.Drawing.Point(20, 20);
@@ -43,9 +40,6 @@ namespace GTE.WindowsForms
             this.lblTitle.Size = new System.Drawing.Size(262, 37);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Gestión de Alumnos";
-            // 
-            // lblSearch
-            // 
             this.lblSearch.AutoSize = true;
             this.lblSearch.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblSearch.Location = new System.Drawing.Point(20, 72);
@@ -53,17 +47,11 @@ namespace GTE.WindowsForms
             this.lblSearch.Size = new System.Drawing.Size(183, 21);
             this.lblSearch.TabIndex = 0;
             this.lblSearch.Text = "Buscar (Nombre/Apellido)";
-            // 
-            // txtSearch
-            // 
             this.txtSearch.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtSearch.Location = new System.Drawing.Point(20, 96);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(180, 32);
             this.txtSearch.TabIndex = 1;
-            // 
-            // btnBuscar
-            // 
             this.btnBuscar.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnBuscar.Location = new System.Drawing.Point(208, 96);
             this.btnBuscar.Name = "btnBuscar";
@@ -72,9 +60,6 @@ namespace GTE.WindowsForms
             this.btnBuscar.Text = "Buscar";
             this.btnBuscar.UseVisualStyleBackColor = true;
             this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
-            // 
-            // btnNuevo
-            // 
             this.btnNuevo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnNuevo.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnNuevo.Location = new System.Drawing.Point(410, 30);
@@ -84,9 +69,6 @@ namespace GTE.WindowsForms
             this.btnNuevo.Text = "Nuevo";
             this.btnNuevo.UseVisualStyleBackColor = true;
             this.btnNuevo.Click += new System.EventHandler(this.btnNuevo_Click);
-            // 
-            // btnEditar
-            // 
             this.btnEditar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnEditar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnEditar.Location = new System.Drawing.Point(530, 30);
@@ -96,9 +78,6 @@ namespace GTE.WindowsForms
             this.btnEditar.Text = "Editar";
             this.btnEditar.UseVisualStyleBackColor = true;
             this.btnEditar.Click += new System.EventHandler(this.btnEditar_Click);
-            // 
-            // btnEliminar
-            // 
             this.btnEliminar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnEliminar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnEliminar.Location = new System.Drawing.Point(650, 30);
@@ -108,55 +87,42 @@ namespace GTE.WindowsForms
             this.btnEliminar.Text = "Eliminar";
             this.btnEliminar.UseVisualStyleBackColor = true;
             this.btnEliminar.Click += new System.EventHandler(this.btnEliminar_Click);
-            // 
-            // 
-            // Filtros por grado, división, turno y estado, en la misma fila del buscador
-            // 
             this.lblFiltroGrado.AutoSize = true;
             this.lblFiltroGrado.Location = new System.Drawing.Point(300, 72);
             this.lblFiltroGrado.Name = "lblFiltroGrado";
             this.lblFiltroGrado.Size = new System.Drawing.Size(60, 20);
             this.lblFiltroGrado.Text = "Grado";
-            // 
             this.cmbFiltroGrado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbFiltroGrado.Location = new System.Drawing.Point(300, 96);
             this.cmbFiltroGrado.Name = "cmbFiltroGrado";
             this.cmbFiltroGrado.Size = new System.Drawing.Size(90, 30);
-            // 
             this.lblFiltroDivision.AutoSize = true;
             this.lblFiltroDivision.Location = new System.Drawing.Point(400, 72);
             this.lblFiltroDivision.Name = "lblFiltroDivision";
             this.lblFiltroDivision.Size = new System.Drawing.Size(70, 20);
             this.lblFiltroDivision.Text = "División";
-            // 
             this.cmbFiltroDivision.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbFiltroDivision.Location = new System.Drawing.Point(400, 96);
             this.cmbFiltroDivision.Name = "cmbFiltroDivision";
             this.cmbFiltroDivision.Size = new System.Drawing.Size(85, 30);
-            // 
             this.lblFiltroTurno.AutoSize = true;
             this.lblFiltroTurno.Location = new System.Drawing.Point(495, 72);
             this.lblFiltroTurno.Name = "lblFiltroTurno";
             this.lblFiltroTurno.Size = new System.Drawing.Size(60, 20);
             this.lblFiltroTurno.Text = "Turno";
-            // 
             this.cmbFiltroTurno.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbFiltroTurno.Location = new System.Drawing.Point(495, 96);
             this.cmbFiltroTurno.Name = "cmbFiltroTurno";
             this.cmbFiltroTurno.Size = new System.Drawing.Size(100, 30);
-            // 
             this.lblFiltroEstado.AutoSize = true;
             this.lblFiltroEstado.Location = new System.Drawing.Point(605, 72);
             this.lblFiltroEstado.Name = "lblFiltroEstado";
             this.lblFiltroEstado.Size = new System.Drawing.Size(60, 20);
             this.lblFiltroEstado.Text = "Estado";
-            // 
             this.cmbFiltroEstado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbFiltroEstado.Location = new System.Drawing.Point(605, 96);
             this.cmbFiltroEstado.Name = "cmbFiltroEstado";
             this.cmbFiltroEstado.Size = new System.Drawing.Size(110, 30);
-            //             // dgvAlumnos
-            // 
             this.dgvAlumnos.AllowUserToAddRows = false;
             this.dgvAlumnos.AllowUserToDeleteRows = false;
             this.dgvAlumnos.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -169,9 +135,6 @@ namespace GTE.WindowsForms
             this.dgvAlumnos.RowHeadersWidth = 51;
             this.dgvAlumnos.Size = new System.Drawing.Size(740, 370);
             this.dgvAlumnos.TabIndex = 6;
-            // 
-            // AlumnoListaForm
-            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(780, 530);

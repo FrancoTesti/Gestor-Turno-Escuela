@@ -6,8 +6,7 @@
 
 <input type="checkbox" title="Navigation menu" class="navbar-toggler" />
 
-@* El menú está agrupado por tipo de tarea y, adentro de cada grupo, primero lo
-   que se usa todos los días. *@
+
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="flex-column">
         <div class="nav-item px-3">
@@ -74,7 +73,7 @@
         <AuthorizeView Roles="Secretario,Portero">
             <div class="nav-seccion">Reportes</div>
 
-            @* El reporte de alumnos es de gestión: lo ve sólo el secretario. *@
+
             <AuthorizeView Roles="Secretario" Context="reporteDeAlumnos">
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="reportealumnos">
@@ -89,8 +88,7 @@
                 </NavLink>
             </div>
 
-            @* La pantalla de la puerta se abre en otra ventana, para dejarla
-               fija en el televisor o el monitor de la entrada. *@
+
             <div class="nav-seccion">Pantalla de la puerta</div>
             <div class="nav-item px-3">
                 <a class="nav-link" href="cartelera" target="_blank" rel="noopener">

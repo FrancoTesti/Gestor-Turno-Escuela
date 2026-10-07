@@ -103,7 +103,7 @@ else
     {
         await EjecutarAsync(async () => {
             retiros = await ReporteClient.GetRetirosAsync(fechaDesde, fechaHasta);
-            retiroExpandido = 0; // cerrar detalles abiertos
+            retiroExpandido = 0;
         });
     }
 

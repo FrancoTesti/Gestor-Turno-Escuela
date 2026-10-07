@@ -23,7 +23,7 @@ namespace GTE.Data
 
         public async Task AddAsync(Tutor tutor)
         {
-            _context.Entry(tutor.Usuario).State = EntityState.Unchanged; // No re-crear el usuario si ya existe en BD
+            _context.Entry(tutor.Usuario).State = EntityState.Unchanged;
             _context.Tutores.Add(tutor);
             await _context.SaveChangesAsync();
         }

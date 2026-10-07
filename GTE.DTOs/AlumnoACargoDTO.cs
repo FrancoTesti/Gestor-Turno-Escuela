@@ -2,10 +2,6 @@ using System;
 
 namespace GTE.DTOs
 {
-    /// <summary>
-    /// Alumno que un tutor tiene a cargo, con el curso y el horario de salida.
-    /// Lo usa la pantalla "Mis alumnos" del tutor.
-    /// </summary>
     public class AlumnoACargoDTO
     {
         public int IdAlumno { get; set; }
@@ -17,7 +13,6 @@ namespace GTE.DTOs
         public TimeSpan HorarioSalida { get; set; }
         public string Estado { get; set; } = string.Empty;
 
-        /// <summary>Verdadero si el curso del alumno está saliendo en este momento.</summary>
         public bool EstaSaliendo { get; set; }
     }
 }

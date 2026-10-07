@@ -53,10 +53,6 @@ namespace GTE.Auth.WindowsForms
                 Contrasena = password
             });
 
-            // Si la API no está levantada, LoginAsync lanza ApiNoDisponibleException
-            // y esa excepción tiene que llegar a la pantalla de login, que la
-            // muestra como "Error de conexión". Tragársela acá hacía que el
-            // escritorio dijera "usuario o contraseña incorrectos".
             if (response != null && response.Exito)
             {
                 _currentToken = response.Token;
