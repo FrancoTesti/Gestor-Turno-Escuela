@@ -1,0 +1,150 @@
+@page "/salidas"
+@attribute [Authorize(Roles = "Secretario,Portero")]
+@inherits PaginaConApiBase
+@inject CursoEscolarApiClient CursosClient
+@inject SalidaDeCursoApiClient SalidasClient
+
+<PageTitle>Salidas de curso</PageTitle>
+
+<h3>Salidas de curso</h3>
+
+<p class="text-muted">
+    Marcá qué curso está saliendo. La
+    <a href="cartelera" target="_blank" rel="noopener">pantalla de la puerta</a>
+    lo muestra al instante.
+</p>
+
+@if (!string.IsNullOrEmpty(MensajeError))
+{
+    <div class="alert alert-danger alerta-flotante">@MensajeError</div>
+}
+
+@if (mensaje is not null)
+{
+    <div class="alert alert-success">@mensaje</div>
+}
+
+<div class="row g-2 align-items-end mb-4">
+    <div class="col-md-5">
+        <label class="form-label">Curso</label>
+        <select class="form-select" @bind="idCursoElegido" disabled="@ocupado">
+            <option value="0">-- Elegí un curso --</option>
+            @foreach (var curso in cursos)
+            {
+                <option value="@curso.IdCurso">@curso.Grado @curso.Curso - @curso.Turno</option>
+            }
+        </select>
+    </div>
+
+    <div class="col-md-4">
+        <button class="btn btn-primary" @onclick="IniciarAsync" disabled="@(idCursoElegido == 0 || ocupado)">
+            @(ocupado ? "Guardando..." : "Está saliendo")
+        </button>
+    </div>
+</div>
+
+<h5>Salidas de hoy</h5>
+
+@if (salidas.Count == 0)
+{
+    <div class="alert alert-info">Todavía no se marcó ninguna salida hoy.</div>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Curso</th>
+                <th>Turno</th>
+                <th>Puerta</th>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th>Alumnos</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var salida in salidas)
+            {
+                <tr>
+                    <td>@salida.Grado @salida.Curso</td>
+                    <td>@salida.Turno</td>
+                    <td>@salida.Puerta</td>
+                    <td>@salida.FechaHoraInicio.ToString("HH:mm")</td>
+                    <td>@(salida.FechaHoraFin?.ToString("HH:mm") ?? "-")</td>
+                    <td>@salida.CantidadDeAlumnos</td>
+                    <td>
+                        @if (salida.EstaEnCurso)
+                        {
+                            <span class="badge bg-primary">Saliendo</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Finalizada</span>
+                        }
+                    </td>
+                    <td>
+                        @if (salida.EstaEnCurso)
+                        {
+                            <button class="btn btn-sm btn-outline-secondary"
+                                    @onclick="() => FinalizarAsync(salida)" disabled="@ocupado">
+                                Terminó de salir
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<CursoEscolarDTO> cursos = new();
+    private List<SalidaDeCursoDTO> salidas = new();
+    private int idCursoElegido;
+    private bool ocupado;
+    private string? mensaje;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await EjecutarAsync(async () =>
+        {
+            cursos = await CursosClient.GetAllAsync();
+            salidas = await SalidasClient.GetDelDiaAsync();
+        });
+    }
+
+    private async Task IniciarAsync()
+    {
+        ocupado = true;
+        mensaje = null;
+
+        await EjecutarAsync(async () =>
+        {
+            var salida = await SalidasClient.IniciarAsync(idCursoElegido);
+
+            mensaje = $"El curso {salida.Grado} {salida.Curso} está saliendo.";
+            idCursoElegido = 0;
+            salidas = await SalidasClient.GetDelDiaAsync();
+        });
+
+        ocupado = false;
+    }
+
+    private async Task FinalizarAsync(SalidaDeCursoDTO salida)
+    {
+        ocupado = true;
+        mensaje = null;
+
+        await EjecutarAsync(async () =>
+        {
+            await SalidasClient.FinalizarAsync(salida.IdSalidaDeCurso);
+
+            mensaje = $"El curso {salida.Grado} {salida.Curso} terminó de salir.";
+            salidas = await SalidasClient.GetDelDiaAsync();
+        });
+
+        ocupado = false;
+    }
+}

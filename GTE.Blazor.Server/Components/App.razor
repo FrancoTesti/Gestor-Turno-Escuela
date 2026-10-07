@@ -8,14 +8,18 @@
     <link rel="stylesheet" href="app.css" />
     <link rel="stylesheet" href="GTE.Blazor.Server.styles.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
-    @* Sin prerenderizado: la página se arma recién cuando el circuito está
-       conectado. Si se prerenderiza, el formulario existe en el HTML antes de
-       que Blazor esté activo, y un envío rápido sale como POST normal a la
-       página, que no sabe qué formulario se envió. *@
-    <HeadOutlet @rendermode="@(new InteractiveServerRenderMode(prerender: false))" />
+    @* Con prerenderizado: la pantalla se arma en el servidor y llega en el
+       primer HTML, así nunca queda en blanco esperando que se conecte el
+       circuito de Blazor (que es lo que pasaba al abrir la aplicación).
+
+       Como el formulario existe antes de que Blazor esté activo, lleva nombre
+       propio (FormName) y su botón queda deshabilitado hasta que el circuito
+       contesta: si no, un envío muy rápido saldría como POST normal contra el
+       servidor en lugar de pasar por el circuito. *@
+    <HeadOutlet @rendermode="InteractiveServer" />
 </head>
 <body>
-    <Routes @rendermode="@(new InteractiveServerRenderMode(prerender: false))" />
+    <Routes @rendermode="InteractiveServer" />
     <script src="_framework/blazor.web.js"></script>
 </body>
 </html>

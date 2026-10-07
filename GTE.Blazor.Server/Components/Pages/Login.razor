@@ -17,12 +17,12 @@
             <EditForm Model="loginModel" OnValidSubmit="HandleLogin" FormName="login">
                 <div class="mb-3">
                     <label class="form-label">Usuario</label>
-                    <InputText @bind-Value="loginModel.Username" class="form-control" placeholder="Ingrese su usuario" />
+                    <InputText @bind-Value="loginModel.Username" class="form-control" placeholder="Ingrese su usuario" disabled="@(!interactivo)" />
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Contraseña</label>
-                    <InputText @bind-Value="loginModel.Password" type="password" class="form-control" placeholder="Ingrese su contraseña" />
+                    <InputText @bind-Value="loginModel.Password" type="password" class="form-control" placeholder="Ingrese su contraseña" disabled="@(!interactivo)" />
                 </div>
 
                 @if (mensajeError is not null)
@@ -32,7 +32,12 @@
                     </div>
                 }
 
-                <button type="submit" class="btn btn-primary w-100 py-2" disabled="@cargando">
+                @* Los casilleros y el botón se habilitan cuando el circuito ya está
+                   conectado. Mientras tanto el formulario se ve (por el
+                   prerenderizado) pero no se puede usar: si no, lo que alguien
+                   escriba se pierde cuando Blazor toma el control, y un envío
+                   apurado saldría como POST normal contra el servidor. *@
+                <button type="submit" class="btn btn-primary w-100 py-2" disabled="@(cargando || !interactivo)">
                     @(cargando ? "Ingresando..." : "Ingresar")
                 </button>
             </EditForm>
@@ -60,6 +65,18 @@
     private LoginData loginModel = new();
     private string? mensajeError;
     private bool cargando;
+    private bool interactivo;
+
+    protected override void OnAfterRender(bool primerRender)
+    {
+        // Con el prerenderizado el formulario ya se ve antes de que Blazor esté
+        // activo; recién acá el circuito está escuchando de verdad.
+        if (primerRender)
+        {
+            interactivo = true;
+            StateHasChanged();
+        }
+    }
 
     private async Task HandleLogin()
     {
