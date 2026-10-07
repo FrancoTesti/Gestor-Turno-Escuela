@@ -59,8 +59,8 @@ El sistema cuenta con 3 roles. Puedes probarlos utilizando estas credenciales (l
 
 | Rol | Usuario | Contraseña | Permisos Principales |
 |---|---|---|---|
-| **Secretario** | `admin` | `admin123` | Control total (Ver/Editar Alumnos, Cursos, Retiros, Horarios, Reportes). |
-| **Portero** | `porteria1` | `porteria123` | Solo lectura de alumnos, gestión de retiros y ver reportes. No puede editar alumnos. |
+| **Secretario** | `admin` | `admin123` | Control total (Ver/Editar Alumnos, Cursos, Retiros, Horarios y los dos reportes). |
+| **Portero** | `porteria1` | `porteria123` | Solo lectura de alumnos, gestión de retiros y salidas, y el reporte de retiros. No puede editar alumnos ni ver el reporte de alumnos. |
 | **Tutor** | `tutor1` | `tutor123` | Solo lectura de cursos. No puede ver el resto del sistema. |
 
 ---
