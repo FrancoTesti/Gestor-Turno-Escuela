@@ -20,6 +20,7 @@ namespace GTE.WindowsForms
         {
             InitializeComponent();
             ApplyStyles();
+            Tema.AcomodarControles(this);
         }
 
         private void ApplyStyles()
@@ -40,11 +41,7 @@ namespace GTE.WindowsForms
             btnQuitar.FlatStyle = FlatStyle.Flat;
             btnQuitar.FlatAppearance.BorderSize = 0;
 
-            dgvAlumnosAutorizados.BackgroundColor = Color.White;
-            dgvAlumnosAutorizados.BorderStyle = BorderStyle.None;
-            dgvAlumnosAutorizados.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvAlumnosAutorizados.MultiSelect = false;
-            dgvAlumnosAutorizados.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(241, 243, 245);
+            Tema.Grilla(dgvAlumnosAutorizados);
         }
 
         private async void AutorizacionListaForm_Load(object sender, EventArgs e)
@@ -95,10 +92,27 @@ namespace GTE.WindowsForms
 
         private async void cmbTutores_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cmbTutores.SelectedValue is int tutorId)
+            int tutorId = TutorElegido();
+
+            if (tutorId > 0)
             {
                 await CargarAlumnosAutorizados(tutorId);
             }
+        }
+
+        private int TutorElegido()
+        {
+            if (cmbTutores.SelectedValue is int seleccionado && seleccionado > 0)
+                return seleccionado;
+
+            string escrito = cmbTutores.Text.Trim();
+            if (escrito.Length == 0)
+                return 0;
+
+            var encontrado = _tutores.FirstOrDefault(t =>
+                $"{t.Nombre} {t.Apellido} (DNI: {t.Dni})".Equals(escrito, StringComparison.OrdinalIgnoreCase));
+
+            return encontrado?.IdTutor ?? 0;
         }
 
         private async Task CargarAlumnosAutorizados(int tutorId)
@@ -106,8 +120,18 @@ namespace GTE.WindowsForms
             try
             {
                 _alumnosAutorizados = await _apiClient.GetAlumnosAutorizadosByTutorAsync(tutorId);
+
+                var autorizacionesDelTutor = await _apiClient.GetByTutorIdAsync(tutorId);
+                var parentescos = autorizacionesDelTutor
+                    .GroupBy(a => a.AlumnoId)
+                    .ToDictionary(g => g.Key, g => g.First().Parentesco);
+
                 dgvAlumnosAutorizados.DataSource = null;
-                dgvAlumnosAutorizados.DataSource = _alumnosAutorizados;
+                dgvAlumnosAutorizados.DataSource = _alumnosAutorizados
+                    .Select(a => new FilaDeAlumnoAutorizado(
+                        a,
+                        parentescos.TryGetValue(a.IdAlumno, out string? parentesco) ? parentesco : "-"))
+                    .ToList();
                 ConfigureColumns();
                 ActualizarComboAlumnosDisponibles();
             }
@@ -155,14 +179,19 @@ namespace GTE.WindowsForms
                 dgvAlumnosAutorizados.Columns["Turno"].Width = 90;
                 dgvAlumnosAutorizados.Columns["Estado"].HeaderText = "Estado";
                 dgvAlumnosAutorizados.Columns["Estado"].Width = 100;
+                dgvAlumnosAutorizados.Columns["Parentesco"].HeaderText = "Parentesco";
+                dgvAlumnosAutorizados.Columns["Parentesco"].Width = 110;
             }
         }
 
         private async void btnAgregar_Click(object sender, EventArgs e)
         {
-            if (cmbTutores.SelectedValue is not int tutorId || tutorId <= 0)
+            int tutorId = TutorElegido();
+
+            if (tutorId <= 0)
             {
-                MessageBox.Show("Por favor, seleccione un tutor válido.", "Validación",
+                MessageBox.Show("Elegí un tutor de la lista (podés escribir el nombre y el sistema te lo sugiere).",
+                    "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -201,7 +230,9 @@ namespace GTE.WindowsForms
 
         private async void btnQuitar_Click(object sender, EventArgs e)
         {
-            if (cmbTutores.SelectedValue is not int tutorId || tutorId <= 0)
+            int tutorId = TutorElegido();
+
+            if (tutorId <= 0)
             {
                 MessageBox.Show("Por favor, seleccione un tutor válido.", "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -215,7 +246,7 @@ namespace GTE.WindowsForms
                 return;
             }
 
-            var alumnoSeleccionado = dgvAlumnosAutorizados.SelectedRows[0].DataBoundItem as AlumnoDTO;
+            var alumnoSeleccionado = dgvAlumnosAutorizados.SelectedRows[0].DataBoundItem as FilaDeAlumnoAutorizado;
             if (alumnoSeleccionado == null) return;
 
             if (MessageBox.Show($"¿Está seguro de que desea remover la autorización para el alumno {alumnoSeleccionado.Nombre} {alumnoSeleccionado.Apellido}?",
@@ -239,6 +270,30 @@ namespace GTE.WindowsForms
                     MessageBox.Show($"Error al quitar autorización: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private sealed class FilaDeAlumnoAutorizado
+        {
+            public FilaDeAlumnoAutorizado(AlumnoDTO alumno, string parentesco)
+            {
+                IdAlumno = alumno.IdAlumno;
+                Nombre = alumno.Nombre;
+                Apellido = alumno.Apellido;
+                Grado = alumno.Grado;
+                Curso = alumno.Curso;
+                Turno = alumno.Turno;
+                Estado = alumno.Estado;
+                Parentesco = parentesco;
+            }
+
+            public int IdAlumno { get; }
+            public string Nombre { get; }
+            public string Apellido { get; }
+            public string Grado { get; }
+            public string Curso { get; }
+            public string Turno { get; }
+            public string Estado { get; }
+            public string Parentesco { get; }
         }
     }
 }

@@ -23,7 +23,7 @@ namespace GTE.Data
 
         public async Task AddAsync(Secretario secretario)
         {
-            _context.Entry(secretario.Usuario).State = EntityState.Unchanged; // Evitar duplicar usuario si ya existe
+            _context.Entry(secretario.Usuario).State = EntityState.Unchanged;
             _context.Secretarios.Add(secretario);
             await _context.SaveChangesAsync();
         }

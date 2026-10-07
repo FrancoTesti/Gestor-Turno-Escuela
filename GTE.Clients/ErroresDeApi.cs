@@ -1,9 +1,5 @@
 namespace GTE.Clients;
 
-/// <summary>
-/// Interpretación de los errores que devuelve la API para que las interfaces
-/// sepan si deben volver al login o solamente mostrar un mensaje.
-/// </summary>
 public static class ErroresDeApi
 {
     public static (bool IrAlLogin, string Mensaje) Interpretar(Exception excepcion)

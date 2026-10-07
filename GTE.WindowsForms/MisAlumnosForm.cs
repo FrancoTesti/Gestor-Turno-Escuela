@@ -6,10 +6,6 @@ using GTE.Clients;
 
 namespace GTE.WindowsForms
 {
-    /// <summary>
-    /// Pantalla del tutor: los alumnos que tiene autorizados a retirar, con su
-    /// curso, el horario de salida y el estado.
-    /// </summary>
     public partial class MisAlumnosForm : Form
     {
         private readonly TutorApiClient _apiClient = new TutorApiClient();
@@ -18,6 +14,7 @@ namespace GTE.WindowsForms
         {
             InitializeComponent();
             ApplyStyles();
+            Tema.AcomodarControles(this);
         }
 
         private void ApplyStyles()
@@ -25,10 +22,21 @@ namespace GTE.WindowsForms
             Tema.Ventana(this);
             Tema.Titulo(lblTitle);
             Tema.Etiqueta(lblSub);
+            Tema.BotonSecundario(btnActualizar);
             Tema.Grilla(dgvAlumnos);
         }
 
         private async void MisAlumnosForm_Load(object sender, EventArgs e)
+        {
+            await CargarAsync();
+        }
+
+        private async void btnActualizar_Click(object sender, EventArgs e)
+        {
+            await CargarAsync();
+        }
+
+        private async Task CargarAsync()
         {
             try
             {
@@ -54,6 +62,8 @@ namespace GTE.WindowsForms
                     dgvAlumnos.Columns["HorarioSalida"].Width = 140;
                     dgvAlumnos.Columns["Estado"].HeaderText = "Estado";
                     dgvAlumnos.Columns["Estado"].Width = 100;
+                    dgvAlumnos.Columns["EstaSaliendo"].HeaderText = "¿Está saliendo?";
+                    dgvAlumnos.Columns["EstaSaliendo"].Width = 130;
                 }
 
                 if (alumnos.Count == 0)

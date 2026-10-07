@@ -5,10 +5,6 @@ using GTE.DTOs;
 
 namespace GTE.Tests;
 
-/// <summary>
-/// Dobles de los servicios, usados solo para poder construir los endpoints
-/// en las pruebas sin depender de la base de datos.
-/// </summary>
 internal sealed class AlumnoServiceFalso : IAlumnoService
 {
     public Task<AlumnoDTO> AddAsync(AlumnoDTO dto) => Task.FromResult(dto);
@@ -118,7 +114,6 @@ internal sealed class TutorRepositoryFalso : ITutorRepository
             t.Dni == dni && (!excludeId.HasValue || t.IdTutor != excludeId.Value)));
 }
 
-/// <summary>Repositorio de usuarios en memoria, para las pruebas de servicios.</summary>
 internal sealed class UsuarioRepositoryFalso : IUsuarioRepository
 {
     private readonly List<Usuario> _usuarios;
@@ -161,7 +156,6 @@ internal sealed class UsuarioRepositoryFalso : IUsuarioRepository
             u.NombreUsuario == nombreUsuario && (!excludeId.HasValue || u.IdUsuario != excludeId.Value)));
 }
 
-/// <summary>Repositorio de autorizaciones vacio, para poder mapear los endpoints.</summary>
 internal sealed class AutorizacionRepositoryFalso : IAutorizacionRepository
 {
     public Task<IEnumerable<Autorizacion>> GetAllAsync() =>
@@ -187,7 +181,6 @@ internal sealed class AutorizacionRepositoryFalso : IAutorizacionRepository
     public Task<bool> DeleteByTutorAndAlumnoAsync(int tutorId, int alumnoId) => Task.FromResult(true);
 }
 
-/// <summary>Servicio de reportes vacio, para poder mapear los endpoints en las pruebas.</summary>
 internal sealed class ReporteServiceFalso : IReporteService
 {
     public Task<IEnumerable<AlumnosPorCursoDTO>> GetAlumnosPorCursoAsync() =>
@@ -197,7 +190,6 @@ internal sealed class ReporteServiceFalso : IReporteService
         Task.FromResult<IEnumerable<RetiroDTO>>(Array.Empty<RetiroDTO>());
 }
 
-/// <summary>Servicio de tutores vacio, para poder mapear los endpoints en las pruebas.</summary>
 internal sealed class TutorServiceFalso : ITutorService
 {
     public Task<IEnumerable<TutorDTO>> GetAllAsync() =>
@@ -212,7 +204,6 @@ internal sealed class TutorServiceFalso : ITutorService
     public Task<bool> DeleteAsync(int id) => Task.FromResult(true);
 }
 
-/// <summary>Repositorio de alumnos en memoria, para las pruebas de servicios.</summary>
 internal sealed class AlumnoRepositoryFalso : IAlumnoRepository
 {
     private readonly List<Alumno> _alumnos;
@@ -252,7 +243,6 @@ internal sealed class AlumnoRepositoryFalso : IAlumnoRepository
         Task.FromResult<IEnumerable<Alumno>>(_alumnos.ToList());
 }
 
-/// <summary>Repositorio de cursos en memoria, para las pruebas de servicios.</summary>
 internal sealed class CursoEscolarRepositoryFalso : ICursoEscolarRepository
 {
     private readonly List<CursoEscolar> _cursos;
@@ -279,7 +269,6 @@ internal sealed class CursoEscolarRepositoryFalso : ICursoEscolarRepository
     public Task<bool> DeleteAsync(int id) => Task.FromResult(true);
 }
 
-/// <summary>Servicio de retiros que devuelve una lista fija, para las pruebas de reportes.</summary>
 internal sealed class RetiroServiceConDatos : IRetiroService
 {
     private readonly List<RetiroDTO> _retiros;
@@ -307,10 +296,6 @@ internal sealed class RetiroServiceConDatos : IRetiroService
         Task.FromResult<IEnumerable<AlumnoDTO>>(Array.Empty<AlumnoDTO>());
 }
 
-/// <summary>
-/// Servicio de autenticación configurable, para representar la sesión de un
-/// circuito de Blazor o la de un usuario del escritorio.
-/// </summary>
 internal sealed class AutenticacionConfigurable : GTE.Clients.IAuthService
 {
     private readonly bool _sesionIniciada;
@@ -342,4 +327,58 @@ internal sealed class AutenticacionConfigurable : GTE.Clients.IAuthService
     }
 
     public Task CheckTokenExpirationAsync() => Task.CompletedTask;
+}
+
+internal sealed class SalidaDeCursoRepositoryFalso : ISalidaDeCursoRepository
+{
+    private readonly List<SalidaDeCurso> _salidas;
+    private int _proximoId;
+
+    public SalidaDeCursoRepositoryFalso(params SalidaDeCurso[] salidas)
+    {
+        _salidas = salidas.ToList();
+        _proximoId = salidas.Length + 1;
+    }
+
+    public Task AddAsync(SalidaDeCurso salida)
+    {
+        salida.SetIdSalidaDeCurso(_proximoId++);
+        _salidas.Add(salida);
+        return Task.CompletedTask;
+    }
+
+    public Task<IEnumerable<SalidaDeCurso>> GetDelDiaAsync(DateTime dia) =>
+        Task.FromResult<IEnumerable<SalidaDeCurso>>(
+            _salidas.Where(s => s.FechaHoraInicio.Date == dia.Date).ToList());
+
+    public Task<IEnumerable<SalidaDeCurso>> GetEnCursoAsync() =>
+        Task.FromResult<IEnumerable<SalidaDeCurso>>(_salidas.Where(s => s.EstaEnCurso).ToList());
+
+    public Task<SalidaDeCurso?> GetAsync(int id) =>
+        Task.FromResult(_salidas.FirstOrDefault(s => s.IdSalidaDeCurso == id));
+
+    public Task<bool> UpdateAsync(SalidaDeCurso salida)
+    {
+        var existente = _salidas.FirstOrDefault(s => s.IdSalidaDeCurso == salida.IdSalidaDeCurso);
+        if (existente is null) return Task.FromResult(false);
+
+        if (existente.EstaEnCurso && !salida.EstaEnCurso)
+            existente.Finalizar(salida.FechaHoraFin!.Value);
+
+        return Task.FromResult(true);
+    }
+}
+
+internal sealed class SalidaDeCursoServiceFalso : ISalidaDeCursoService
+{
+    public Task<CarteleraDTO> GetCarteleraAsync() => Task.FromResult(new CarteleraDTO());
+
+    public Task<IEnumerable<SalidaDeCursoDTO>> GetDelDiaAsync(DateTime dia) =>
+        Task.FromResult<IEnumerable<SalidaDeCursoDTO>>(Array.Empty<SalidaDeCursoDTO>());
+
+    public Task<(bool Exito, string Mensaje, SalidaDeCursoDTO? Salida)> IniciarAsync(int idCurso, Personal personal) =>
+        Task.FromResult((true, string.Empty, (SalidaDeCursoDTO?)null));
+
+    public Task<(bool Exito, string Mensaje)> FinalizarAsync(int idSalida) =>
+        Task.FromResult((true, string.Empty));
 }

@@ -15,11 +15,11 @@ namespace GTE.WindowsForms
 
         private void ApplyStyles()
         {
-            this.BackColor = Color.FromArgb(33, 37, 41); // Sleek Dark Gray
-            this.lblTitle.ForeColor = Color.FromArgb(248, 249, 250); // White
-            this.lblUsername.ForeColor = Color.FromArgb(206, 212, 218); // Light gray
+            this.BackColor = Color.FromArgb(33, 37, 41);
+            this.lblTitle.ForeColor = Color.FromArgb(248, 249, 250);
+            this.lblUsername.ForeColor = Color.FromArgb(206, 212, 218);
             this.lblPassword.ForeColor = Color.FromArgb(206, 212, 218);
-            this.btnLogin.BackColor = Color.FromArgb(13, 110, 253); // Blue Accent
+            this.btnLogin.BackColor = Color.FromArgb(13, 110, 253);
             this.btnLogin.ForeColor = Color.White;
             this.btnLogin.FlatStyle = FlatStyle.Flat;
             this.btnLogin.FlatAppearance.BorderSize = 0;

@@ -5,17 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/" />
     <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
-    <link rel="stylesheet" href="app.css" />
-    <link rel="stylesheet" href="GTE.Blazor.Server.styles.css" />
+
+    <link rel="stylesheet" href="app.css?v=2" />
+    <link rel="stylesheet" href="GTE.Blazor.Server.styles.css?v=2" />
     <link rel="icon" type="image/png" href="favicon.png" />
-    @* Sin prerenderizado: la página se arma recién cuando el circuito está
-       conectado. Si se prerenderiza, el formulario existe en el HTML antes de
-       que Blazor esté activo, y un envío rápido sale como POST normal a la
-       página, que no sabe qué formulario se envió. *@
-    <HeadOutlet @rendermode="@(new InteractiveServerRenderMode(prerender: false))" />
+
+
+    <style>
+        #components-reconnect-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 2000;
+            justify-content: center;
+            padding: 20px 16px;
+        }
+
+        #components-reconnect-modal.components-reconnect-show,
+        #components-reconnect-modal.components-reconnect-failed,
+        #components-reconnect-modal.components-reconnect-rejected {
+            display: flex;
+        }
+
+        #components-reconnect-modal .aviso-de-conexion {
+            background: #fff3cd;
+            border: 1px solid #ffe69c;
+            border-radius: 10px;
+            padding: 16px 22px;
+            max-width: 520px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        #components-reconnect-modal .aviso-titulo {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin: 0;
+        }
+
+        #components-reconnect-modal .aviso-detalle {
+            color: #6c757d;
+            margin: 6px 0 12px;
+        }
+
+        .nav-seccion {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.1);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 0.7rem 1.25rem 0.55rem;
+            margin: 0.6rem 0 0.45rem;
+        }
+    </style>
+
+
+    <HeadOutlet @rendermode="InteractiveServer" />
 </head>
 <body>
-    <Routes @rendermode="@(new InteractiveServerRenderMode(prerender: false))" />
+
+    <div id="components-reconnect-modal">
+        <div class="aviso-de-conexion">
+            <p class="aviso-titulo">Se perdió la conexión con el servidor</p>
+            <p class="aviso-detalle">
+                Reintentando... Si el aviso no desaparece, recargá la página.
+            </p>
+            <button type="button" class="btn btn-primary" onclick="location.reload()">
+                Recargar la página
+            </button>
+        </div>
+    </div>
+
+    <Routes @rendermode="InteractiveServer" />
     <script src="_framework/blazor.web.js"></script>
 </body>
 </html>

@@ -21,12 +21,12 @@
 @if (horarios == null) { <p><em>Cargando...</em></p> }
 else
 {
-    <table class="table table-striped">
-        <thead>
+    <table class="table table-striped align-middle">
+        <thead class="table-dark">
             <tr>
                 <th>Alumno</th><th>Descripción</th><th>Hora Salida</th>
                 <AuthorizeView Roles="Secretario, Portero">
-                    <Authorized><th>Acciones</th></Authorized>
+                    <Authorized><th class="text-center" style="width: 180px;">Acciones</th></Authorized>
                 </AuthorizeView>
             </tr>
         </thead>
@@ -37,9 +37,9 @@ else
                     <td>@h.AlumnoNombreCompleto</td><td>@h.DescripcionActividad</td><td>@h.HoraSalidaEspecial</td>
                     <AuthorizeView Roles="Secretario, Portero">
                         <Authorized>
-                            <td>
-                                <button class="btn btn-warning btn-sm" @onclick="() => AbrirModalEditar(h)">Editar</button>
-                                <button class="btn btn-danger btn-sm" @onclick="() => Eliminar(h.IdHorarioEspecial)">Borrar</button>
+                            <td class="text-center text-nowrap">
+                                <button class="btn btn-sm btn-outline-warning me-1" @onclick="() => AbrirModalEditar(h)">Editar</button>
+                                <button class="btn btn-sm btn-outline-danger" @onclick="() => Eliminar(h.IdHorarioEspecial)">Borrar</button>
                             </td>
                         </Authorized>
                     </AuthorizeView>

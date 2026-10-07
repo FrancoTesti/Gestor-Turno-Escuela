@@ -13,5 +13,7 @@ namespace GTE.DTOs
         public string? AlumnoNombreCompleto { get; set; }
         public int TutorId { get; set; }
         public string? TutorNombreCompleto { get; set; }
+
+        public string Parentesco { get; set; } = string.Empty;
     }
 }

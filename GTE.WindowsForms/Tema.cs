@@ -4,10 +4,6 @@ using System.Windows.Forms;
 
 namespace GTE.WindowsForms
 {
-    /// <summary>
-    /// Colores y estilos compartidos por todas las pantallas, para que el
-    /// escritorio se vea igual que la interfaz web.
-    /// </summary>
     public static class Tema
     {
         public static readonly Color Fondo = Color.FromArgb(248, 249, 250);
@@ -20,7 +16,10 @@ namespace GTE.WindowsForms
         public static readonly Color Gris = Color.FromArgb(108, 117, 125);
         public static readonly Color Barra = Color.FromArgb(33, 37, 41);
 
-        /// <summary>Fondo y tipografía base de una ventana.</summary>
+        public const int AltoDeBoton = 32;
+
+        private const float TamanioDeEntrada = 11F;
+
         public static void Ventana(Form formulario)
         {
             formulario.BackColor = Fondo;
@@ -44,7 +43,13 @@ namespace GTE.WindowsForms
             campo.BackColor = Superficie;
             campo.ForeColor = Texto;
             campo.BorderStyle = BorderStyle.FixedSingle;
-            campo.Font = new Font("Segoe UI", 10F);
+            campo.Font = new Font("Segoe UI", TamanioDeEntrada);
+
+            if (!campo.Multiline)
+            {
+                campo.AutoSize = false;
+                campo.Height = AltoDeBoton;
+            }
         }
 
         public static void Entrada(ComboBox combo)
@@ -52,15 +57,22 @@ namespace GTE.WindowsForms
             combo.BackColor = Superficie;
             combo.ForeColor = Texto;
             combo.FlatStyle = FlatStyle.Flat;
-            combo.Font = new Font("Segoe UI", 10F);
+            combo.Font = new Font("Segoe UI", TamanioDeEntrada);
 
-            if (combo.DropDownStyle != ComboBoxStyle.Simple)
+            if (combo.DropDownStyle != ComboBoxStyle.Simple
+                && combo.AutoCompleteMode == AutoCompleteMode.None)
                 combo.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
-        /// <summary>Deja la grilla con el mismo aspecto que las tablas de la web.</summary>
+        public static void Entrada(DateTimePicker fecha)
+        {
+            fecha.Font = new Font("Segoe UI", TamanioDeEntrada);
+        }
+
         public static void Grilla(DataGridView grilla)
         {
+            const float TamanioDeLetra = 11F;
+
             grilla.BackgroundColor = Superficie;
             grilla.BorderStyle = BorderStyle.None;
             grilla.GridColor = Color.FromArgb(233, 236, 239);
@@ -68,18 +80,22 @@ namespace GTE.WindowsForms
             grilla.MultiSelect = false;
             grilla.RowHeadersVisible = false;
             grilla.EnableHeadersVisualStyles = false;
+            grilla.AllowUserToResizeRows = false;
 
             grilla.ColumnHeadersDefaultCellStyle.BackColor = Barra;
             grilla.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
             grilla.ColumnHeadersDefaultCellStyle.SelectionBackColor = Barra;
-            grilla.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold);
-            grilla.ColumnHeadersHeight = 36;
+            grilla.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI Semibold", TamanioDeLetra, FontStyle.Bold);
+            grilla.ColumnHeadersDefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            grilla.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 
-            grilla.RowTemplate.Height = 30;
-            grilla.DefaultCellStyle.Font = new Font("Segoe UI", 9.5F);
+            grilla.RowTemplate.Height = 34;
+            grilla.DefaultCellStyle.Font = new Font("Segoe UI", TamanioDeLetra);
             grilla.DefaultCellStyle.SelectionBackColor = Color.FromArgb(207, 226, 255);
             grilla.DefaultCellStyle.SelectionForeColor = Texto;
             grilla.AlternatingRowsDefaultCellStyle.BackColor = Fondo;
+
+            grilla.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
         public static void Boton(Button boton, Color color)
@@ -91,8 +107,34 @@ namespace GTE.WindowsForms
             boton.Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold);
             boton.Cursor = Cursors.Hand;
 
-            if (boton.Height < 36)
-                boton.Height = 36;
+            boton.Height = AltoDeBoton;
+        }
+
+        public static void AcomodarControles(Control contenedor)
+        {
+            foreach (Control control in contenedor.Controls)
+            {
+                switch (control)
+                {
+                    case Button boton:
+                        boton.Height = AltoDeBoton;
+                        break;
+                    case TextBox campo:
+                        Entrada(campo);
+                        if (!campo.Multiline)
+                            campo.Height = AltoDeBoton;
+                        break;
+                    case ComboBox combo:
+                        Entrada(combo);
+                        break;
+                    case DateTimePicker fecha:
+                        Entrada(fecha);
+                        break;
+                }
+
+                if (control.HasChildren)
+                    AcomodarControles(control);
+            }
         }
 
         public static void BotonPrimario(Button boton) => Boton(boton, Primario);
@@ -103,17 +145,26 @@ namespace GTE.WindowsForms
 
         public static void BotonSecundario(Button boton) => Boton(boton, Gris);
 
-        /// <summary>Botón de la barra lateral, como el menú de la web.</summary>
         public static void BotonMenu(Button boton)
         {
             boton.BackColor = Barra;
             boton.ForeColor = Color.FromArgb(222, 226, 230);
             boton.FlatStyle = FlatStyle.Flat;
-            boton.FlatAppearance.BorderSize = 0;
+            boton.FlatAppearance.BorderSize = 1;
+            boton.FlatAppearance.BorderColor = Color.FromArgb(52, 58, 64);
             boton.TextAlign = ContentAlignment.MiddleLeft;
             boton.Padding = new Padding(15, 0, 0, 0);
             boton.Font = new Font("Segoe UI Semibold", 10.5F, FontStyle.Bold);
             boton.Cursor = Cursors.Hand;
+        }
+
+        public static void EtiquetaSeccion(Label etiqueta)
+        {
+            etiqueta.BackColor = Color.FromArgb(52, 58, 64);
+            etiqueta.ForeColor = Color.FromArgb(142, 202, 230);
+            etiqueta.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            etiqueta.TextAlign = ContentAlignment.MiddleLeft;
+            etiqueta.Padding = new Padding(15, 0, 0, 0);
         }
     }
 }

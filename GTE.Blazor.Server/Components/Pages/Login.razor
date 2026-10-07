@@ -17,12 +17,12 @@
             <EditForm Model="loginModel" OnValidSubmit="HandleLogin" FormName="login">
                 <div class="mb-3">
                     <label class="form-label">Usuario</label>
-                    <InputText @bind-Value="loginModel.Username" class="form-control" placeholder="Ingrese su usuario" />
+                    <InputText @bind-Value="loginModel.Username" class="form-control" placeholder="Ingrese su usuario" disabled="@(!interactivo)" />
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Contraseña</label>
-                    <InputText @bind-Value="loginModel.Password" type="password" class="form-control" placeholder="Ingrese su contraseña" />
+                    <InputText @bind-Value="loginModel.Password" type="password" class="form-control" placeholder="Ingrese su contraseña" disabled="@(!interactivo)" />
                 </div>
 
                 @if (mensajeError is not null)
@@ -32,7 +32,8 @@
                     </div>
                 }
 
-                <button type="submit" class="btn btn-primary w-100 py-2" disabled="@cargando">
+
+                <button type="submit" class="btn btn-primary w-100 py-2" disabled="@(cargando || !interactivo)">
                     @(cargando ? "Ingresando..." : "Ingresar")
                 </button>
             </EditForm>
@@ -60,6 +61,16 @@
     private LoginData loginModel = new();
     private string? mensajeError;
     private bool cargando;
+    private bool interactivo;
+
+    protected override void OnAfterRender(bool primerRender)
+    {
+        if (primerRender)
+        {
+            interactivo = true;
+            StateHasChanged();
+        }
+    }
 
     private async Task HandleLogin()
     {
@@ -75,8 +86,6 @@
         }
         catch (ApiNoDisponibleException ex)
         {
-            // Sin este caso aparte, cuando la API no está levantada la pantalla
-            // decía "usuario o contraseña incorrectos" y no se entendía el problema.
             mensajeError = ex.Message;
         }
         catch (Exception ex)

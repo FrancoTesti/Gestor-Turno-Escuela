@@ -15,7 +15,7 @@ namespace GTE.WebAPI
             .WithName("GetAlumnosPorCurso")
             .Produces<List<AlumnosPorCursoDTO>>(StatusCodes.Status200OK)
             .WithOpenApi()
-            .RequireAuthorization(Politicas.LecturaAlumnos);
+            .RequireAuthorization(Politicas.ReporteDeAlumnos);
 
             app.MapGet("/reportes/retiros", async (DateTime? desde, DateTime? hasta, IReporteService service) =>
             {
@@ -25,7 +25,7 @@ namespace GTE.WebAPI
             .WithName("GetRetirosPorFecha")
             .Produces<List<RetiroDTO>>(StatusCodes.Status200OK)
             .WithOpenApi()
-            .RequireAuthorization(Politicas.LecturaAlumnos);
+            .RequireAuthorization(Politicas.ReporteDeRetiros);
         }
     }
 }

@@ -1,7 +1,11 @@
 using GTE.Blazor.Server;
 using GTE.Blazor.Server.Components;
+using GTE.Clients;
 
 var builder = WebApplication.CreateBuilder(args);
+
+if (!string.IsNullOrWhiteSpace(builder.Configuration["Api:Url"]))
+    ApiConfig.Direccion = builder.Configuration["Api:Url"]!;
 
 builder.Services.AgregarServiciosDeLaWeb();
 

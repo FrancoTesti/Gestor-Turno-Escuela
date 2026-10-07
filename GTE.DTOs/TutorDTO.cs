@@ -16,10 +16,8 @@ namespace GTE.DTOs
         public string Telefono { get; set; } = string.Empty;
         public bool TieneRestriccion { get; set; }
 
-        /// <summary>Usuario con el que el tutor entra al sistema.</summary>
         public string NombreUsuario { get; set; } = string.Empty;
 
-        /// <summary>Solo se usa al crear o modificar; en las consultas vuelve vacia.</summary>
         public string Contrasena { get; set; } = string.Empty;
     }
 }

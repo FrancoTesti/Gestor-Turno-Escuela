@@ -1,10 +1,5 @@
 namespace GTE.Clients;
 
-/// <summary>
-/// Reglas de permisos que usan las interfaces para mostrar u ocultar acciones.
-/// Deben coincidir con las políticas definidas en la API, que son las que
-/// finalmente autorizan o rechazan cada operación.
-/// </summary>
 public static class PermisosDeUsuario
 {
     private const string Secretario = "Secretario";
@@ -22,4 +17,9 @@ public static class PermisosDeUsuario
 
     public static bool PuedeVerCursos(string? rol) =>
         rol is Secretario or Portero or Tutor;
+
+    public static bool PuedeVerReporteDeAlumnos(string? rol) => rol == Secretario;
+
+    public static bool PuedeVerReporteDeRetiros(string? rol) =>
+        rol is Secretario or Portero;
 }

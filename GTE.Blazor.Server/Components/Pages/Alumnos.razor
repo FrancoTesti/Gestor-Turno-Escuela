@@ -21,11 +21,24 @@
             </div>
             <div class="col-md-2">
                 <label class="form-label">Grado</label>
-                <input class="form-control" @bind="filtro.Grado" />
+
+                <select class="form-control" @bind="filtro.Grado">
+                    <option value="">Todos</option>
+                    @foreach (var grado in GradosDisponibles)
+                    {
+                        <option value="@grado">@grado</option>
+                    }
+                </select>
             </div>
             <div class="col-md-2">
                 <label class="form-label">División</label>
-                <input class="form-control" @bind="filtro.Curso" />
+                <select class="form-control" @bind="filtro.Curso">
+                    <option value="">Todas</option>
+                    @foreach (var division in DivisionesDisponibles)
+                    {
+                        <option value="@division">@division</option>
+                    }
+                </select>
             </div>
             <div class="col-md-2">
                 <label class="form-label">Estado</label>
@@ -57,15 +70,15 @@ else if (alumnos.Count == 0)
 }
 else
 {
-    <table class="table table-striped">
-        <thead>
+    <table class="table table-striped align-middle">
+        <thead class="table-dark">
             <tr>
                 <th>Nombre y Apellido</th>
                 <th>Grado y Curso</th>
                 <th>Turno</th>
                 <th>Estado</th>
                 <AuthorizeView Roles="Secretario">
-                    <Authorized><th>Acciones</th></Authorized>
+                    <Authorized><th class="text-center" style="width: 180px;">Acciones</th></Authorized>
                 </AuthorizeView>
             </tr>
         </thead>
@@ -79,9 +92,9 @@ else
                     <td><EstadoBadge Estado="@a.Estado" /></td>
                     <AuthorizeView Roles="Secretario">
                         <Authorized>
-                            <td>
-                                <button class="btn btn-warning btn-sm" @onclick="() => AbrirModalEditar(a)">Editar</button>
-                                <button class="btn btn-danger btn-sm" @onclick="() => Eliminar(a.IdAlumno)">Borrar</button>
+                            <td class="text-center text-nowrap">
+                                <button class="btn btn-sm btn-outline-warning me-1" @onclick="() => AbrirModalEditar(a)">Editar</button>
+                                <button class="btn btn-sm btn-outline-danger" @onclick="() => Eliminar(a.IdAlumno)">Borrar</button>
                             </td>
                         </Authorized>
                     </AuthorizeView>
@@ -149,6 +162,12 @@ else
     private FiltroDeAlumnos filtro = new();
     private bool mostrarModal;
 
+    private IEnumerable<string> GradosDisponibles =>
+        (cursos ?? new List<CursoEscolarDTO>()).Select(c => c.Grado).Distinct().OrderBy(g => g);
+
+    private IEnumerable<string> DivisionesDisponibles =>
+        (cursos ?? new List<CursoEscolarDTO>()).Select(c => c.Curso).Distinct().OrderBy(c => c);
+
     protected override async Task OnInitializedAsync()
     {
         await EjecutarAsync(async () =>
@@ -160,10 +179,6 @@ else
 
     private async Task CargarDatos() => alumnos = (await AlumnosClient.GetAllAsync()).ToList();
 
-    /// <summary>
-    /// Busca con los filtros cargados. Recorre el endpoint de criterios, que es
-    /// el que resuelve la consulta con ADO.NET del lado de la API.
-    /// </summary>
     private async Task Buscar() => await EjecutarAsync(async () =>
         alumnos = (await AlumnosClient.GetByCriteriaAsync(filtro.ToCriteria())).ToList());
 
@@ -196,7 +211,7 @@ else
 
     private async Task Guardar()
     {
-        if (alumnoEditando.IdCurso == 0) return; // Validación simple
+        if (alumnoEditando.IdCurso == 0) return;
 
         await EjecutarAsync(async () =>
         {

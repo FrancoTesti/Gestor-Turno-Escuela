@@ -18,6 +18,7 @@ namespace GTE.WindowsForms
         {
             InitializeComponent();
             ApplyStyles();
+            Tema.AcomodarControles(this);
         }
 
         private void ApplyStyles()
@@ -32,23 +33,16 @@ namespace GTE.WindowsForms
             btnConsultar.FlatStyle = FlatStyle.Flat;
             btnConsultar.FlatAppearance.BorderSize = 0;
 
-            foreach (var grilla in new[] { dgvRetiros, dgvDetalle })
-            {
-                grilla.BackgroundColor = Color.White;
-                grilla.BorderStyle = BorderStyle.None;
-                grilla.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                grilla.MultiSelect = false;
-                grilla.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(241, 243, 245);
-            }
+            Tema.Grilla(dgvRetiros);
+            Tema.Grilla(dgvDetalle);
         }
 
-        private async void ReporteRetirosForm_Load(object sender, EventArgs e)
+        private void ReporteRetirosForm_Load(object sender, EventArgs e)
         {
-            // Por defecto se muestra el mes en curso.
             dtpDesde.Value = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
             dtpHasta.Value = DateTime.Today;
 
-            await Consultar();
+            lblTotal.Text = "Elegí un período y apretá Consultar.";
         }
 
         private async void btnConsultar_Click(object sender, EventArgs e)
@@ -71,15 +65,16 @@ namespace GTE.WindowsForms
                     Observaciones = retiro.Observaciones
                 }).ToList();
 
-                lblTotal.Text = $"Retiros: {_retiros.Count}    " +
-                                $"Alumnos retirados: {_retiros.Sum(r => r.Detalles.Count)}";
-
                 dgvDetalle.DataSource = null;
 
                 if (_retiros.Count == 0)
                 {
-                    MessageBox.Show("No hay retiros registrados en el período elegido.", "Sin resultados",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    lblTotal.Text = "No hay retiros registrados en el período elegido.";
+                }
+                else
+                {
+                    lblTotal.Text = $"Retiros: {_retiros.Count}    " +
+                                    $"Alumnos retirados: {_retiros.Sum(r => r.Detalles.Count)}";
                 }
             }
             catch (Exception ex)

@@ -28,9 +28,6 @@ namespace GTE.WindowsForms
             ((System.ComponentModel.ISupportInitialize)(this.dgvRetiros)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDetalle)).BeginInit();
             this.SuspendLayout();
-            // 
-            // lblTitle
-            // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblTitle.Location = new System.Drawing.Point(20, 15);
@@ -38,43 +35,28 @@ namespace GTE.WindowsForms
             this.lblTitle.Size = new System.Drawing.Size(400, 37);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Retiros por Rango de Fechas";
-            // 
-            // lblDesde
-            // 
             this.lblDesde.AutoSize = true;
             this.lblDesde.Location = new System.Drawing.Point(20, 72);
             this.lblDesde.Name = "lblDesde";
             this.lblDesde.Size = new System.Drawing.Size(54, 20);
             this.lblDesde.TabIndex = 1;
             this.lblDesde.Text = "Desde";
-            // 
-            // dtpDesde
-            // 
             this.dtpDesde.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtpDesde.Location = new System.Drawing.Point(80, 68);
             this.dtpDesde.Name = "dtpDesde";
             this.dtpDesde.Size = new System.Drawing.Size(140, 27);
             this.dtpDesde.TabIndex = 2;
-            // 
-            // lblHasta
-            // 
             this.lblHasta.AutoSize = true;
             this.lblHasta.Location = new System.Drawing.Point(240, 72);
             this.lblHasta.Name = "lblHasta";
             this.lblHasta.Size = new System.Drawing.Size(49, 20);
             this.lblHasta.TabIndex = 3;
             this.lblHasta.Text = "Hasta";
-            // 
-            // dtpHasta
-            // 
             this.dtpHasta.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtpHasta.Location = new System.Drawing.Point(295, 68);
             this.dtpHasta.Name = "dtpHasta";
             this.dtpHasta.Size = new System.Drawing.Size(140, 27);
             this.dtpHasta.TabIndex = 4;
-            // 
-            // btnConsultar
-            // 
             this.btnConsultar.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnConsultar.Location = new System.Drawing.Point(455, 65);
             this.btnConsultar.Name = "btnConsultar";
@@ -83,9 +65,6 @@ namespace GTE.WindowsForms
             this.btnConsultar.Text = "Consultar";
             this.btnConsultar.UseVisualStyleBackColor = true;
             this.btnConsultar.Click += new System.EventHandler(this.btnConsultar_Click);
-            // 
-            // lblTotal
-            // 
             this.lblTotal.AutoSize = true;
             this.lblTotal.Font = new System.Drawing.Font("Segoe UI Semibold", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblTotal.Location = new System.Drawing.Point(20, 110);
@@ -93,9 +72,6 @@ namespace GTE.WindowsForms
             this.lblTotal.Size = new System.Drawing.Size(120, 24);
             this.lblTotal.TabIndex = 6;
             this.lblTotal.Text = "Retiros: -";
-            // 
-            // dgvRetiros
-            // 
             this.dgvRetiros.AllowUserToAddRows = false;
             this.dgvRetiros.AllowUserToDeleteRows = false;
             this.dgvRetiros.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
@@ -108,9 +84,6 @@ namespace GTE.WindowsForms
             this.dgvRetiros.Size = new System.Drawing.Size(860, 200);
             this.dgvRetiros.TabIndex = 7;
             this.dgvRetiros.SelectionChanged += new System.EventHandler(this.dgvRetiros_SelectionChanged);
-            // 
-            // lblDetalle
-            // 
             this.lblDetalle.AutoSize = true;
             this.lblDetalle.Font = new System.Drawing.Font("Segoe UI Semibold", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblDetalle.Location = new System.Drawing.Point(20, 352);
@@ -118,9 +91,6 @@ namespace GTE.WindowsForms
             this.lblDetalle.Size = new System.Drawing.Size(250, 24);
             this.lblDetalle.TabIndex = 8;
             this.lblDetalle.Text = "Alumnos del retiro seleccionado";
-            // 
-            // dgvDetalle
-            // 
             this.dgvDetalle.AllowUserToAddRows = false;
             this.dgvDetalle.AllowUserToDeleteRows = false;
             this.dgvDetalle.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -133,9 +103,6 @@ namespace GTE.WindowsForms
             this.dgvDetalle.RowHeadersWidth = 51;
             this.dgvDetalle.Size = new System.Drawing.Size(860, 230);
             this.dgvDetalle.TabIndex = 9;
-            // 
-            // ReporteRetirosForm
-            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(900, 640);

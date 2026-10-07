@@ -29,9 +29,6 @@ namespace GTE.WindowsForms
             this.pnlActions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAlumnosAutorizados)).BeginInit();
             this.SuspendLayout();
-            // 
-            // lblTitle
-            // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblTitle.Location = new System.Drawing.Point(18, 15);
@@ -39,9 +36,6 @@ namespace GTE.WindowsForms
             this.lblTitle.Size = new System.Drawing.Size(395, 37);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Administración de Autorizaciones";
-            // 
-            // pnlTop
-            // 
             this.pnlTop.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlTop.BackColor = System.Drawing.Color.White;
@@ -52,12 +46,11 @@ namespace GTE.WindowsForms
             this.pnlTop.Name = "pnlTop";
             this.pnlTop.Size = new System.Drawing.Size(730, 65);
             this.pnlTop.TabIndex = 1;
-            // 
-            // cmbTutores
-            // 
             this.cmbTutores.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbTutores.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTutores.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
+            this.cmbTutores.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cmbTutores.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cmbTutores.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.cmbTutores.FormattingEnabled = true;
             this.cmbTutores.Location = new System.Drawing.Point(150, 16);
@@ -65,19 +58,14 @@ namespace GTE.WindowsForms
             this.cmbTutores.Size = new System.Drawing.Size(555, 31);
             this.cmbTutores.TabIndex = 1;
             this.cmbTutores.SelectedIndexChanged += new System.EventHandler(this.cmbTutores_SelectedIndexChanged);
-            // 
-            // lblTutor
-            // 
-            this.lblTutor.AutoSize = true;
+            this.lblTutor.AutoSize = false;
             this.lblTutor.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblTutor.Location = new System.Drawing.Point(15, 19);
+            this.lblTutor.Location = new System.Drawing.Point(15, 16);
             this.lblTutor.Name = "lblTutor";
-            this.lblTutor.Size = new System.Drawing.Size(129, 23);
+            this.lblTutor.Size = new System.Drawing.Size(129, 31);
+            this.lblTutor.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblTutor.TabIndex = 0;
             this.lblTutor.Text = "Seleccionar Tutor:";
-            // 
-            // pnlActions
-            // 
             this.pnlActions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlActions.BackColor = System.Drawing.Color.White;
@@ -90,9 +78,6 @@ namespace GTE.WindowsForms
             this.pnlActions.Name = "pnlActions";
             this.pnlActions.Size = new System.Drawing.Size(730, 65);
             this.pnlActions.TabIndex = 2;
-            // 
-            // btnQuitar
-            // 
             this.btnQuitar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnQuitar.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnQuitar.Location = new System.Drawing.Point(595, 14);
@@ -102,9 +87,6 @@ namespace GTE.WindowsForms
             this.btnQuitar.Text = "Quitar Alumno";
             this.btnQuitar.UseVisualStyleBackColor = true;
             this.btnQuitar.Click += new System.EventHandler(this.btnQuitar_Click);
-            // 
-            // btnAgregar
-            // 
             this.btnAgregar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAgregar.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnAgregar.Location = new System.Drawing.Point(460, 14);
@@ -114,9 +96,6 @@ namespace GTE.WindowsForms
             this.btnAgregar.Text = "+ Autorizar";
             this.btnAgregar.UseVisualStyleBackColor = true;
             this.btnAgregar.Click += new System.EventHandler(this.btnAgregar_Click);
-            // 
-            // cmbAlumnos
-            // 
             this.cmbAlumnos.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbAlumnos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -126,19 +105,14 @@ namespace GTE.WindowsForms
             this.cmbAlumnos.Name = "cmbAlumnos";
             this.cmbAlumnos.Size = new System.Drawing.Size(295, 31);
             this.cmbAlumnos.TabIndex = 1;
-            // 
-            // lblAlumno
-            // 
-            this.lblAlumno.AutoSize = true;
+            this.lblAlumno.AutoSize = false;
             this.lblAlumno.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblAlumno.Location = new System.Drawing.Point(15, 19);
+            this.lblAlumno.Location = new System.Drawing.Point(15, 16);
             this.lblAlumno.Name = "lblAlumno";
-            this.lblAlumno.Size = new System.Drawing.Size(129, 23);
+            this.lblAlumno.Size = new System.Drawing.Size(129, 31);
+            this.lblAlumno.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblAlumno.TabIndex = 0;
             this.lblAlumno.Text = "Agregar Alumno:";
-            // 
-            // dgvAlumnosAutorizados
-            // 
             this.dgvAlumnosAutorizados.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -151,9 +125,6 @@ namespace GTE.WindowsForms
             this.dgvAlumnosAutorizados.RowTemplate.Height = 29;
             this.dgvAlumnosAutorizados.Size = new System.Drawing.Size(730, 280);
             this.dgvAlumnosAutorizados.TabIndex = 3;
-            // 
-            // AutorizacionListaForm
-            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(780, 520);

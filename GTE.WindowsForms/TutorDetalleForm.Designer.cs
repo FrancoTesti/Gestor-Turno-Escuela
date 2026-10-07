@@ -34,9 +34,6 @@ namespace GTE.WindowsForms
             this.btnGuardar = new System.Windows.Forms.Button();
             this.btnCancelar = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // lblTitle
-            // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblTitle.Location = new System.Drawing.Point(30, 25);
@@ -44,9 +41,6 @@ namespace GTE.WindowsForms
             this.lblTitle.Size = new System.Drawing.Size(176, 32);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Detalle Tutor";
-            // 
-            // lblNombre
-            // 
             this.lblNombre.AutoSize = true;
             this.lblNombre.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblNombre.Location = new System.Drawing.Point(30, 85);
@@ -54,17 +48,11 @@ namespace GTE.WindowsForms
             this.lblNombre.Size = new System.Drawing.Size(68, 21);
             this.lblNombre.TabIndex = 0;
             this.lblNombre.Text = "Nombre";
-            // 
-            // txtNombre
-            // 
             this.txtNombre.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtNombre.Location = new System.Drawing.Point(30, 110);
             this.txtNombre.Name = "txtNombre";
             this.txtNombre.Size = new System.Drawing.Size(320, 30);
             this.txtNombre.TabIndex = 1;
-            // 
-            // lblApellido
-            // 
             this.lblApellido.AutoSize = true;
             this.lblApellido.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblApellido.Location = new System.Drawing.Point(30, 155);
@@ -72,17 +60,11 @@ namespace GTE.WindowsForms
             this.lblApellido.Size = new System.Drawing.Size(67, 21);
             this.lblApellido.TabIndex = 0;
             this.lblApellido.Text = "Apellido";
-            // 
-            // txtApellido
-            // 
             this.txtApellido.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtApellido.Location = new System.Drawing.Point(30, 180);
             this.txtApellido.Name = "txtApellido";
             this.txtApellido.Size = new System.Drawing.Size(320, 30);
             this.txtApellido.TabIndex = 2;
-            // 
-            // lblDni
-            // 
             this.lblDni.AutoSize = true;
             this.lblDni.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblDni.Location = new System.Drawing.Point(30, 225);
@@ -90,17 +72,11 @@ namespace GTE.WindowsForms
             this.lblDni.Size = new System.Drawing.Size(37, 21);
             this.lblDni.TabIndex = 0;
             this.lblDni.Text = "DNI";
-            // 
-            // txtDni
-            // 
             this.txtDni.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtDni.Location = new System.Drawing.Point(30, 250);
             this.txtDni.Name = "txtDni";
             this.txtDni.Size = new System.Drawing.Size(140, 30);
             this.txtDni.TabIndex = 3;
-            // 
-            // lblParentesco
-            // 
             this.lblParentesco.AutoSize = true;
             this.lblParentesco.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblParentesco.Location = new System.Drawing.Point(210, 225);
@@ -108,17 +84,11 @@ namespace GTE.WindowsForms
             this.lblParentesco.Size = new System.Drawing.Size(88, 21);
             this.lblParentesco.TabIndex = 0;
             this.lblParentesco.Text = "Parentesco";
-            // 
-            // txtParentesco
-            // 
             this.txtParentesco.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtParentesco.Location = new System.Drawing.Point(210, 250);
             this.txtParentesco.Name = "txtParentesco";
             this.txtParentesco.Size = new System.Drawing.Size(140, 30);
             this.txtParentesco.TabIndex = 4;
-            // 
-            // lblTelefono
-            // 
             this.lblTelefono.AutoSize = true;
             this.lblTelefono.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblTelefono.Location = new System.Drawing.Point(30, 295);
@@ -126,17 +96,11 @@ namespace GTE.WindowsForms
             this.lblTelefono.Size = new System.Drawing.Size(67, 21);
             this.lblTelefono.TabIndex = 0;
             this.lblTelefono.Text = "Teléfono";
-            // 
-            // txtTelefono
-            // 
             this.txtTelefono.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtTelefono.Location = new System.Drawing.Point(30, 320);
             this.txtTelefono.Name = "txtTelefono";
             this.txtTelefono.Size = new System.Drawing.Size(140, 30);
             this.txtTelefono.TabIndex = 5;
-            // 
-            // lblUsuario
-            // 
             this.lblUsuario.AutoSize = true;
             this.lblUsuario.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblUsuario.Location = new System.Drawing.Point(210, 295);
@@ -144,17 +108,11 @@ namespace GTE.WindowsForms
             this.lblUsuario.Size = new System.Drawing.Size(59, 21);
             this.lblUsuario.TabIndex = 0;
             this.lblUsuario.Text = "Usuario";
-            // 
-            // txtUsuario
-            // 
             this.txtUsuario.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtUsuario.Location = new System.Drawing.Point(210, 320);
             this.txtUsuario.Name = "txtUsuario";
             this.txtUsuario.Size = new System.Drawing.Size(140, 30);
             this.txtUsuario.TabIndex = 6;
-            // 
-            // lblContrasena
-            // 
             this.lblContrasena.AutoSize = true;
             this.lblContrasena.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblContrasena.Location = new System.Drawing.Point(30, 365);
@@ -162,18 +120,12 @@ namespace GTE.WindowsForms
             this.lblContrasena.Size = new System.Drawing.Size(83, 21);
             this.lblContrasena.TabIndex = 0;
             this.lblContrasena.Text = "Contraseña";
-            // 
-            // txtContrasena
-            // 
             this.txtContrasena.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtContrasena.Location = new System.Drawing.Point(30, 390);
             this.txtContrasena.Name = "txtContrasena";
             this.txtContrasena.Size = new System.Drawing.Size(320, 30);
             this.txtContrasena.TabIndex = 7;
             this.txtContrasena.UseSystemPasswordChar = true;
-            // 
-            // chkRestriccion
-            // 
             this.chkRestriccion.AutoSize = true;
             this.chkRestriccion.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.chkRestriccion.Location = new System.Drawing.Point(30, 440);
@@ -182,31 +134,24 @@ namespace GTE.WindowsForms
             this.chkRestriccion.TabIndex = 8;
             this.chkRestriccion.Text = "Tiene restricción legal para retirar";
             this.chkRestriccion.UseVisualStyleBackColor = true;
-            // 
-            // btnGuardar
-            // 
             this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnGuardar.Location = new System.Drawing.Point(30, 490);
+            this.btnGuardar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnGuardar.Location = new System.Drawing.Point(68, 506);
             this.btnGuardar.Name = "btnGuardar";
-            this.btnGuardar.Size = new System.Drawing.Size(150, 40);
+            this.btnGuardar.Size = new System.Drawing.Size(140, 36);
             this.btnGuardar.TabIndex = 9;
             this.btnGuardar.Text = "Guardar";
             this.btnGuardar.UseVisualStyleBackColor = true;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
-            // 
-            // btnCancelar
-            // 
             this.btnCancelar.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnCancelar.Location = new System.Drawing.Point(200, 490);
+            this.btnCancelar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancelar.Location = new System.Drawing.Point(220, 506);
             this.btnCancelar.Name = "btnCancelar";
-            this.btnCancelar.Size = new System.Drawing.Size(150, 40);
+            this.btnCancelar.Size = new System.Drawing.Size(140, 36);
             this.btnCancelar.TabIndex = 10;
             this.btnCancelar.Text = "Cancelar";
             this.btnCancelar.UseVisualStyleBackColor = true;
             this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
-            // 
-            // TutorDetalleForm
-            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(380, 560);

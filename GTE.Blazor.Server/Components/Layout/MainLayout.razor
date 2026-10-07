@@ -11,7 +11,8 @@
         <div class="top-row px-4 auth">
             <AuthorizeView>
                 <Authorized>
-                    <span class="me-3">Hola, @context.User.Identity?.Name!</span>
+
+                    <span class="me-3">Hola, @NombreParaSaludar(context)!</span>
                     <button class="btn btn-outline-danger btn-sm" @onclick="CerrarSesion">Cerrar Sesión</button>
                 </Authorized>
                 <NotAuthorized>
@@ -27,13 +28,16 @@
 </div>
 
 @code {
+    private static string? NombreParaSaludar(Microsoft.AspNetCore.Components.Authorization.AuthenticationState estado)
+    {
+        string? nombreCompleto = estado.User.FindFirst("NombreCompleto")?.Value;
+        return string.IsNullOrWhiteSpace(nombreCompleto) ? estado.User.Identity?.Name : nombreCompleto;
+    }
+
     private async Task CerrarSesion()
     {
         await AuthService.LogoutAsync();
 
-        // Navegación dentro del circuito: recargar la página entera mientras el
-        // usuario no autorizado también redirige dejaba la aplicación en un
-        // estado inconsistente y el siguiente login no funcionaba.
         Nav.NavigateTo("/login");
     }
 }

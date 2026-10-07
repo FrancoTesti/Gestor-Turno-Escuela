@@ -30,7 +30,8 @@ namespace GTE.Blazor.Server.Auth
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, _username ?? string.Empty),
-                new Claim(ClaimTypes.Role, _role ?? string.Empty)
+                new Claim(ClaimTypes.Role, _role ?? string.Empty),
+                new Claim("NombreCompleto", _nombreCompleto ?? string.Empty)
             };
 
             var user = new ClaimsPrincipal(new ClaimsIdentity(claims, "jwt"));
@@ -40,7 +41,7 @@ namespace GTE.Blazor.Server.Auth
         public async Task<bool> LoginAsync(string username, string password)
         {
             var result = await _authApiClient.LoginAsync(new LoginRequest { NombreUsuario = username, Contrasena = password });
-            
+
             if (result != null && !string.IsNullOrEmpty(result.Token))
             {
                 _token = result.Token;

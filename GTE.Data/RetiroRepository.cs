@@ -55,7 +55,6 @@ namespace GTE.Data
             existing.FechaHora = retiro.FechaHora;
             existing.Observaciones = retiro.Observaciones;
 
-            // Eliminar detalles ausentes en el nuevo objeto
             var detallesAEliminar = existing.Detalles
                 .Where(d => !retiro.Detalles.Any(nd => nd.IdDetalleRetiro != 0 && nd.IdDetalleRetiro == d.IdDetalleRetiro))
                 .ToList();
@@ -65,7 +64,6 @@ namespace GTE.Data
                 _context.DetalleRetiros.Remove(det);
             }
 
-            // Actualizar o agregar detalles
             foreach (var det in retiro.Detalles)
             {
                 var existenteDet = existing.Detalles.FirstOrDefault(d => d.IdDetalleRetiro != 0 && d.IdDetalleRetiro == det.IdDetalleRetiro);

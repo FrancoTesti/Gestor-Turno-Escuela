@@ -21,9 +21,6 @@ namespace GTE.WindowsForms
             this.dgvDatos = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDatos)).BeginInit();
             this.SuspendLayout();
-            // 
-            // lblTitle
-            // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblTitle.Location = new System.Drawing.Point(20, 15);
@@ -31,9 +28,6 @@ namespace GTE.WindowsForms
             this.lblTitle.Size = new System.Drawing.Size(430, 37);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Alumnos por Curso y Turno";
-            // 
-            // pnlGrafico
-            // 
             this.pnlGrafico.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlGrafico.BackColor = System.Drawing.Color.White;
@@ -43,9 +37,6 @@ namespace GTE.WindowsForms
             this.pnlGrafico.Size = new System.Drawing.Size(860, 280);
             this.pnlGrafico.TabIndex = 1;
             this.pnlGrafico.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlGrafico_Paint);
-            // 
-            // lblTotal
-            // 
             this.lblTotal.AutoSize = true;
             this.lblTotal.Font = new System.Drawing.Font("Segoe UI Semibold", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblTotal.Location = new System.Drawing.Point(20, 355);
@@ -53,9 +44,6 @@ namespace GTE.WindowsForms
             this.lblTotal.Size = new System.Drawing.Size(140, 24);
             this.lblTotal.TabIndex = 2;
             this.lblTotal.Text = "Total de alumnos: -";
-            // 
-            // dgvDatos
-            // 
             this.dgvDatos.AllowUserToAddRows = false;
             this.dgvDatos.AllowUserToDeleteRows = false;
             this.dgvDatos.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -68,9 +56,6 @@ namespace GTE.WindowsForms
             this.dgvDatos.RowHeadersWidth = 51;
             this.dgvDatos.Size = new System.Drawing.Size(860, 210);
             this.dgvDatos.TabIndex = 3;
-            // 
-            // ReporteAlumnosPorCursoForm
-            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(900, 620);

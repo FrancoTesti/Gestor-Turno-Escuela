@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
@@ -11,11 +11,15 @@ namespace GTE.WindowsForms
     public partial class AlumnoListaForm : Form
     {
         private readonly AlumnoApiClient _apiClient = new AlumnoApiClient();
+        private readonly CursoEscolarApiClient _cursosClient = new CursoEscolarApiClient();
+
+        private List<AlumnoDTO> _alumnos = new();
 
         public AlumnoListaForm()
         {
             InitializeComponent();
             ApplyStyles();
+            Tema.AcomodarControles(this);
         }
 
         private void ApplyStyles()
@@ -32,17 +36,54 @@ namespace GTE.WindowsForms
             Tema.Grilla(dgvAlumnos);
         }
 
+        private async Task CargarOpcionesDeFiltro()
+        {
+            var cursos = await _cursosClient.GetAllAsync();
+
+            void Cargar(ComboBox combo, IEnumerable<string> opciones, string todos)
+            {
+                combo.Items.Clear();
+                combo.Items.Add(todos);
+                foreach (var opcion in opciones.Distinct().OrderBy(o => o))
+                    combo.Items.Add(opcion);
+                combo.SelectedIndex = 0;
+            }
+
+            Cargar(cmbFiltroGrado, cursos.Select(c => c.Grado), "Todos");
+            Cargar(cmbFiltroDivision, cursos.Select(c => c.Curso), "Todas");
+            Cargar(cmbFiltroTurno, cursos.Select(c => c.Turno), "Todos");
+
+            cmbFiltroEstado.Items.Clear();
+            cmbFiltroEstado.Items.Add("Todos");
+            cmbFiltroEstado.Items.Add("Presente");
+            cmbFiltroEstado.Items.Add("Retirado");
+            cmbFiltroEstado.Items.Add("Ausente");
+            cmbFiltroEstado.SelectedIndex = 0;
+        }
+
+        private static string? Elegido(ComboBox combo) =>
+            combo.SelectedIndex <= 0 ? null : combo.SelectedItem?.ToString();
+
         private async void AlumnoListaForm_Load(object sender, EventArgs e)
         {
             await AplicarPermisosSegunRol();
+            await CargarOpcionesDeFiltro();
             await RefreshGrid();
         }
 
-        /// <summary>
-        /// Oculta las acciones que el rol del usuario no puede realizar.
-        /// La restricción real la aplica la API; esto evita ofrecer botones
-        /// que terminarían en un error de permisos.
-        /// </summary>
+        private void MostrarAlumnos()
+        {
+            string? turno = Elegido(cmbFiltroTurno);
+
+            var visibles = string.IsNullOrEmpty(turno)
+                ? _alumnos
+                : _alumnos.Where(a => string.Equals(a.Turno, turno, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            dgvAlumnos.DataSource = null;
+            dgvAlumnos.DataSource = visibles;
+            ConfigureColumns();
+        }
+
         private async Task AplicarPermisosSegunRol()
         {
             string? rol = await AuthServiceProvider.Instance.GetRoleAsync();
@@ -57,9 +98,8 @@ namespace GTE.WindowsForms
         {
             try
             {
-                var alumnos = await _apiClient.GetAllAsync();
-                dgvAlumnos.DataSource = alumnos;
-                ConfigureColumns();
+                _alumnos = await _apiClient.GetAllAsync();
+                MostrarAlumnos();
             }
             catch (Exception ex)
             {
@@ -95,10 +135,16 @@ namespace GTE.WindowsForms
             string term = txtSearch.Text.Trim();
             try
             {
-                var criteria = new AlumnoCriteriaDTO { Nombre = term };
-                var filtrados = await _apiClient.GetByCriteriaAsync(criteria);
-                dgvAlumnos.DataSource = filtrados;
-                ConfigureColumns();
+                var criteria = new AlumnoCriteriaDTO
+                {
+                    Nombre = string.IsNullOrWhiteSpace(term) ? null : term,
+                    Grado = Elegido(cmbFiltroGrado),
+                    Curso = Elegido(cmbFiltroDivision),
+                    Estado = Elegido(cmbFiltroEstado)
+                };
+
+                _alumnos = await _apiClient.GetByCriteriaAsync(criteria);
+                MostrarAlumnos();
             }
             catch (Exception ex)
             {

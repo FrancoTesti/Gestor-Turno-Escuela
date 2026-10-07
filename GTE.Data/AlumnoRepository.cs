@@ -59,8 +59,6 @@ namespace GTE.Data
 
         public async Task<IEnumerable<Alumno>> GetByCriteriaAsync(AlumnoCriteria criteria)
         {
-            // Esta búsqueda usa ADO.NET deliberadamente. El resto del acceso a
-            // datos permanece implementado con Entity Framework Core.
             const string sql = @"
                 SELECT a.IdAlumno, a.Nombre, a.Apellido, a.IdCurso, a.Estado,
                        c.Grado, c.Curso, c.Turno, c.HorarioSalida

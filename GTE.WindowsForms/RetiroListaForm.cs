@@ -18,6 +18,7 @@ namespace GTE.WindowsForms
         {
             InitializeComponent();
             ApplyStyles();
+            Tema.AcomodarControles(this);
         }
 
         private void ApplyStyles()
@@ -47,11 +48,7 @@ namespace GTE.WindowsForms
             btnEliminar.FlatStyle = FlatStyle.Flat;
             btnEliminar.FlatAppearance.BorderSize = 0;
 
-            dgvRetiros.BackgroundColor = Color.White;
-            dgvRetiros.BorderStyle = BorderStyle.None;
-            dgvRetiros.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvRetiros.MultiSelect = false;
-            dgvRetiros.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(241, 243, 245);
+            Tema.Grilla(dgvRetiros);
         }
 
         private async void RetiroListaForm_Load(object sender, EventArgs e)

@@ -17,7 +17,6 @@ namespace GTE.Clients
         {
         }
 
-        /// <summary>Cantidad de alumnos por curso escolar, agrupados por turno.</summary>
         public async Task<List<AlumnosPorCursoDTO>> GetAlumnosPorCursoAsync()
         {
             await EnsureAuthenticatedAsync();
@@ -35,7 +34,6 @@ namespace GTE.Clients
             throw new Exception("Error al obtener el reporte de alumnos por curso.");
         }
 
-        /// <summary>Retiros de un periodo. Las dos fechas son opcionales.</summary>
         public async Task<List<RetiroDTO>> GetRetirosAsync(DateTime? desde, DateTime? hasta)
         {
             await EnsureAuthenticatedAsync();

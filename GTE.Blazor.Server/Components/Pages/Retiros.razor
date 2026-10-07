@@ -41,8 +41,8 @@ else if (RetirosFiltrados.Count == 0)
 }
 else
 {
-    <div class="table-responsive shadow-sm rounded">
-        <table class="table table-striped table-hover align-middle mb-0">
+    <div class="table-responsive">
+        <table class="table table-striped align-middle mb-0">
             <thead class="table-dark">
                 <tr>
                     <th>ID</th>
@@ -51,7 +51,7 @@ else
                     <th>Personal (Entrega)</th>
                     <th>Alumnos Retirados</th>
                     <th>Observaciones</th>
-                    <th class="text-center" style="width: 160px;">Acciones</th>
+                    <th class="text-center" style="width: 180px;">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -74,11 +74,11 @@ else
                             </ul>
                         </td>
                         <td><small>@r.Observaciones</small></td>
-                        <td class="text-center">
-                            <button class="btn btn-outline-warning btn-sm me-1" @onclick="() => AbrirModalEditar(r)" title="Editar">
+                        <td class="text-center text-nowrap">
+                            <button class="btn btn-sm btn-outline-warning me-1" @onclick="() => AbrirModalEditar(r)" title="Editar">
                                 Editar
                             </button>
-                            <button class="btn btn-outline-danger btn-sm" @onclick="() => EliminarRetiro(r.IdRetiro)" title="Eliminar">
+                            <button class="btn btn-sm btn-outline-danger" @onclick="() => EliminarRetiro(r.IdRetiro)" title="Eliminar">
                                 Borrar
                             </button>
                         </td>
@@ -188,8 +188,8 @@ else
                                 else
                                 {
                                     <div class="table-responsive">
-                                        <table class="table table-bordered table-sm align-middle">
-                                            <thead class="table-light">
+                            <table class="table table-striped align-middle">
+                                <thead class="table-dark">
                                                 <tr>
                                                     <th>Alumno</th>
                                                     <th style="width: 150px;">Hora de Salida</th>
@@ -407,7 +407,6 @@ else
             IdAlumno = alumno.IdAlumno,
             AlumnoNombreCompleto = $"{alumno.Nombre} {alumno.Apellido}",
             HoraSalida = DateTime.Now.TimeOfDay,
-            // Se muestra el estado que el alumno tenia antes del retiro.
             Estado = alumno.Estado
         });
 

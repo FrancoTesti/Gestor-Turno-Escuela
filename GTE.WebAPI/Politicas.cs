@@ -2,39 +2,30 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace GTE.WebAPI;
 
-/// <summary>
-/// Nombres de las políticas de autorización que usa la API para separar
-/// las funcionalidades de cada tipo de usuario.
-/// </summary>
 public static class Politicas
 {
-    /// <summary>Rol del secretario, que administra el sistema.</summary>
     public const string RolSecretario = "Secretario";
 
-    /// <summary>Rol del portero, que atiende la puerta.</summary>
     public const string RolPortero = "Portero";
 
-    /// <summary>Rol del tutor, que consulta información de sus alumnos.</summary>
     public const string RolTutor = "Tutor";
 
-    /// <summary>Solo el Secretario puede administrar alumnos, cursos y retiros.</summary>
     public const string SoloSecretario = "SoloSecretario";
 
-    /// <summary>Pueden consultar alumnos el Secretario y el Portero.</summary>
     public const string LecturaAlumnos = "LecturaAlumnos";
 
-    /// <summary>Pueden consultar cursos los tres tipos de usuario.</summary>
     public const string LecturaCursos = "LecturaCursos";
 
-    /// <summary>Pueden operar los retiros el Secretario y el Portero.</summary>
     public const string GestionRetiros = "GestionRetiros";
 
-    /// <summary>Solo el Tutor, para sus propias pantallas.</summary>
+    public const string GestionSalidas = "GestionSalidas";
+
     public const string SoloTutor = "SoloTutor";
 
-    /// <summary>
-    /// Registra las políticas de autorización de la aplicación.
-    /// </summary>
+    public const string ReporteDeAlumnos = "ReporteDeAlumnos";
+
+    public const string ReporteDeRetiros = "ReporteDeRetiros";
+
     public static IServiceCollection AddPoliticasDeAutorizacion(this IServiceCollection services)
     {
         services.AddAuthorization(options =>
@@ -51,8 +42,17 @@ public static class Politicas
             options.AddPolicy(GestionRetiros, politica =>
                 politica.RequireRole(RolSecretario, RolPortero));
 
+            options.AddPolicy(GestionSalidas, politica =>
+                politica.RequireRole(RolSecretario, RolPortero));
+
             options.AddPolicy(SoloTutor, politica =>
                 politica.RequireRole(RolTutor));
+
+            options.AddPolicy(ReporteDeAlumnos, politica =>
+                politica.RequireRole(RolSecretario));
+
+            options.AddPolicy(ReporteDeRetiros, politica =>
+                politica.RequireRole(RolSecretario, RolPortero));
         });
 
         return services;

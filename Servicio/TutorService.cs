@@ -42,9 +42,6 @@ namespace GTE.Application.Services
             if (await _usuarioRepository.NombreUsuarioExisteAsync(dto.NombreUsuario))
                 throw new ArgumentException("Ese nombre de usuario ya está en uso. Ingrese otro.");
 
-            // Las dos entidades se construyen antes de guardar nada, asi las
-            // validaciones del dominio corren antes de escribir en la base y no
-            // queda un usuario suelto si el tutor no es valido.
             var usuario = new Usuario(dto.NombreUsuario, dto.Contrasena);
             var tutor = new Tutor(dto.Nombre, dto.Apellido, dto.Dni, dto.Parentesco, dto.Telefono, usuario);
             tutor.SetTieneRestriccion(dto.TieneRestriccion);
@@ -82,18 +79,12 @@ namespace GTE.Application.Services
 
             bool eliminado = await _tutorRepository.DeleteAsync(id);
 
-            // El usuario del tutor se elimina tambien: si quedara, ocuparia el
-            // nombre de usuario y no podria reutilizarse.
             if (eliminado && tutor.Usuario is not null)
                 await _usuarioRepository.DeleteAsync(tutor.Usuario.IdUsuario);
 
             return eliminado;
         }
 
-        /// <summary>
-        /// La contraseña no se devuelve en las consultas; solo se usa al crear
-        /// o modificar.
-        /// </summary>
         private static TutorDTO MapToDTO(Tutor tutor) => new()
         {
             IdTutor = tutor.IdTutor,

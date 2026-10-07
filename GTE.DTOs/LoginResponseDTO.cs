@@ -11,7 +11,6 @@ namespace GTE.DTOs
         public string? Rol { get; set; }
         public string? NombreCompleto { get; set; }
 
-        // Propiedades para JWT
         public string? Token { get; set; }
         public DateTime? ExpiresAt { get; set; }
     }

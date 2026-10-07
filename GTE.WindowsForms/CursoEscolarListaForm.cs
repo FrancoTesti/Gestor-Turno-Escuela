@@ -16,6 +16,7 @@ namespace GTE.WindowsForms
         {
             InitializeComponent();
             ApplyStyles();
+            Tema.AcomodarControles(this);
         }
 
         private void ApplyStyles()
@@ -39,11 +40,7 @@ namespace GTE.WindowsForms
             btnEliminar.FlatStyle = FlatStyle.Flat;
             btnEliminar.FlatAppearance.BorderSize = 0;
 
-            dgvCursos.BackgroundColor = Color.White;
-            dgvCursos.BorderStyle = BorderStyle.None;
-            dgvCursos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvCursos.MultiSelect = false;
-            dgvCursos.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(241, 243, 245);
+            Tema.Grilla(dgvCursos);
         }
 
         private async void CursoEscolarListaForm_Load(object sender, EventArgs e)
@@ -52,11 +49,6 @@ namespace GTE.WindowsForms
             await RefreshGrid();
         }
 
-        /// <summary>
-        /// Oculta las acciones que el rol del usuario no puede realizar.
-        /// La restricción real la aplica la API; esto evita ofrecer botones
-        /// que terminarían en un error de permisos.
-        /// </summary>
         private async Task AplicarPermisosSegunRol()
         {
             string? rol = await AuthServiceProvider.Instance.GetRoleAsync();

@@ -18,6 +18,7 @@ namespace GTE.WindowsForms
             InitializeComponent();
             _isEditMode = false;
             ApplyStyles();
+            Tema.AcomodarControles(this);
         }
 
         public TutorDetalleForm(TutorDTO tutor) : this()
@@ -73,8 +74,6 @@ namespace GTE.WindowsForms
             txtUsuario.Text = _tutorExistente.NombreUsuario;
             chkRestriccion.Checked = _tutorExistente.TieneRestriccion;
 
-            // El usuario y la contraseña se definen al crear el tutor; la
-            // modificación solo cambia los datos del tutor.
             txtUsuario.Enabled = false;
             txtContrasena.Enabled = false;
             txtContrasena.PlaceholderText = "No se modifica desde acá";
@@ -162,7 +161,6 @@ namespace GTE.WindowsForms
             }
             catch (Exception ex)
             {
-                // La API devuelve acá los errores de negocio, como el DNI repetido.
                 Avisar(ex.Message, MessageBoxIcon.Error);
             }
         }

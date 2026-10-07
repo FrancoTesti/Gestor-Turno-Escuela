@@ -11,7 +11,7 @@ namespace GTE.Clients
         public async Task<LoginResponse?> LoginAsync(LoginRequest request)
         {
             using var client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:5117/");
+            client.BaseAddress = ApiConfig.Uri;
 
             try
             {
@@ -23,9 +23,6 @@ namespace GTE.Clients
             }
             catch (HttpRequestException ex)
             {
-                // No hubo respuesta de la API. Antes esto se devolvía como null y
-                // las pantallas mostraban "usuario o contraseña incorrectos", que
-                // no tiene nada que ver: el problema es que la API no está corriendo.
                 throw new ApiNoDisponibleException(
                     "No se pudo conectar con la API. Verificá que el proyecto GTE.WebAPI esté en ejecución.", ex);
             }
@@ -35,7 +32,6 @@ namespace GTE.Clients
                     "La API no respondió a tiempo. Verificá que el proyecto GTE.WebAPI esté en ejecución.", ex);
             }
 
-            // La API contestó, pero rechazó el usuario o la contraseña.
             return null;
         }
     }
