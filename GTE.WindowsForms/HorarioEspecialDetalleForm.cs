@@ -45,14 +45,21 @@ namespace GTE.WindowsForms
             this.dtpHora.Format = DateTimePickerFormat.Time;
             this.dtpHora.ShowUpDown = true;
 
-            this.btnGuardar.Location = new Point(120, 150);
+            this.btnGuardar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            this.btnGuardar.Location = new Point(38, 146);
+            this.btnGuardar.Size = new Size(140, 36);
             this.btnGuardar.Text = "Guardar";
             this.btnGuardar.Click += new EventHandler(this.btnGuardar_Click);
 
-            this.btnCancelar.Location = new Point(220, 150);
+            this.btnCancelar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            this.btnCancelar.Location = new Point(190, 146);
+            this.btnCancelar.Size = new Size(140, 36);
             this.btnCancelar.Text = "Cancelar";
             this.btnCancelar.Click += new EventHandler(this.btnCancelar_Click);
 
+            // Las mismas medidas de referencia que las demás pantallas.
+            this.AutoScaleDimensions = new SizeF(8F, 20F);
+            this.AutoScaleMode = AutoScaleMode.Font;
             this.ClientSize = new Size(350, 200);
             this.Controls.Add(lblAlumno);
             this.Controls.Add(cmbAlumno);
@@ -76,6 +83,7 @@ namespace GTE.WindowsForms
         {
             InitializeComponent();
             _dto = new HorarioEspecialDTO();
+            Tema.AcomodarControles(this);
         }
 
         public HorarioEspecialDetalleForm(HorarioEspecialDTO dto) : this()

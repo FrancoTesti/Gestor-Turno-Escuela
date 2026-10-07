@@ -26,6 +26,7 @@ namespace GTE.WindowsForms
             InitializeComponent();
             _isEditMode = false;
             ApplyStyles();
+            Tema.AcomodarControles(this);
         }
 
         public RetiroDetalleForm(RetiroDTO retiro) : this()

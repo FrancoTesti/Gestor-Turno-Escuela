@@ -117,7 +117,6 @@ namespace GTE.WindowsForms
             // La pantalla de la puerta se abre en el navegador, como en la web.
             btnCartelera.Visible = role == "Secretario" || role == "Portero";
 
-            MostrarInicio();
         }
 
         protected override void OnShown(EventArgs e)
@@ -129,6 +128,10 @@ namespace GTE.WindowsForms
             // quedaron para el rol que entró.
             AcomodarSecciones();
             AcomodarMenu();
+
+            // El inicio se arma recién acá: las tarjetas se filtran por los botones
+            // visibles, y eso no se puede saber antes de mostrar la ventana.
+            MostrarInicio();
         }
 
         /// <summary>
@@ -217,44 +220,56 @@ namespace GTE.WindowsForms
         {
             HighlightButton(btnInicio);
 
-            var secciones = new List<AccesoDirecto>();
+            var diaADia = new List<AccesoDirecto>();
+            var administracion = new List<AccesoDirecto>();
+            var reportes = new List<AccesoDirecto>();
 
-            void Agregar(Button boton, string titulo, string descripcion, Func<Form> pantalla)
+            void Agregar(List<AccesoDirecto> grupo, Button boton, string titulo, string descripcion, Func<Form> pantalla)
             {
                 if (boton.Visible)
-                    secciones.Add(new AccesoDirecto(titulo, descripcion, () => Abrir(boton, pantalla)));
+                    grupo.Add(new AccesoDirecto(titulo, descripcion, () => Abrir(boton, pantalla)));
             }
 
-            Agregar(btnAlumnos, "Alumnos",
-                "Consultá el listado, buscá por curso o turno y administrá los legajos.",
-                () => new AlumnoListaForm());
-            Agregar(btnRetiros, "Retiros",
-                "Registrá la entrega de alumnos a un tutor autorizado.",
-                () => new RetiroListaForm());
-            Agregar(btnSalidas, "Salidas de curso",
+            // Mismo orden y mismos grupos que el menú de la izquierda.
+            Agregar(diaADia, btnSalidas, "Salidas de curso",
                 "Marcá qué curso está saliendo. La pantalla de la puerta lo muestra al instante.",
                 () => new SalidaDeCursoForm());
-            Agregar(btnOtros, "Horarios especiales",
+            Agregar(diaADia, btnRetiros, "Retiros",
+                "Registrá la entrega de alumnos a un tutor autorizado.",
+                () => new RetiroListaForm());
+            Agregar(diaADia, btnAlumnos, "Alumnos",
+                "Consultá el listado, buscá por curso o turno y administrá los legajos.",
+                () => new AlumnoListaForm());
+            Agregar(diaADia, btnOtros, "Horarios especiales",
                 "Cargá las salidas a una hora distinta por una actividad puntual.",
                 () => new HorarioEspecialListaForm());
-            Agregar(btnTutores, "Tutores",
-                "Datos de contacto de los adultos autorizados a retirar.",
-                () => new TutorListaForm());
-            Agregar(btnAutorizaciones, "Autorizaciones",
-                "Definí qué tutor puede retirar a cada alumno.",
-                () => new AutorizacionListaForm());
-            Agregar(btnCursos, "Cursos",
-                "Grados, divisiones, turnos y horario de salida de cada curso.",
-                () => new CursoEscolarListaForm());
-            Agregar(btnMisAlumnos, "Mis alumnos",
+            Agregar(diaADia, btnMisAlumnos, "Mis alumnos",
                 "Los alumnos a tu cargo, con su curso, horario de salida y estado.",
                 () => new MisAlumnosForm());
-            Agregar(btnReporteAlumnos, "Reporte de alumnos",
+
+            Agregar(administracion, btnCursos, "Cursos",
+                "Grados, divisiones, turnos y horario de salida de cada curso.",
+                () => new CursoEscolarListaForm());
+            Agregar(administracion, btnTutores, "Tutores",
+                "Datos de contacto de los adultos autorizados a retirar.",
+                () => new TutorListaForm());
+            Agregar(administracion, btnAutorizaciones, "Autorizaciones",
+                "Definí qué tutor puede retirar a cada alumno.",
+                () => new AutorizacionListaForm());
+
+            Agregar(reportes, btnReporteAlumnos, "Reporte de alumnos",
                 "Cantidad de alumnos por curso y turno, con gráfico.",
                 () => new ReporteAlumnosPorCursoForm());
-            Agregar(btnReporteRetiros, "Reporte de retiros",
+            Agregar(reportes, btnReporteRetiros, "Reporte de retiros",
                 "Retiros de un período, con el detalle de los alumnos.",
                 () => new ReporteRetirosForm());
+
+            var secciones = new List<SeccionDelInicio>
+            {
+                new("Día a día", diaADia),
+                new("Administración", administracion),
+                new("Reportes", reportes)
+            };
 
             ShowChildForm(new HomeForm(nombreMostrado, rolMostrado, secciones));
         }

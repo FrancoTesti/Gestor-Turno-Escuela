@@ -21,6 +21,7 @@ namespace GTE.WindowsForms
             InitializeComponent();
             _isEditMode = false;
             ApplyStyles();
+            Tema.AcomodarControles(this);
         }
 
         public AlumnoDetalleForm(AlumnoDTO alumno) : this()

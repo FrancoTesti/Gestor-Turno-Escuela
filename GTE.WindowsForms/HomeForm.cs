@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace GTE.WindowsForms
@@ -20,9 +21,22 @@ namespace GTE.WindowsForms
         public Action Abrir { get; }
     }
 
+    /// <summary>Grupo de pantallas del inicio, con el mismo título que el menú.</summary>
+    public sealed class SeccionDelInicio
+    {
+        public SeccionDelInicio(string titulo, IEnumerable<AccesoDirecto> accesos)
+        {
+            Titulo = titulo;
+            Accesos = accesos.ToList();
+        }
+
+        public string Titulo { get; }
+        public IReadOnlyList<AccesoDirecto> Accesos { get; }
+    }
+
     /// <summary>
     /// Pantalla de inicio del escritorio: saluda al usuario y le muestra una
-    /// tarjeta por cada sección que tiene habilitada, igual que la web.
+    /// tarjeta por cada sección que tiene habilitada, agrupadas igual que en la web.
     /// </summary>
     public class HomeForm : Form
     {
@@ -31,7 +45,7 @@ namespace GTE.WindowsForms
 
         private readonly FlowLayoutPanel pnlTarjetas = new FlowLayoutPanel();
 
-        public HomeForm(string? nombre, string? rol, IEnumerable<AccesoDirecto> secciones)
+        public HomeForm(string? nombre, string? rol, IEnumerable<SeccionDelInicio> secciones)
         {
             Tema.Ventana(this);
             ClientSize = new Size(780, 530);
@@ -59,12 +73,35 @@ namespace GTE.WindowsForms
             pnlTarjetas.WrapContents = true;
             pnlTarjetas.AutoScroll = true;
 
-            foreach (AccesoDirecto seccion in secciones)
-                pnlTarjetas.Controls.Add(CrearTarjeta(seccion));
+            foreach (var seccion in secciones.Where(seccion => seccion.Accesos.Count > 0))
+            {
+                pnlTarjetas.Controls.Add(CrearTituloDeSeccion(seccion.Titulo));
+
+                foreach (var acceso in seccion.Accesos)
+                    pnlTarjetas.Controls.Add(CrearTarjeta(acceso));
+            }
 
             Controls.Add(lblSaludo);
             Controls.Add(lblDetalle);
             Controls.Add(pnlTarjetas);
+        }
+
+        /// <summary>
+        /// El título ocupa todo el ancho, así el grupo arranca en una fila nueva y
+        /// las tarjetas quedan separadas de la sección anterior.
+        /// </summary>
+        private Control CrearTituloDeSeccion(string titulo)
+        {
+            return new Label
+            {
+                Text = titulo.ToUpperInvariant(),
+                AutoSize = false,
+                Size = new Size(pnlTarjetas.ClientSize.Width - 6, 26),
+                Margin = new Padding(0, 12, 0, 8),
+                Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold),
+                ForeColor = Tema.TextoSuave,
+                TextAlign = ContentAlignment.BottomLeft
+            };
         }
 
         /// <summary>

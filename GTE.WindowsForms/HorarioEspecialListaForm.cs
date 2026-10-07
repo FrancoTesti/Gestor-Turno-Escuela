@@ -35,25 +35,25 @@ namespace GTE.WindowsForms
             
             // btnNuevo
             this.btnNuevo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            this.btnNuevo.Location = new Point(475, 50);
+            this.btnNuevo.Location = new Point(430, 50);
             this.btnNuevo.Name = "btnNuevo";
-            this.btnNuevo.Size = new Size(100, 30);
+            this.btnNuevo.Size = new Size(110, 36);
             this.btnNuevo.Text = "Nuevo";
             this.btnNuevo.Click += new EventHandler(this.btnNuevo_Click);
             
             // btnEditar
             this.btnEditar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            this.btnEditar.Location = new Point(581, 50);
+            this.btnEditar.Location = new Point(550, 50);
             this.btnEditar.Name = "btnEditar";
-            this.btnEditar.Size = new Size(100, 30);
+            this.btnEditar.Size = new Size(110, 36);
             this.btnEditar.Text = "Editar";
             this.btnEditar.Click += new EventHandler(this.btnEditar_Click);
             
             // btnEliminar
             this.btnEliminar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            this.btnEliminar.Location = new Point(687, 50);
+            this.btnEliminar.Location = new Point(670, 50);
             this.btnEliminar.Name = "btnEliminar";
-            this.btnEliminar.Size = new Size(100, 30);
+            this.btnEliminar.Size = new Size(110, 36);
             this.btnEliminar.Text = "Eliminar";
             this.btnEliminar.Click += new EventHandler(this.btnEliminar_Click);
             
@@ -66,6 +66,10 @@ namespace GTE.WindowsForms
             this.dgvHorarios.Size = new Size(766, 340);
             
             // Form
+            // Las mismas medidas de referencia que las demás pantallas, así el
+            // sistema las escala igual en monitores con otra resolución.
+            this.AutoScaleDimensions = new SizeF(8F, 20F);
+            this.AutoScaleMode = AutoScaleMode.Font;
             this.ClientSize = new Size(800, 450);
             this.Controls.Add(this.dgvHorarios);
             this.Controls.Add(this.btnEliminar);
@@ -86,6 +90,7 @@ namespace GTE.WindowsForms
         {
             InitializeComponent();
             ApplyStyles();
+            Tema.AcomodarControles(this);
         }
 
         private void ApplyStyles()

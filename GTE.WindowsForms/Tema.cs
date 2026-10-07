@@ -20,6 +20,12 @@ namespace GTE.WindowsForms
         public static readonly Color Gris = Color.FromArgb(108, 117, 125);
         public static readonly Color Barra = Color.FromArgb(33, 37, 41);
 
+        /// <summary>Alto que comparten todos los botones de las pantallas.</summary>
+        public const int AltoDeBoton = 36;
+
+        /// <summary>Tamaño de letra que comparten los casilleros y los desplegables.</summary>
+        private const float TamanioDeEntrada = 11F;
+
         /// <summary>Fondo y tipografía base de una ventana.</summary>
         public static void Ventana(Form formulario)
         {
@@ -44,7 +50,7 @@ namespace GTE.WindowsForms
             campo.BackColor = Superficie;
             campo.ForeColor = Texto;
             campo.BorderStyle = BorderStyle.FixedSingle;
-            campo.Font = new Font("Segoe UI", 10F);
+            campo.Font = new Font("Segoe UI", TamanioDeEntrada);
         }
 
         public static void Entrada(ComboBox combo)
@@ -52,10 +58,15 @@ namespace GTE.WindowsForms
             combo.BackColor = Superficie;
             combo.ForeColor = Texto;
             combo.FlatStyle = FlatStyle.Flat;
-            combo.Font = new Font("Segoe UI", 10F);
+            combo.Font = new Font("Segoe UI", TamanioDeEntrada);
 
             if (combo.DropDownStyle != ComboBoxStyle.Simple)
                 combo.DropDownStyle = ComboBoxStyle.DropDownList;
+        }
+
+        public static void Entrada(DateTimePicker fecha)
+        {
+            fecha.Font = new Font("Segoe UI", TamanioDeEntrada);
         }
 
         /// <summary>
@@ -102,8 +113,37 @@ namespace GTE.WindowsForms
             boton.Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold);
             boton.Cursor = Cursors.Hand;
 
-            if (boton.Height < 36)
-                boton.Height = 36;
+            boton.Height = AltoDeBoton;
+        }
+
+        /// <summary>
+        /// Deja todos los botones de una pantalla con el mismo alto y todos los
+        /// casilleros, desplegables y selectores de fecha con la misma letra, así
+        /// las pantallas se ven iguales entre sí.
+        /// </summary>
+        public static void AcomodarControles(Control contenedor)
+        {
+            foreach (Control control in contenedor.Controls)
+            {
+                switch (control)
+                {
+                    case Button boton:
+                        boton.Height = AltoDeBoton;
+                        break;
+                    case TextBox campo:
+                        Entrada(campo);
+                        break;
+                    case ComboBox combo:
+                        Entrada(combo);
+                        break;
+                    case DateTimePicker fecha:
+                        Entrada(fecha);
+                        break;
+                }
+
+                if (control.HasChildren)
+                    AcomodarControles(control);
+            }
         }
 
         public static void BotonPrimario(Button boton) => Boton(boton, Primario);
