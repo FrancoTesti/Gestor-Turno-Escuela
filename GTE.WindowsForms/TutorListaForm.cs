@@ -26,9 +26,12 @@ namespace GTE.WindowsForms
             ApplyStyles();
             Tema.AcomodarControles(this);
 
-            // Los filtros se aplican mientras se escribe o se cambia el curso.
+            // Los filtros se aplican mientras se escribe o se cambia alguno.
             txtFiltroNombre.TextChanged += (_, _) => AplicarFiltros();
-            cmbFiltroCurso.SelectedIndexChanged += (_, _) => AplicarFiltros();
+            cmbFiltroGrado.SelectedIndexChanged += (_, _) => AplicarFiltros();
+            cmbFiltroDivision.SelectedIndexChanged += (_, _) => AplicarFiltros();
+            cmbFiltroTurno.SelectedIndexChanged += (_, _) => AplicarFiltros();
+            cmbFiltroEstado.SelectedIndexChanged += (_, _) => AplicarFiltros();
         }
 
         private void ApplyStyles()
@@ -68,12 +71,19 @@ namespace GTE.WindowsForms
 
                 var cursos = await _cursosClient.GetAllAsync();
 
-                cmbFiltroCurso.Items.Clear();
-                cmbFiltroCurso.Items.Add(new OpcionDeCurso(null, "Todos los cursos"));
-                foreach (var curso in cursos)
-                    cmbFiltroCurso.Items.Add(new OpcionDeCurso(curso.IdCurso, $"{curso.Grado} {curso.Curso} ({curso.Turno})"));
+                void Cargar(ComboBox combo, IEnumerable<string> opciones, string todos)
+                {
+                    combo.Items.Clear();
+                    combo.Items.Add(todos);
+                    foreach (var opcion in opciones.Distinct().OrderBy(o => o))
+                        combo.Items.Add(opcion);
+                    combo.SelectedIndex = 0;
+                }
 
-                cmbFiltroCurso.SelectedIndex = 0;
+                Cargar(cmbFiltroGrado, cursos.Select(c => c.Grado), "Todos");
+                Cargar(cmbFiltroDivision, cursos.Select(c => c.Curso), "Todas");
+                Cargar(cmbFiltroTurno, cursos.Select(c => c.Turno), "Todos");
+                Cargar(cmbFiltroEstado, new[] { "Presente", "Retirado", "Ausente" }, "Todos");
             }
             catch (Exception ex)
             {
@@ -129,19 +139,29 @@ namespace GTE.WindowsForms
                     || t.Dni.Contains(texto, StringComparison.OrdinalIgnoreCase));
             }
 
-            if (cmbFiltroCurso.SelectedItem is OpcionDeCurso { IdCurso: int idCurso })
+            // Los filtros de grado, división, turno y estado son del alumno: se
+            // buscan los tutores que tienen autorizado algún alumno que los cumpla.
+            string? grado = Elegido(cmbFiltroGrado);
+            string? division = Elegido(cmbFiltroDivision);
+            string? turno = Elegido(cmbFiltroTurno);
+            string? estado = Elegido(cmbFiltroEstado);
+
+            if (grado != null || division != null || turno != null || estado != null)
             {
-                var alumnosDelCurso = _alumnos
-                    .Where(a => a.IdCurso == idCurso)
+                var alumnosQueCumplen = _alumnos
+                    .Where(a => (grado == null || a.Grado == grado)
+                        && (division == null || a.Curso == division)
+                        && (turno == null || a.Turno == turno)
+                        && (estado == null || a.Estado == estado))
                     .Select(a => a.IdAlumno)
                     .ToHashSet();
 
-                var tutoresDelCurso = _autorizaciones
-                    .Where(a => alumnosDelCurso.Contains(a.AlumnoId))
+                var tutoresQueCumplen = _autorizaciones
+                    .Where(a => alumnosQueCumplen.Contains(a.AlumnoId))
                     .Select(a => a.TutorId)
                     .ToHashSet();
 
-                visibles = visibles.Where(t => tutoresDelCurso.Contains(t.IdTutor));
+                visibles = visibles.Where(t => tutoresQueCumplen.Contains(t.IdTutor));
             }
 
             dgvTutores.DataSource = null;
@@ -149,20 +169,9 @@ namespace GTE.WindowsForms
             ConfigureColumns();
         }
 
-        /// <summary>Un curso de la lista de filtros. El nulo es "todos".</summary>
-        private sealed class OpcionDeCurso
-        {
-            public OpcionDeCurso(int? idCurso, string texto)
-            {
-                IdCurso = idCurso;
-                Texto = texto;
-            }
-
-            public int? IdCurso { get; }
-            public string Texto { get; }
-
-            public override string ToString() => Texto;
-        }
+        /// <summary>El texto elegido en un filtro, o nulo si está en "todos".</summary>
+        private static string? Elegido(ComboBox combo) =>
+            combo.SelectedIndex <= 0 ? null : combo.SelectedItem?.ToString();
 
         private void ConfigureColumns()
         {

@@ -18,8 +18,14 @@ namespace GTE.WindowsForms
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblFiltroNombre = new System.Windows.Forms.Label();
             this.txtFiltroNombre = new System.Windows.Forms.TextBox();
-            this.lblFiltroCurso = new System.Windows.Forms.Label();
-            this.cmbFiltroCurso = new System.Windows.Forms.ComboBox();
+            this.lblFiltroGrado = new System.Windows.Forms.Label();
+            this.lblFiltroDivision = new System.Windows.Forms.Label();
+            this.lblFiltroTurno = new System.Windows.Forms.Label();
+            this.lblFiltroEstado = new System.Windows.Forms.Label();
+            this.cmbFiltroDivision = new System.Windows.Forms.ComboBox();
+            this.cmbFiltroTurno = new System.Windows.Forms.ComboBox();
+            this.cmbFiltroEstado = new System.Windows.Forms.ComboBox();
+            this.cmbFiltroGrado = new System.Windows.Forms.ComboBox();
             this.btnNuevo = new System.Windows.Forms.Button();
             this.btnEditar = new System.Windows.Forms.Button();
             this.btnEliminar = new System.Windows.Forms.Button();
@@ -50,25 +56,70 @@ namespace GTE.WindowsForms
             // 
             this.txtFiltroNombre.Location = new System.Drawing.Point(20, 96);
             this.txtFiltroNombre.Name = "txtFiltroNombre";
-            this.txtFiltroNombre.Size = new System.Drawing.Size(300, 30);
+            this.txtFiltroNombre.Size = new System.Drawing.Size(180, 30);
             this.txtFiltroNombre.TabIndex = 21;
             // 
-            // lblFiltroCurso
             // 
-            this.lblFiltroCurso.AutoSize = true;
-            this.lblFiltroCurso.Location = new System.Drawing.Point(340, 72);
-            this.lblFiltroCurso.Name = "lblFiltroCurso";
-            this.lblFiltroCurso.Size = new System.Drawing.Size(120, 20);
-            this.lblFiltroCurso.TabIndex = 22;
-            this.lblFiltroCurso.Text = "Curso del alumno";
+            // lblFiltroDivision
             // 
-            // cmbFiltroCurso
+            this.lblFiltroDivision.AutoSize = true;
+            this.lblFiltroDivision.Location = new System.Drawing.Point(320, 72);
+            this.lblFiltroDivision.Name = "lblFiltroDivision";
+            this.lblFiltroDivision.Size = new System.Drawing.Size(70, 20);
+            this.lblFiltroDivision.Text = "División";
             // 
-            this.cmbFiltroCurso.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbFiltroCurso.Location = new System.Drawing.Point(340, 96);
-            this.cmbFiltroCurso.Name = "cmbFiltroCurso";
-            this.cmbFiltroCurso.Size = new System.Drawing.Size(300, 30);
-            this.cmbFiltroCurso.TabIndex = 23;
+            // cmbFiltroDivision
+            // 
+            this.cmbFiltroDivision.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbFiltroDivision.Location = new System.Drawing.Point(320, 96);
+            this.cmbFiltroDivision.Name = "cmbFiltroDivision";
+            this.cmbFiltroDivision.Size = new System.Drawing.Size(90, 30);
+            // 
+            // lblFiltroTurno
+            // 
+            this.lblFiltroTurno.AutoSize = true;
+            this.lblFiltroTurno.Location = new System.Drawing.Point(420, 72);
+            this.lblFiltroTurno.Name = "lblFiltroTurno";
+            this.lblFiltroTurno.Size = new System.Drawing.Size(60, 20);
+            this.lblFiltroTurno.Text = "Turno";
+            // 
+            // cmbFiltroTurno
+            // 
+            this.cmbFiltroTurno.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbFiltroTurno.Location = new System.Drawing.Point(420, 96);
+            this.cmbFiltroTurno.Name = "cmbFiltroTurno";
+            this.cmbFiltroTurno.Size = new System.Drawing.Size(110, 30);
+            // 
+            // lblFiltroEstado
+            // 
+            this.lblFiltroEstado.AutoSize = true;
+            this.lblFiltroEstado.Location = new System.Drawing.Point(540, 72);
+            this.lblFiltroEstado.Name = "lblFiltroEstado";
+            this.lblFiltroEstado.Size = new System.Drawing.Size(60, 20);
+            this.lblFiltroEstado.Text = "Estado del alumno";
+            // 
+            // cmbFiltroEstado
+            // 
+            this.cmbFiltroEstado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbFiltroEstado.Location = new System.Drawing.Point(540, 96);
+            this.cmbFiltroEstado.Name = "cmbFiltroEstado";
+            this.cmbFiltroEstado.Size = new System.Drawing.Size(110, 30);
+            //             // lblFiltroGrado
+            // 
+            this.lblFiltroGrado.AutoSize = true;
+            this.lblFiltroGrado.Location = new System.Drawing.Point(210, 72);
+            this.lblFiltroGrado.Name = "lblFiltroGrado";
+            this.lblFiltroGrado.Size = new System.Drawing.Size(120, 20);
+            this.lblFiltroGrado.TabIndex = 22;
+            this.lblFiltroGrado.Text = "Grado del alumno";
+            // 
+            // cmbFiltroGrado
+            // 
+            this.cmbFiltroGrado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbFiltroGrado.Location = new System.Drawing.Point(210, 96);
+            this.cmbFiltroGrado.Name = "cmbFiltroGrado";
+            this.cmbFiltroGrado.Size = new System.Drawing.Size(100, 30);
+            this.cmbFiltroGrado.TabIndex = 23;
             // 
             // btnNuevo
             // 
@@ -131,8 +182,14 @@ namespace GTE.WindowsForms
             this.Controls.Add(this.btnEditar);
             this.Controls.Add(this.btnNuevo);
             this.Controls.Add(this.lblTitle);
-            this.Controls.Add(this.cmbFiltroCurso);
-            this.Controls.Add(this.lblFiltroCurso);
+            this.Controls.Add(this.cmbFiltroEstado);
+            this.Controls.Add(this.cmbFiltroTurno);
+            this.Controls.Add(this.cmbFiltroDivision);
+            this.Controls.Add(this.lblFiltroEstado);
+            this.Controls.Add(this.lblFiltroTurno);
+            this.Controls.Add(this.lblFiltroDivision);
+            this.Controls.Add(this.cmbFiltroGrado);
+            this.Controls.Add(this.lblFiltroGrado);
             this.Controls.Add(this.txtFiltroNombre);
             this.Controls.Add(this.lblFiltroNombre);
             this.Name = "TutorListaForm";
@@ -146,8 +203,14 @@ namespace GTE.WindowsForms
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label lblFiltroNombre;
         private System.Windows.Forms.TextBox txtFiltroNombre;
-        private System.Windows.Forms.Label lblFiltroCurso;
-        private System.Windows.Forms.ComboBox cmbFiltroCurso;
+        private System.Windows.Forms.Label lblFiltroGrado;
+        private System.Windows.Forms.ComboBox cmbFiltroGrado;
+        private System.Windows.Forms.Label lblFiltroDivision;
+        private System.Windows.Forms.Label lblFiltroTurno;
+        private System.Windows.Forms.Label lblFiltroEstado;
+        private System.Windows.Forms.ComboBox cmbFiltroDivision;
+        private System.Windows.Forms.ComboBox cmbFiltroTurno;
+        private System.Windows.Forms.ComboBox cmbFiltroEstado;
         private System.Windows.Forms.Button btnNuevo;
         private System.Windows.Forms.Button btnEditar;
         private System.Windows.Forms.Button btnEliminar;

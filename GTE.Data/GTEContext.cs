@@ -332,15 +332,35 @@ namespace GTE.Data
                 });
             }
 
+            // Las familias no son todas iguales: cada tutor tiene entre dos y cuatro
+            // hijos, y los hermanos quedan repartidos en cursos distintos.
+            int[] tamaniosDeFamilia = { 2, 3, 3, 4 };
+            var tutoresPorAlumno = new List<int>();
+
+            for (int t = 1; t <= CantidadDeTutores; t++)
+            {
+                int hijos = tamaniosDeFamilia[(t - 1) % tamaniosDeFamilia.Length];
+                for (int h = 0; h < hijos; h++)
+                    tutoresPorAlumno.Add(t);
+            }
+
+            // El salto hace que los hermanos no caigan en el mismo curso.
+            const int SaltoEntreHermanos = 7;
+
+            var hijosDeCadaTutor = new Dictionary<int, List<int>>();
             int proximoAlumno = 1;
 
             for (int curso = 1; curso <= CantidadDeCursos; curso++)
             {
                 for (int alumno = 1; alumno <= AlumnosPorCurso; alumno++)
                 {
-                    // Cada tutor tiene tres hijos repartidos en cursos distintos, y
-                    // comparten el apellido: los hermanos van a diferentes grados.
-                    int tutor = ((proximoAlumno - 1) % CantidadDeTutores) + 1;
+                    // Comparten el apellido con el tutor: los hermanos van a cursos
+                    // distintos, como en una escuela de verdad.
+                    int tutor = tutoresPorAlumno[((proximoAlumno - 1) * SaltoEntreHermanos) % tutoresPorAlumno.Count];
+
+                    if (!hijosDeCadaTutor.TryGetValue(tutor, out var hijos))
+                        hijosDeCadaTutor[tutor] = hijos = new List<int>();
+                    hijos.Add(proximoAlumno);
 
                     string estado = tutor <= TutoresQueYaRetiraron ? "Retirado"
                         : proximoAlumno % 30 == 0 ? "Ausente"
@@ -363,8 +383,8 @@ namespace GTE.Data
                         Parentesco = tutor == 2 || (tutor > 2 && tutor % 2 == 0) ? "Madre" : "Padre"
                     });
 
-                    // Algunos alumnos también quedan autorizados para otro adulto.
-                    if (proximoAlumno % 4 == 0)
+                    // Sólo unos pocos alumnos quedan autorizados para otro adulto.
+                    if (proximoAlumno % 12 == 0)
                     {
                         int otroTutor = tutor == CantidadDeTutores ? 1 : tutor + 1;
 
@@ -416,13 +436,14 @@ namespace GTE.Data
                     Observaciones = motivosDeRetiro[t % motivosDeRetiro.Length]
                 });
 
-                for (int hijo = 0; hijo < 3; hijo++)
+                // Cada familia se llevó a sus hijos: algunas dos, otras tres o cuatro.
+                foreach (int hijo in hijosDeCadaTutor[t])
                 {
                     detallesDeEjemplo.Add(new
                     {
                         IdDetalleRetiro = proximoDetalle++,
                         IdRetiro = t,
-                        IdAlumno = t + (hijo * CantidadDeTutores),
+                        IdAlumno = hijo,
                         HoraSalida = hora,
                         Estado = "Retirado"
                     });
