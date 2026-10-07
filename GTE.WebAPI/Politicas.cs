@@ -36,6 +36,17 @@ public static class Politicas
     public const string SoloTutor = "SoloTutor";
 
     /// <summary>
+    /// El reporte de alumnos es de gestión, así que lo ve sólo el Secretario.
+    /// </summary>
+    public const string ReporteDeAlumnos = "ReporteDeAlumnos";
+
+    /// <summary>
+    /// El reporte de retiros lo usan también los porteros, que son quienes
+    /// entregan a los alumnos en la puerta.
+    /// </summary>
+    public const string ReporteDeRetiros = "ReporteDeRetiros";
+
+    /// <summary>
     /// Registra las políticas de autorización de la aplicación.
     /// </summary>
     public static IServiceCollection AddPoliticasDeAutorizacion(this IServiceCollection services)
@@ -59,6 +70,12 @@ public static class Politicas
 
             options.AddPolicy(SoloTutor, politica =>
                 politica.RequireRole(RolTutor));
+
+            options.AddPolicy(ReporteDeAlumnos, politica =>
+                politica.RequireRole(RolSecretario));
+
+            options.AddPolicy(ReporteDeRetiros, politica =>
+                politica.RequireRole(RolSecretario, RolPortero));
         });
 
         return services;

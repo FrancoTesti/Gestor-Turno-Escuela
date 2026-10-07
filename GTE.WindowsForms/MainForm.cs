@@ -77,8 +77,6 @@ namespace GTE.WindowsForms
                 btnRetiros.Visible = true;
                 btnTutores.Visible = true;
                 btnAutorizaciones.Visible = true;
-                btnReporteAlumnos.Visible = true;
-                btnReporteRetiros.Visible = true;
                 btnOtros.Visible = true;
                 btnOtros.Text = "Horarios Esp.";
             }
@@ -91,8 +89,6 @@ namespace GTE.WindowsForms
                 btnRetiros.Visible = true;
                 btnTutores.Visible = true;
                 btnAutorizaciones.Visible = true;
-                btnReporteAlumnos.Visible = true;
-                btnReporteRetiros.Visible = true;
                 btnOtros.Visible = true;
                 btnOtros.Text = "Horarios Esp.";
             }
@@ -103,10 +99,13 @@ namespace GTE.WindowsForms
                 btnRetiros.Visible = false;
                 btnTutores.Visible = false;
                 btnAutorizaciones.Visible = false;
-                btnReporteAlumnos.Visible = false;
-                btnReporteRetiros.Visible = false;
                 btnOtros.Visible = false;
             }
+
+            // Reportes: el de alumnos es de gestión (sólo secretaría) y el de
+            // retiros lo usa también la portería, que es la que retira.
+            btnReporteAlumnos.Visible = PermisosDeUsuario.PuedeVerReporteDeAlumnos(role);
+            btnReporteRetiros.Visible = PermisosDeUsuario.PuedeVerReporteDeRetiros(role);
 
             // El tutor solo tiene, además de cursos, su pantalla de alumnos a cargo.
             btnMisAlumnos.Visible = role == "Tutor";

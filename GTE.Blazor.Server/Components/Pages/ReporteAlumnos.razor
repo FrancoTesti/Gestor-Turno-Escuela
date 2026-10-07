@@ -1,5 +1,6 @@
 @page "/reportealumnos"
-@attribute [Authorize(Roles = "Secretario,Portero")]
+@* Es un reporte de gestión: la portería no lo necesita. *@
+@attribute [Authorize(Roles = "Secretario")]
 @inherits PaginaConApiBase
 @inject GTE.Clients.ReporteApiClient ReporteClient
 @using GTE.DTOs

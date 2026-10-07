@@ -22,4 +22,11 @@ public static class PermisosDeUsuario
 
     public static bool PuedeVerCursos(string? rol) =>
         rol is Secretario or Portero or Tutor;
+
+    /// <summary>El reporte de alumnos es de gestión: sólo lo ve el Secretario.</summary>
+    public static bool PuedeVerReporteDeAlumnos(string? rol) => rol == Secretario;
+
+    /// <summary>El reporte de retiros lo ve también la portería.</summary>
+    public static bool PuedeVerReporteDeRetiros(string? rol) =>
+        rol is Secretario or Portero;
 }
