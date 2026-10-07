@@ -213,7 +213,10 @@ namespace GTE.Data
             // misma contraseña, así se sigue entrando igual que antes.
             // ------------------------------------------------------------------
             const int CantidadDeCursos = 12;
-            const int CantidadDeTutores = 48;
+            // Cada familia tiene un tutor titular; en unas pocas, además, el otro
+            // progenitor también quedó registrado con su propio usuario.
+            const int CantidadDeFamilias = 60;
+            const int FamiliasConDosProgenitores = 8;
             const int AlumnosPorCurso = 12;
             const int TutoresQueYaRetiraron = 12;
 
@@ -259,7 +262,11 @@ namespace GTE.Data
                 "Rojas", "Dominguez", "Cabrera", "Luna", "Paz", "Vega",
                 "Bravo", "Ferreyra", "Quiroga", "Rios", "Cardozo", "Villalba",
                 "Navarro", "Arias", "Godoy", "Coronel", "Ocampo", "Ledesma",
-                "Ibarra", "Salinas", "Duarte", "Escobar", "Montero", "Toledo"
+                "Ibarra", "Salinas", "Duarte", "Escobar", "Montero", "Toledo",
+                "Vera", "Ramirez", "Barrera", "Farias", "Peralta", "Maldonado",
+                "Carrizo", "Alderete", "Bogado", "Zarate", "Pereyra", "Agüero",
+                "Bustos", "Chavez", "Correa", "Caceres", "Zamora", "Ojeda",
+                "Vargas", "Baez", "Leiva", "Arce", "Ponce", "Sanabria"
             };
 
             string[] motivosDeRetiro =
@@ -292,77 +299,99 @@ namespace GTE.Data
                 new { IdUsuario = 5, NombreUsuario = "tutor2", Contrasena = "tutor123", EstaActivo = true }
             };
 
+            // Cada familia tiene un tutor titular. Las dos primeras familias son
+            // las que ya usaba el grupo, con sus mismos usuarios.
+            int[] usuariosDeLasFamilias = new int[CantidadDeFamilias + 1];
+            usuariosDeLasFamilias[1] = 3;
+            usuariosDeLasFamilias[2] = 5;
+
+            int proximoIdUsuario = 6;
+
+            // Parentesco habitual del tutor con los chicos de su familia.
+            bool EsMadre(int familia) => familia == 2 || (familia > 2 && familia % 2 == 0);
+
             var tutoresDeEjemplo = new List<object>();
-            var alumnosDeEjemplo = new List<object>();
-            var autorizacionesDeEjemplo = new List<object>();
 
-            for (int t = 1; t <= CantidadDeTutores; t++)
+            for (int familia = 1; familia <= CantidadDeFamilias; familia++)
             {
-                // Los dos primeros tutores son los que ya usaba el grupo.
-                int idUsuario = t switch { 1 => 3, 2 => 5, _ => t + 3 };
-
-                if (t > 2)
+                if (familia > 2)
                 {
+                    usuariosDeLasFamilias[familia] = proximoIdUsuario;
                     usuariosDeEjemplo.Add(new
                     {
-                        IdUsuario = idUsuario,
-                        NombreUsuario = $"tutor{t}",
+                        IdUsuario = proximoIdUsuario++,
+                        NombreUsuario = $"tutor{familia}",
                         Contrasena = "tutor123",
                         EstaActivo = true
                     });
                 }
 
-                bool esMujer = t == 2 || (t > 2 && t % 2 == 0);
+                bool esMujer = EsMadre(familia);
 
                 tutoresDeEjemplo.Add(new
                 {
-                    IdTutor = t,
-                    Nombre = t == 1 ? "Franco"
-                        : t == 2 ? "Mariana"
-                        : esMujer ? nombresDeTutoras[(t / 2) % nombresDeTutoras.Length]
-                        : nombresDeTutores[(t / 2) % nombresDeTutores.Length],
-                    Apellido = apellidos[t - 1],
-                    Dni = (30000000 + (t * 137)).ToString(),
+                    IdTutor = familia,
+                    Nombre = familia == 1 ? "Franco"
+                        : familia == 2 ? "Mariana"
+                        : esMujer ? nombresDeTutoras[(familia / 2) % nombresDeTutoras.Length]
+                        : nombresDeTutores[(familia / 2) % nombresDeTutores.Length],
+                    Apellido = apellidos[familia - 1],
+                    Dni = (30000000 + (familia * 137)).ToString(),
                     Parentesco = esMujer ? "Madre" : "Padre",
-                    Telefono = $"11-{4000 + t}-{1000 + (t * 7)}",
+                    Telefono = $"11-{4000 + familia}-{1000 + (familia * 7)}",
                     // Un tutor con restricción, para poder probar que el sistema no
                     // lo deja retirar alumnos.
-                    TieneRestriccion = t == 7,
-                    IdUsuario = idUsuario
+                    TieneRestriccion = familia == 7,
+                    IdUsuario = usuariosDeLasFamilias[familia]
                 });
             }
 
-            // Las familias no son todas iguales: cada tutor tiene entre dos y cuatro
-            // hijos, y los hermanos quedan repartidos en cursos distintos.
-            int[] tamaniosDeFamilia = { 2, 3, 3, 4 };
-            var tutoresPorAlumno = new List<int>();
+            // Las familias no son todas iguales: las hay con un solo hijo en la
+            // escuela y otras con tres o cuatro. Entre todas suman los 144 alumnos
+            // de la escuela.
+            int[] tamaniosDeFamilia = new int[CantidadDeFamilias];
+            var tamaniosMezclados = new List<int>();
+            tamaniosMezclados.AddRange(Enumerable.Repeat(1, 12));
+            tamaniosMezclados.AddRange(Enumerable.Repeat(2, 21));
+            tamaniosMezclados.AddRange(Enumerable.Repeat(3, 18));
+            tamaniosMezclados.AddRange(Enumerable.Repeat(4, 9));
 
-            for (int t = 1; t <= CantidadDeTutores; t++)
-            {
-                int hijos = tamaniosDeFamilia[(t - 1) % tamaniosDeFamilia.Length];
-                for (int h = 0; h < hijos; h++)
-                    tutoresPorAlumno.Add(t);
-            }
+            // Se mezclan de una forma fija (sin azar), así las familias chicas y
+            // las grandes no quedan todas juntas en el listado.
+            for (int familia = 0; familia < CantidadDeFamilias; familia++)
+                tamaniosDeFamilia[familia] = tamaniosMezclados[(familia * 29) % CantidadDeFamilias];
+
+            // Un lugar por cada hijo, con la familia que le toca: de ahí sale el
+            // reparto de hermanos entre los cursos.
+            var familiasPorHijo = new List<int>();
+            for (int familia = 1; familia <= CantidadDeFamilias; familia++)
+                for (int hijo = 0; hijo < tamaniosDeFamilia[familia - 1]; hijo++)
+                    familiasPorHijo.Add(familia);
 
             // El salto hace que los hermanos no caigan en el mismo curso.
             const int SaltoEntreHermanos = 7;
 
-            var hijosDeCadaTutor = new Dictionary<int, List<int>>();
+            var hijosDeCadaFamilia = new Dictionary<int, List<int>>();
+            var familiaDeCadaAlumno = new Dictionary<int, int>();
+            var alumnosDeEjemplo = new List<object>();
+            var autorizacionesDeEjemplo = new List<object>();
             int proximoAlumno = 1;
 
             for (int curso = 1; curso <= CantidadDeCursos; curso++)
             {
                 for (int alumno = 1; alumno <= AlumnosPorCurso; alumno++)
                 {
-                    // Comparten el apellido con el tutor: los hermanos van a cursos
-                    // distintos, como en una escuela de verdad.
-                    int tutor = tutoresPorAlumno[((proximoAlumno - 1) * SaltoEntreHermanos) % tutoresPorAlumno.Count];
+                    // Los hermanos comparten el apellido con su familia y van a
+                    // cursos distintos, como en una escuela de verdad.
+                    int familia = familiasPorHijo[((proximoAlumno - 1) * SaltoEntreHermanos) % familiasPorHijo.Count];
 
-                    if (!hijosDeCadaTutor.TryGetValue(tutor, out var hijos))
-                        hijosDeCadaTutor[tutor] = hijos = new List<int>();
+                    familiaDeCadaAlumno[proximoAlumno] = familia;
+
+                    if (!hijosDeCadaFamilia.TryGetValue(familia, out var hijos))
+                        hijosDeCadaFamilia[familia] = hijos = new List<int>();
                     hijos.Add(proximoAlumno);
 
-                    string estado = tutor <= TutoresQueYaRetiraron ? "Retirado"
+                    string estado = familia <= TutoresQueYaRetiraron ? "Retirado"
                         : proximoAlumno % 30 == 0 ? "Ausente"
                         : "Presente";
 
@@ -370,7 +399,7 @@ namespace GTE.Data
                     {
                         IdAlumno = proximoAlumno,
                         Nombre = nombresDeAlumnos[(proximoAlumno - 1) % nombresDeAlumnos.Length],
-                        Apellido = apellidos[tutor - 1],
+                        Apellido = apellidos[familia - 1],
                         IdCurso = curso,
                         Estado = estado
                     });
@@ -379,28 +408,88 @@ namespace GTE.Data
                     {
                         IdAutorizacion = autorizacionesDeEjemplo.Count + 1,
                         AlumnoId = proximoAlumno,
-                        TutorId = tutor,
-                        Parentesco = tutor == 2 || (tutor > 2 && tutor % 2 == 0) ? "Madre" : "Padre"
+                        TutorId = familia,
+                        Parentesco = EsMadre(familia) ? "Madre" : "Padre"
                     });
-
-                    // Sólo unos pocos alumnos quedan autorizados para otro adulto.
-                    if (proximoAlumno % 12 == 0)
-                    {
-                        int otroTutor = tutor == CantidadDeTutores ? 1 : tutor + 1;
-
-                        autorizacionesDeEjemplo.Add(new
-                        {
-                            IdAutorizacion = autorizacionesDeEjemplo.Count + 1,
-                            AlumnoId = proximoAlumno,
-                            TutorId = otroTutor,
-                            // Con este otro adulto el parentesco es distinto: eso es lo
-                            // que antes no se podía representar.
-                            Parentesco = otroTutor == 2 || (otroTutor > 2 && otroTutor % 2 == 0) ? "Tía" : "Tío"
-                        });
-                    }
 
                     proximoAlumno++;
                 }
+            }
+
+            // En las primeras familias el otro progenitor también quedó registrado,
+            // así hay alumnos con dos adultos autorizados para retirarlos.
+            for (int familia = 1; familia <= FamiliasConDosProgenitores; familia++)
+            {
+                int idTutor = CantidadDeFamilias + familia;
+                bool esMujer = !EsMadre(familia);
+                int idUsuario = proximoIdUsuario++;
+
+                usuariosDeEjemplo.Add(new
+                {
+                    IdUsuario = idUsuario,
+                    NombreUsuario = $"tutor{idTutor}",
+                    Contrasena = "tutor123",
+                    EstaActivo = true
+                });
+
+                tutoresDeEjemplo.Add(new
+                {
+                    IdTutor = idTutor,
+                    Nombre = esMujer ? nombresDeTutoras[idTutor % nombresDeTutoras.Length]
+                        : nombresDeTutores[idTutor % nombresDeTutores.Length],
+                    // El otro progenitor suele tener otro apellido.
+                    Apellido = apellidos[CantidadDeFamilias + familia - 1],
+                    Dni = (30000000 + (idTutor * 137)).ToString(),
+                    Parentesco = esMujer ? "Madre" : "Padre",
+                    Telefono = $"11-{4000 + idTutor}-{1000 + (idTutor * 7)}",
+                    TieneRestriccion = false,
+                    IdUsuario = idUsuario
+                });
+
+                foreach (int hijo in hijosDeCadaFamilia[familia])
+                {
+                    autorizacionesDeEjemplo.Add(new
+                    {
+                        IdAutorizacion = autorizacionesDeEjemplo.Count + 1,
+                        AlumnoId = hijo,
+                        TutorId = idTutor,
+                        Parentesco = esMujer ? "Madre" : "Padre"
+                    });
+                }
+            }
+
+            // Unos pocos alumnos quedaron autorizados para un tío o un abuelo. El
+            // adulto extra sale de las familias con un solo hijo, así ninguna
+            // familia termina con demasiados chicos a cargo.
+            var familiasConUnSoloHijo = new List<int>();
+            for (int familia = 1; familia <= CantidadDeFamilias; familia++)
+                if (tamaniosDeFamilia[familia - 1] == 1)
+                    familiasConUnSoloHijo.Add(familia);
+
+            string[] parentescosDeConfianza = { "Tío", "Tía", "Abuelo", "Abuela" };
+            int[] alumnosConOtroAutorizado = { 17, 34, 51, 68, 85, 102, 119, 136 };
+
+            for (int i = 0; i < alumnosConOtroAutorizado.Length; i++)
+            {
+                int alumno = alumnosConOtroAutorizado[i];
+                int indice = i;
+                int familiaExtra = familiasConUnSoloHijo[indice % familiasConUnSoloHijo.Count];
+
+                while (familiaExtra == familiaDeCadaAlumno[alumno])
+                {
+                    indice++;
+                    familiaExtra = familiasConUnSoloHijo[indice % familiasConUnSoloHijo.Count];
+                }
+
+                autorizacionesDeEjemplo.Add(new
+                {
+                    IdAutorizacion = autorizacionesDeEjemplo.Count + 1,
+                    AlumnoId = alumno,
+                    TutorId = familiaExtra,
+                    // Con este otro adulto el parentesco es distinto: eso es lo que
+                    // antes no se podía representar.
+                    Parentesco = parentescosDeConfianza[i % parentescosDeConfianza.Length]
+                });
             }
 
             modelBuilder.Entity<Usuario>().HasData(usuariosDeEjemplo);
@@ -417,8 +506,8 @@ namespace GTE.Data
             modelBuilder.Entity<Alumno>().HasData(alumnosDeEjemplo);
             modelBuilder.Entity<Autorizacion>().HasData(autorizacionesDeEjemplo);
 
-            // Los primeros doce tutores ya pasaron a retirar a sus tres hijos, en
-            // días distintos del último mes.
+            // Las primeras doce familias ya pasaron a retirar a sus hijos, en días
+            // distintos del último mes.
             var retirosDeEjemplo = new List<object>();
             var detallesDeEjemplo = new List<object>();
             int proximoDetalle = 1;
@@ -436,8 +525,8 @@ namespace GTE.Data
                     Observaciones = motivosDeRetiro[t % motivosDeRetiro.Length]
                 });
 
-                // Cada familia se llevó a sus hijos: algunas dos, otras tres o cuatro.
-                foreach (int hijo in hijosDeCadaTutor[t])
+                // Cada familia se llevó a sus hijos: algunas uno, otras dos o más.
+                foreach (int hijo in hijosDeCadaFamilia[t])
                 {
                     detallesDeEjemplo.Add(new
                     {

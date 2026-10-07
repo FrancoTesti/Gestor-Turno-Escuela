@@ -2,6 +2,9 @@
 @attribute [Authorize(Roles = "Secretario,Portero")]
 @inherits PaginaConApiBase
 @inject TutorApiClient TutoresClient
+@inject AlumnoApiClient AlumnosClient
+@inject AutorizacionApiClient AutorizacionesClient
+@inject CursoEscolarApiClient CursosClient
 
 <h3>Gestión de Tutores</h3>
 
@@ -20,12 +23,55 @@
     <div class="card-body">
         <h6 class="card-subtitle mb-3 text-muted">Buscar por filtros</h6>
         <div class="row g-2 align-items-end">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label class="form-label">Nombre, apellido o DNI</label>
                 <input class="form-control" placeholder="Escribí para filtrar"
                        @bind="filtroTexto" @bind:event="oninput" />
             </div>
             <div class="col-md-3">
+                <label class="form-label">Grado del alumno</label>
+                <select class="form-control" @bind="filtroGrado">
+                    <option value="">Todos</option>
+                    @foreach (var grado in GradosDisponibles)
+                    {
+                        <option value="@grado">@grado</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">División</label>
+                <select class="form-control" @bind="filtroDivision">
+                    <option value="">Todas</option>
+                    @foreach (var division in DivisionesDisponibles)
+                    {
+                        <option value="@division">@division</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Turno</label>
+                <select class="form-control" @bind="filtroTurno">
+                    <option value="">Todos</option>
+                    @foreach (var turno in TurnosDisponibles)
+                    {
+                        <option value="@turno">@turno</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Estado del alumno</label>
+                <select class="form-control" @bind="filtroEstado">
+                    <option value="">Todos</option>
+                    <option value="Presente">Presente</option>
+                    <option value="Retirado">Retirado</option>
+                    <option value="Ausente">Ausente</option>
+                </select>
+            </div>
+        </div>
+        @* Grado, división, turno y estado son datos del alumno: sirven para
+           encontrar a los tutores que tienen autorizado algún chico así. *@
+        <div class="row g-2 align-items-end mt-1">
+            <div class="col-md-4">
                 <label class="form-label">Parentesco</label>
                 <select class="form-control" @bind="filtroParentesco">
                     <option value="">Todos</option>
@@ -165,12 +211,19 @@ else
 
 @code {
     private List<TutorDTO>? tutores;
+    private List<AlumnoDTO> alumnos = new();
+    private List<AutorizacionDTO> autorizaciones = new();
+    private List<CursoEscolarDTO> cursos = new();
     private TutorDTO tutorEditando = new();
     private bool mostrarModal;
     private bool esEdicion;
     private string? filtroTexto;
     private string filtroParentesco = string.Empty;
     private string filtroRestriccion = "todos";
+    private string filtroGrado = string.Empty;
+    private string filtroDivision = string.Empty;
+    private string filtroTurno = string.Empty;
+    private string filtroEstado = string.Empty;
 
     private IEnumerable<string> ParentescosDisponibles =>
         (tutores ?? new List<TutorDTO>())
@@ -178,6 +231,16 @@ else
             .Where(p => !string.IsNullOrWhiteSpace(p))
             .Distinct()
             .OrderBy(p => p);
+
+    /// <summary>Grados, divisiones y turnos que existen, para no escribir texto libre.</summary>
+    private IEnumerable<string> GradosDisponibles =>
+        cursos.Select(c => c.Grado).Distinct().OrderBy(g => g);
+
+    private IEnumerable<string> DivisionesDisponibles =>
+        cursos.Select(c => c.Curso).Distinct().OrderBy(d => d);
+
+    private IEnumerable<string> TurnosDisponibles =>
+        cursos.Select(c => c.Turno).Distinct().OrderBy(t => t);
 
     /// <summary>Tutores que pasan los filtros de la pantalla.</summary>
     private IEnumerable<TutorDTO> TutoresFiltrados =>
@@ -189,13 +252,47 @@ else
             && (string.IsNullOrEmpty(filtroParentesco) || t.Parentesco == filtroParentesco)
             && (filtroRestriccion == "todos"
                 || (filtroRestriccion == "si" && t.TieneRestriccion)
-                || (filtroRestriccion == "no" && !t.TieneRestriccion)));
+                || (filtroRestriccion == "no" && !t.TieneRestriccion))
+            && TutoresConAlumnosQueCumplen().Contains(t.IdTutor));
+
+    /// <summary>
+    /// Tutores que tienen autorizado al menos un alumno que cumple el grado, la
+    /// división, el turno y el estado elegidos. Si no se eligió ninguno de esos
+    /// filtros, no se descarta a nadie.
+    /// </summary>
+    private HashSet<int> TutoresConAlumnosQueCumplen()
+    {
+        bool hayFiltroDelAlumno = !string.IsNullOrEmpty(filtroGrado)
+            || !string.IsNullOrEmpty(filtroDivision)
+            || !string.IsNullOrEmpty(filtroTurno)
+            || !string.IsNullOrEmpty(filtroEstado);
+
+        if (!hayFiltroDelAlumno)
+            return (tutores ?? new List<TutorDTO>()).Select(t => t.IdTutor).ToHashSet();
+
+        var alumnosQueCumplen = alumnos
+            .Where(a => (string.IsNullOrEmpty(filtroGrado) || a.Grado == filtroGrado)
+                && (string.IsNullOrEmpty(filtroDivision) || a.Curso == filtroDivision)
+                && (string.IsNullOrEmpty(filtroTurno) || a.Turno == filtroTurno)
+                && (string.IsNullOrEmpty(filtroEstado) || a.Estado == filtroEstado))
+            .Select(a => a.IdAlumno)
+            .ToHashSet();
+
+        return autorizaciones
+            .Where(a => alumnosQueCumplen.Contains(a.AlumnoId))
+            .Select(a => a.TutorId)
+            .ToHashSet();
+    }
 
     private void LimpiarFiltros()
     {
         filtroTexto = null;
         filtroParentesco = string.Empty;
         filtroRestriccion = "todos";
+        filtroGrado = string.Empty;
+        filtroDivision = string.Empty;
+        filtroTurno = string.Empty;
+        filtroEstado = string.Empty;
     }
 
     protected override async Task OnInitializedAsync()
@@ -203,7 +300,16 @@ else
         await EjecutarAsync(CargarDatos);
     }
 
-    private async Task CargarDatos() => tutores = (await TutoresClient.GetAllAsync()).ToList();
+    private async Task CargarDatos()
+    {
+        tutores = await TutoresClient.GetAllAsync();
+
+        // Los filtros de grado, división, turno y estado son del alumno, así que
+        // también se necesitan los alumnos y qué tutor tiene autorizado a cada uno.
+        alumnos = await AlumnosClient.GetAllAsync();
+        autorizaciones = await AutorizacionesClient.GetAllAsync();
+        cursos = await CursosClient.GetAllAsync();
+    }
 
     private void AbrirModalNuevo()
     {
