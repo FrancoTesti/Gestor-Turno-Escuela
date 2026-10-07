@@ -51,13 +51,13 @@ namespace GTE.WindowsForms
             this.txtSearch.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtSearch.Location = new System.Drawing.Point(20, 95);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(300, 30);
+            this.txtSearch.Size = new System.Drawing.Size(250, 30);
             this.txtSearch.TabIndex = 1;
             // 
             // btnBuscar
             // 
             this.btnBuscar.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.btnBuscar.Location = new System.Drawing.Point(300, 95);
+            this.btnBuscar.Location = new System.Drawing.Point(280, 95);
             this.btnBuscar.Name = "btnBuscar";
             this.btnBuscar.Size = new System.Drawing.Size(90, 36);
             this.btnBuscar.TabIndex = 2;

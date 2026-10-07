@@ -44,6 +44,8 @@ namespace GTE.WindowsForms
         private const int AltoTarjeta = 104;
 
         private readonly FlowLayoutPanel pnlTarjetas = new FlowLayoutPanel();
+        private readonly List<Label> titulosDeSeccion = new();
+        private readonly List<Panel> tarjetas = new();
 
         public HomeForm(string? nombre, string? rol, IEnumerable<SeccionDelInicio> secciones)
         {
@@ -75,11 +77,21 @@ namespace GTE.WindowsForms
 
             foreach (var seccion in secciones.Where(seccion => seccion.Accesos.Count > 0))
             {
-                pnlTarjetas.Controls.Add(CrearTituloDeSeccion(seccion.Titulo));
+                var titulo = CrearTituloDeSeccion(seccion.Titulo);
+                titulosDeSeccion.Add(titulo);
+                pnlTarjetas.Controls.Add(titulo);
 
                 foreach (var acceso in seccion.Accesos)
-                    pnlTarjetas.Controls.Add(CrearTarjeta(acceso));
+                {
+                    var tarjeta = CrearTarjeta(acceso);
+                    tarjetas.Add(tarjeta);
+                    pnlTarjetas.Controls.Add(tarjeta);
+                }
             }
+
+            // Al cambiar el tamaño de la ventana se reparte de nuevo el ancho.
+            pnlTarjetas.Resize += (_, _) => AcomodarTarjetas();
+            AcomodarTarjetas();
 
             Controls.Add(lblSaludo);
             Controls.Add(lblDetalle);
@@ -87,14 +99,41 @@ namespace GTE.WindowsForms
         }
 
         /// <summary>
+        /// Reparte el ancho disponible entre las tarjetas, en tres columnas cuando
+        /// hay lugar. Sin esto, con la ventana maximizada las tarjetas se quedaban
+        /// de 300 píxeles y sobraba un hueco al costado de cada fila.
+        /// </summary>
+        private void AcomodarTarjetas()
+        {
+            int disponible = pnlTarjetas.ClientSize.Width - 24;
+            if (disponible <= 0)
+                return;
+
+            int columnas = disponible >= 960 ? 3 : disponible >= 620 ? 2 : 1;
+            int ancho = Math.Max(240, (disponible - ((columnas - 1) * 16)) / columnas);
+
+            foreach (var titulo in titulosDeSeccion)
+                titulo.Width = disponible;
+
+            foreach (var tarjeta in tarjetas)
+            {
+                tarjeta.Width = ancho;
+
+                if (tarjeta.Controls["lblDescripcion"] is Label descripcion)
+                    descripcion.Width = ancho - 32;
+            }
+        }
+
+        /// <summary>
         /// El título ocupa todo el ancho, así el grupo arranca en una fila nueva y
         /// las tarjetas quedan separadas de la sección anterior.
         /// </summary>
-        private Control CrearTituloDeSeccion(string titulo)
+        private Label CrearTituloDeSeccion(string titulo)
         {
             return new Label
             {
                 Text = titulo.ToUpperInvariant(),
+                Name = "lblSeccion",
                 AutoSize = false,
                 Size = new Size(pnlTarjetas.ClientSize.Width - 6, 26),
                 Margin = new Padding(0, 12, 0, 8),
@@ -108,7 +147,7 @@ namespace GTE.WindowsForms
         /// Tarjeta con el nombre de la sección y una línea que explica para qué
         /// sirve. Se puede clickear en cualquier parte, como las de la web.
         /// </summary>
-        private Control CrearTarjeta(AccesoDirecto seccion)
+        private Panel CrearTarjeta(AccesoDirecto seccion)
         {
             var tarjeta = new Panel
             {
@@ -122,6 +161,7 @@ namespace GTE.WindowsForms
             var lblTitulo = new Label
             {
                 Text = seccion.Titulo,
+                Name = "lblTituloTarjeta",
                 Location = new Point(16, 16),
                 AutoSize = true,
                 Font = new Font("Segoe UI Semibold", 11F, FontStyle.Bold),
@@ -132,6 +172,7 @@ namespace GTE.WindowsForms
             var lblDescripcion = new Label
             {
                 Text = seccion.Descripcion,
+                Name = "lblDescripcion",
                 Location = new Point(16, 46),
                 Size = new Size(AnchoTarjeta - 32, 46),
                 Font = new Font("Segoe UI", 9F),
