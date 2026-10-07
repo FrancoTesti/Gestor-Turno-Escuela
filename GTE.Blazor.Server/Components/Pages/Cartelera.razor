@@ -46,7 +46,7 @@
                         @(curso.CantidadDeAlumnos == 1 ? "1 alumno" : $"{curso.CantidadDeAlumnos} alumnos")
                     </p>
                     <p class="cartelera-curso-pie">
-                        Sale por @curso.Puerta desde las @curso.FechaHoraInicio.ToString(@"HH\:mm")
+                        @TextoDeLaPuerta(curso)
                     </p>
                 </div>
             }
@@ -150,6 +150,19 @@
     private DateTime horaActual = DateTime.Now;
     private bool hayError;
     private readonly CancellationTokenSource cancelacion = new();
+
+    /// <summary>
+    /// El pie de cada curso en la cartelera. La puerta se muestra sólo cuando la
+    /// salida la marcó un portero: si la marcó el secretario, ese dato no existe.
+    /// </summary>
+    private static string TextoDeLaPuerta(CursoEnSalidaDTO curso)
+    {
+        string hora = curso.FechaHoraInicio.ToString(@"HH\:mm");
+
+        return string.IsNullOrWhiteSpace(curso.Puerta)
+            ? $"Desde las {hora}"
+            : $"Sale por {curso.Puerta} desde las {hora}";
+    }
 
     protected override async Task OnInitializedAsync()
     {

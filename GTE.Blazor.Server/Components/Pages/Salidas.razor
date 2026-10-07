@@ -70,7 +70,9 @@ else
                 <tr>
                     <td>@salida.Grado @salida.Curso</td>
                     <td>@salida.Turno</td>
-                    <td>@salida.Puerta</td>
+                    @* Cuando la marca alguien que no es portero (por ejemplo el
+                       secretario) no hay puerta asignada: queda vacío. *@
+                    <td>@(string.IsNullOrWhiteSpace(salida.Puerta) ? "—" : salida.Puerta)</td>
                     <td>@salida.FechaHoraInicio.ToString("HH:mm")</td>
                     <td>@(salida.FechaHoraFin?.ToString("HH:mm") ?? "-")</td>
                     <td>@salida.CantidadDeAlumnos</td>

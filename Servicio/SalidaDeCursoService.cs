@@ -113,9 +113,13 @@ namespace GTE.Application.Services
             return (true, $"El curso {salida.CursoEscolar.MostrarCurso()} terminó de salir.");
         }
 
-        /// <summary>El portero tiene una puerta asignada; el resto del personal no.</summary>
+        /// <summary>
+        /// El portero tiene una puerta asignada; el resto del personal no, así que
+        /// no se muestra ninguna. Antes decía "Secretaría", pero eso confundía en la
+        /// pantalla de la puerta: parecía que el curso salía por la secretaría.
+        /// </summary>
         private static string PuertaDe(Personal personal) =>
-            personal is Portero portero ? portero.PuertaAsignada : "Secretaría";
+            personal is Portero portero ? portero.PuertaAsignada : string.Empty;
 
         private static SalidaDeCursoDTO Mapear(SalidaDeCurso salida, int cantidadDeAlumnos)
         {
