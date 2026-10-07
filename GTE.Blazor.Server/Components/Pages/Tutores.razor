@@ -36,7 +36,7 @@ else
                 <th>Usuario</th>
                 <th>Restricción</th>
                 <AuthorizeView Roles="Secretario">
-                    <Authorized><th>Acciones</th></Authorized>
+                    <Authorized><th class="text-center" style="width: 180px;">Acciones</th></Authorized>
                 </AuthorizeView>
             </tr>
         </thead>
@@ -52,7 +52,7 @@ else
                     <td>@(t.TieneRestriccion ? "Sí" : "No")</td>
                     <AuthorizeView Roles="Secretario">
                         <Authorized>
-                            <td>
+                            <td class="text-center text-nowrap">
                                 <button class="btn btn-sm btn-outline-warning me-1" @onclick="() => AbrirModalEditar(t)">Editar</button>
                                 <button class="btn btn-sm btn-outline-danger" @onclick="() => Eliminar(t.IdTutor)">Borrar</button>
                             </td>

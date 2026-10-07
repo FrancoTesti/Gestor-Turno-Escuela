@@ -126,5 +126,18 @@ namespace GTE.WindowsForms
             boton.Font = new Font("Segoe UI Semibold", 10.5F, FontStyle.Bold);
             boton.Cursor = Cursors.Hand;
         }
+
+        /// <summary>
+        /// Título de un grupo del menú lateral. Va sobre la barra oscura, así que
+        /// tiene que ser claro para que se lea.
+        /// </summary>
+        public static void EtiquetaSeccion(Label etiqueta)
+        {
+            etiqueta.BackColor = Barra;
+            etiqueta.ForeColor = Color.FromArgb(214, 222, 230);
+            etiqueta.Font = new Font("Segoe UI Semibold", 8.25F, FontStyle.Bold);
+            etiqueta.TextAlign = ContentAlignment.MiddleLeft;
+            etiqueta.Padding = new Padding(15, 0, 0, 0);
+        }
     }
 }

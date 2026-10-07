@@ -34,31 +34,36 @@ namespace GTE.WindowsForms
             this.lblTitle.Text = "Gestión de Horarios Especiales";
             
             // btnNuevo
-            this.btnNuevo.Location = new Point(17, 50);
+            this.btnNuevo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            this.btnNuevo.Location = new Point(475, 50);
             this.btnNuevo.Name = "btnNuevo";
             this.btnNuevo.Size = new Size(100, 30);
             this.btnNuevo.Text = "Nuevo";
             this.btnNuevo.Click += new EventHandler(this.btnNuevo_Click);
             
             // btnEditar
-            this.btnEditar.Location = new Point(123, 50);
+            this.btnEditar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            this.btnEditar.Location = new Point(581, 50);
             this.btnEditar.Name = "btnEditar";
             this.btnEditar.Size = new Size(100, 30);
             this.btnEditar.Text = "Editar";
             this.btnEditar.Click += new EventHandler(this.btnEditar_Click);
             
             // btnEliminar
-            this.btnEliminar.Location = new Point(229, 50);
+            this.btnEliminar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            this.btnEliminar.Location = new Point(687, 50);
             this.btnEliminar.Name = "btnEliminar";
             this.btnEliminar.Size = new Size(100, 30);
             this.btnEliminar.Text = "Eliminar";
             this.btnEliminar.Click += new EventHandler(this.btnEliminar_Click);
             
             // dgvHorarios
+            // Con los cuatro anclajes la tabla acompaña el tamaño de la ventana.
+            this.dgvHorarios.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             this.dgvHorarios.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvHorarios.Location = new Point(17, 95);
             this.dgvHorarios.Name = "dgvHorarios";
-            this.dgvHorarios.Size = new Size(750, 340);
+            this.dgvHorarios.Size = new Size(766, 340);
             
             // Form
             this.ClientSize = new Size(800, 450);

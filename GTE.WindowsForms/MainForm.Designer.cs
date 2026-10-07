@@ -20,6 +20,11 @@ namespace GTE.WindowsForms
             this.lblUserSub = new System.Windows.Forms.Label();
             this.lblUserTitle = new System.Windows.Forms.Label();
             this.pnlSidebar = new System.Windows.Forms.Panel();
+            this.btnCartelera = new System.Windows.Forms.Button();
+            this.lblSeccionPantalla = new System.Windows.Forms.Label();
+            this.lblSeccionReportes = new System.Windows.Forms.Label();
+            this.lblSeccionAdministracion = new System.Windows.Forms.Label();
+            this.lblSeccionDiaADia = new System.Windows.Forms.Label();
             this.btnMisAlumnos = new System.Windows.Forms.Button();
             this.btnOtros = new System.Windows.Forms.Button();
             this.btnAutorizaciones = new System.Windows.Forms.Button();
@@ -81,16 +86,24 @@ namespace GTE.WindowsForms
             // 
             // pnlSidebar
             // 
-            this.pnlSidebar.Controls.Add(this.btnOtros);
-            this.pnlSidebar.Controls.Add(this.btnMisAlumnos);
+            // El orden de estos Add es el orden en que se ven los controles: el
+            // último que se agrega queda más arriba. Es el mismo orden y las
+            // mismas secciones que el menú de la web.
+            this.pnlSidebar.Controls.Add(this.btnCartelera);
+            this.pnlSidebar.Controls.Add(this.lblSeccionPantalla);
             this.pnlSidebar.Controls.Add(this.btnReporteRetiros);
             this.pnlSidebar.Controls.Add(this.btnReporteAlumnos);
+            this.pnlSidebar.Controls.Add(this.lblSeccionReportes);
             this.pnlSidebar.Controls.Add(this.btnAutorizaciones);
-            this.pnlSidebar.Controls.Add(this.btnRetiros);
             this.pnlSidebar.Controls.Add(this.btnTutores);
             this.pnlSidebar.Controls.Add(this.btnCursos);
+            this.pnlSidebar.Controls.Add(this.lblSeccionAdministracion);
+            this.pnlSidebar.Controls.Add(this.btnMisAlumnos);
+            this.pnlSidebar.Controls.Add(this.btnOtros);
             this.pnlSidebar.Controls.Add(this.btnAlumnos);
+            this.pnlSidebar.Controls.Add(this.btnRetiros);
             this.pnlSidebar.Controls.Add(this.btnSalidas);
+            this.pnlSidebar.Controls.Add(this.lblSeccionDiaADia);
             this.pnlSidebar.Controls.Add(this.btnInicio);
             this.pnlSidebar.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlSidebar.Location = new System.Drawing.Point(0, 70);
@@ -109,6 +122,55 @@ namespace GTE.WindowsForms
             this.btnInicio.UseVisualStyleBackColor = true;
             this.btnInicio.Click += new System.EventHandler(this.btnInicio_Click);
             // 
+            // 
+            // lblSeccionDiaADia
+            // 
+            this.lblSeccionDiaADia.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblSeccionDiaADia.Location = new System.Drawing.Point(0, 50);
+            this.lblSeccionDiaADia.Name = "lblSeccionDiaADia";
+            this.lblSeccionDiaADia.Size = new System.Drawing.Size(220, 28);
+            this.lblSeccionDiaADia.TabIndex = 20;
+            this.lblSeccionDiaADia.Text = "DÍA A DÍA";
+            // 
+            // lblSeccionAdministracion
+            // 
+            this.lblSeccionAdministracion.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblSeccionAdministracion.Location = new System.Drawing.Point(0, 328);
+            this.lblSeccionAdministracion.Name = "lblSeccionAdministracion";
+            this.lblSeccionAdministracion.Size = new System.Drawing.Size(220, 28);
+            this.lblSeccionAdministracion.TabIndex = 21;
+            this.lblSeccionAdministracion.Text = "ADMINISTRACIÓN";
+            // 
+            // lblSeccionReportes
+            // 
+            this.lblSeccionReportes.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblSeccionReportes.Location = new System.Drawing.Point(0, 506);
+            this.lblSeccionReportes.Name = "lblSeccionReportes";
+            this.lblSeccionReportes.Size = new System.Drawing.Size(220, 28);
+            this.lblSeccionReportes.TabIndex = 22;
+            this.lblSeccionReportes.Text = "REPORTES";
+            // 
+            // lblSeccionPantalla
+            // 
+            this.lblSeccionPantalla.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblSeccionPantalla.Location = new System.Drawing.Point(0, 634);
+            this.lblSeccionPantalla.Name = "lblSeccionPantalla";
+            this.lblSeccionPantalla.Size = new System.Drawing.Size(220, 28);
+            this.lblSeccionPantalla.TabIndex = 23;
+            this.lblSeccionPantalla.Text = "PANTALLA DE LA PUERTA";
+            // 
+            // btnCartelera
+            // 
+            this.btnCartelera.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnCartelera.Location = new System.Drawing.Point(0, 662);
+            this.btnCartelera.Name = "btnCartelera";
+            this.btnCartelera.Size = new System.Drawing.Size(220, 50);
+            this.btnCartelera.TabIndex = 24;
+            this.btnCartelera.Text = "Pantalla de salida";
+            this.btnCartelera.UseVisualStyleBackColor = true;
+            this.btnCartelera.Visible = false;
+            this.btnCartelera.Click += new System.EventHandler(this.btnCartelera_Click);
+            // 
             // btnSalidas
             // 
             this.btnSalidas.Dock = System.Windows.Forms.DockStyle.Top;
@@ -124,7 +186,7 @@ namespace GTE.WindowsForms
             // btnMisAlumnos
             // 
             this.btnMisAlumnos.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnMisAlumnos.Location = new System.Drawing.Point(0, 500);
+            this.btnMisAlumnos.Location = new System.Drawing.Point(0, 278);
             this.btnMisAlumnos.Name = "btnMisAlumnos";
             this.btnMisAlumnos.Size = new System.Drawing.Size(220, 50);
             this.btnMisAlumnos.TabIndex = 10;
@@ -136,7 +198,7 @@ namespace GTE.WindowsForms
             // btnOtros
             // 
             this.btnOtros.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnOtros.Location = new System.Drawing.Point(0, 450);
+            this.btnOtros.Location = new System.Drawing.Point(0, 228);
             this.btnOtros.Name = "btnOtros";
             this.btnOtros.Size = new System.Drawing.Size(220, 50);
             this.btnOtros.TabIndex = 4;
@@ -148,7 +210,7 @@ namespace GTE.WindowsForms
             // btnAutorizaciones
             // 
             this.btnAutorizaciones.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnAutorizaciones.Location = new System.Drawing.Point(0, 300);
+            this.btnAutorizaciones.Location = new System.Drawing.Point(0, 456);
             this.btnAutorizaciones.Name = "btnAutorizaciones";
             this.btnAutorizaciones.Size = new System.Drawing.Size(220, 50);
             this.btnAutorizaciones.TabIndex = 7;
@@ -159,7 +221,7 @@ namespace GTE.WindowsForms
             // btnReporteAlumnos
             // 
             this.btnReporteAlumnos.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnReporteAlumnos.Location = new System.Drawing.Point(0, 350);
+            this.btnReporteAlumnos.Location = new System.Drawing.Point(0, 534);
             this.btnReporteAlumnos.Name = "btnReporteAlumnos";
             this.btnReporteAlumnos.Size = new System.Drawing.Size(220, 50);
             this.btnReporteAlumnos.TabIndex = 8;
@@ -170,7 +232,7 @@ namespace GTE.WindowsForms
             // btnReporteRetiros
             // 
             this.btnReporteRetiros.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnReporteRetiros.Location = new System.Drawing.Point(0, 400);
+            this.btnReporteRetiros.Location = new System.Drawing.Point(0, 584);
             this.btnReporteRetiros.Name = "btnReporteRetiros";
             this.btnReporteRetiros.Size = new System.Drawing.Size(220, 50);
             this.btnReporteRetiros.TabIndex = 9;
@@ -181,44 +243,44 @@ namespace GTE.WindowsForms
             // btnRetiros
             // 
             this.btnRetiros.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnRetiros.Location = new System.Drawing.Point(0, 250);
+            this.btnRetiros.Location = new System.Drawing.Point(0, 128);
             this.btnRetiros.Name = "btnRetiros";
             this.btnRetiros.Size = new System.Drawing.Size(220, 50);
             this.btnRetiros.TabIndex = 2;
-            this.btnRetiros.Text = "Gestionar Retiros";
+            this.btnRetiros.Text = "Retiros";
             this.btnRetiros.UseVisualStyleBackColor = true;
             this.btnRetiros.Click += new System.EventHandler(this.btnRetiros_Click);
             // 
             // btnTutores
             // 
             this.btnTutores.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnTutores.Location = new System.Drawing.Point(0, 200);
+            this.btnTutores.Location = new System.Drawing.Point(0, 406);
             this.btnTutores.Name = "btnTutores";
             this.btnTutores.Size = new System.Drawing.Size(220, 50);
             this.btnTutores.TabIndex = 4;
-            this.btnTutores.Text = "Gestionar Tutores";
+            this.btnTutores.Text = "Tutores";
             this.btnTutores.UseVisualStyleBackColor = true;
             this.btnTutores.Click += new System.EventHandler(this.btnTutores_Click);
             // 
             // btnCursos
             // 
             this.btnCursos.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnCursos.Location = new System.Drawing.Point(0, 150);
+            this.btnCursos.Location = new System.Drawing.Point(0, 356);
             this.btnCursos.Name = "btnCursos";
             this.btnCursos.Size = new System.Drawing.Size(220, 50);
             this.btnCursos.TabIndex = 1;
-            this.btnCursos.Text = "Gestionar Cursos";
+            this.btnCursos.Text = "Cursos";
             this.btnCursos.UseVisualStyleBackColor = true;
             this.btnCursos.Click += new System.EventHandler(this.btnCursos_Click);
             // 
             // btnAlumnos
             // 
             this.btnAlumnos.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnAlumnos.Location = new System.Drawing.Point(0, 100);
+            this.btnAlumnos.Location = new System.Drawing.Point(0, 178);
             this.btnAlumnos.Name = "btnAlumnos";
             this.btnAlumnos.Size = new System.Drawing.Size(220, 50);
             this.btnAlumnos.TabIndex = 0;
-            this.btnAlumnos.Text = "Gestionar Alumnos";
+            this.btnAlumnos.Text = "Alumnos";
             this.btnAlumnos.UseVisualStyleBackColor = true;
             this.btnAlumnos.Click += new System.EventHandler(this.btnAlumnos_Click);
             // 
@@ -264,6 +326,11 @@ namespace GTE.WindowsForms
         private System.Windows.Forms.Button btnAlumnos;
         private System.Windows.Forms.Button btnSalidas;
         private System.Windows.Forms.Button btnInicio;
+        private System.Windows.Forms.Button btnCartelera;
+        private System.Windows.Forms.Label lblSeccionDiaADia;
+        private System.Windows.Forms.Label lblSeccionAdministracion;
+        private System.Windows.Forms.Label lblSeccionReportes;
+        private System.Windows.Forms.Label lblSeccionPantalla;
         private System.Windows.Forms.Panel pnlContent;
     }
 }

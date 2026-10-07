@@ -53,12 +53,13 @@
 
 /* Título de cada grupo del menú (día a día, administración, reportes). */
 .nav-seccion {
-    color: #8d99a6;
-    font-size: 0.72rem;
+    color: #d7dee6;
+    font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    padding: 1rem 1.25rem 0.25rem;
+    padding: 1.1rem 1.25rem 0.3rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
     .nav-item:first-of-type {

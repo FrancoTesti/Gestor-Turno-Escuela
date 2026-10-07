@@ -24,7 +24,7 @@ else
             <tr>
                 <th>Grado</th><th>Curso</th><th>Turno</th><th>Horario Salida</th>
                 <AuthorizeView Roles="Secretario">
-                    <Authorized><th>Acciones</th></Authorized>
+                    <Authorized><th class="text-center" style="width: 180px;">Acciones</th></Authorized>
                 </AuthorizeView>
             </tr>
         </thead>
@@ -35,7 +35,7 @@ else
                     <td>@c.Grado</td><td>@c.Curso</td><td>@c.Turno</td><td>@c.HorarioSalida</td>
                     <AuthorizeView Roles="Secretario">
                         <Authorized>
-                            <td>
+                            <td class="text-center text-nowrap">
                                 <button class="btn btn-sm btn-outline-warning me-1" @onclick="() => AbrirModalEditar(c)">Editar</button>
                                 <button class="btn btn-sm btn-outline-danger" @onclick="() => Eliminar(c.IdCurso)">Borrar</button>
                             </td>

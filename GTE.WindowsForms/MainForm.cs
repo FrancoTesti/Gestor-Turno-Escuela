@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using GTE.Clients;
@@ -37,6 +38,18 @@ namespace GTE.WindowsForms
             {
                 Tema.BotonMenu(boton);
             }
+
+            // La pantalla de salida es un enlace al navegador, pero se ve como los
+            // demás botones del menú.
+            Tema.BotonMenu(btnCartelera);
+
+            foreach (var etiqueta in new[]
+                     {
+                         lblSeccionDiaADia, lblSeccionAdministracion, lblSeccionReportes, lblSeccionPantalla
+                     })
+            {
+                Tema.EtiquetaSeccion(etiqueta);
+            }
         }
 
         private async void LoadUserData()
@@ -66,10 +79,12 @@ namespace GTE.WindowsForms
             }
             else if (role == "Portero")
             {
-                btnAlumnos.Visible = false;
-                btnCursos.Visible = false;
+                // El portero ve los mismos listados que el secretario, pero sin
+                // los botones para modificar (eso lo controla la API).
+                btnAlumnos.Visible = true;
+                btnCursos.Visible = true;
                 btnRetiros.Visible = true;
-                btnTutores.Visible = false;
+                btnTutores.Visible = true;
                 btnAutorizaciones.Visible = true;
                 btnReporteAlumnos.Visible = true;
                 btnReporteRetiros.Visible = true;
@@ -94,7 +109,56 @@ namespace GTE.WindowsForms
             // El portero es quien marca en la puerta qué curso está saliendo.
             btnSalidas.Visible = role == "Secretario" || role == "Portero";
 
+            // La pantalla de la puerta se abre en el navegador, como en la web.
+            btnCartelera.Visible = role == "Secretario" || role == "Portero";
+
             MostrarInicio();
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+
+            // Se acomodan acá y no en el constructor: los controles todavía no
+            // están visibles, así que en ese momento no se puede saber cuáles
+            // quedaron para el rol que entró.
+            AcomodarSecciones();
+        }
+
+        /// <summary>
+        /// El título de cada grupo del menú se muestra solo si el grupo tiene
+        /// alguna opción disponible para el rol que entró.
+        /// </summary>
+        private void AcomodarSecciones()
+        {
+            lblSeccionDiaADia.Visible = btnSalidas.Visible || btnRetiros.Visible || btnAlumnos.Visible
+                || btnOtros.Visible || btnMisAlumnos.Visible;
+
+            lblSeccionAdministracion.Visible = btnCursos.Visible || btnTutores.Visible || btnAutorizaciones.Visible;
+
+            lblSeccionReportes.Visible = btnReporteAlumnos.Visible || btnReporteRetiros.Visible;
+
+            lblSeccionPantalla.Visible = btnCartelera.Visible;
+        }
+
+        /// <summary>
+        /// Abre la pantalla que se deja fija en la puerta del colegio. Es la misma
+        /// que el enlace del menú de la web.
+        /// </summary>
+        private void btnCartelera_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo($"{ApiConfig.DireccionDeLaWeb}/cartelera")
+                {
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"No se pudo abrir la pantalla de salida en el navegador: {ex.Message}",
+                    "Pantalla de salida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         /// <summary>
