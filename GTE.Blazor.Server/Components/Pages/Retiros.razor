@@ -41,8 +41,8 @@ else if (RetirosFiltrados.Count == 0)
 }
 else
 {
-    <div class="table-responsive shadow-sm rounded">
-        <table class="table table-striped table-hover align-middle mb-0">
+    <div class="table-responsive">
+        <table class="table table-striped align-middle mb-0">
             <thead class="table-dark">
                 <tr>
                     <th>ID</th>
@@ -75,10 +75,10 @@ else
                         </td>
                         <td><small>@r.Observaciones</small></td>
                         <td class="text-center">
-                            <button class="btn btn-outline-warning btn-sm me-1" @onclick="() => AbrirModalEditar(r)" title="Editar">
+                            <button class="btn btn-sm btn-outline-warning me-1" @onclick="() => AbrirModalEditar(r)" title="Editar">
                                 Editar
                             </button>
-                            <button class="btn btn-outline-danger btn-sm" @onclick="() => EliminarRetiro(r.IdRetiro)" title="Eliminar">
+                            <button class="btn btn-sm btn-outline-danger" @onclick="() => EliminarRetiro(r.IdRetiro)" title="Eliminar">
                                 Borrar
                             </button>
                         </td>
@@ -188,8 +188,8 @@ else
                                 else
                                 {
                                     <div class="table-responsive">
-                                        <table class="table table-bordered table-sm align-middle">
-                                            <thead class="table-light">
+                            <table class="table table-striped align-middle">
+                                <thead class="table-dark">
                                                 <tr>
                                                     <th>Alumno</th>
                                                     <th style="width: 150px;">Hora de Salida</th>

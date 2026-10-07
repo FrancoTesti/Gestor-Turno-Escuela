@@ -20,6 +20,28 @@ a, .btn-link {
     padding-top: 1.1rem;
 }
 
+/* Todas las tablas de la aplicación se ven igual: el modelo es la tabla de
+   salidas de curso, con el encabezado oscuro y las filas alineadas al medio. */
+.content table.table thead th {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.content table.table tbody td {
+    vertical-align: middle;
+}
+
+/* Tarjetas del inicio: se levantan un poco al pasar el mouse, así se nota que
+   se puede hacer clic en toda la tarjeta. */
+.tarjeta-inicio {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tarjeta-inicio:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.12) !important;
+}
+
 h1:focus {
     outline: none;
 }

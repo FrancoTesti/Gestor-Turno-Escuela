@@ -21,8 +21,8 @@
 @if (horarios == null) { <p><em>Cargando...</em></p> }
 else
 {
-    <table class="table table-striped">
-        <thead>
+    <table class="table table-striped align-middle">
+        <thead class="table-dark">
             <tr>
                 <th>Alumno</th><th>Descripción</th><th>Hora Salida</th>
                 <AuthorizeView Roles="Secretario, Portero">
@@ -38,8 +38,8 @@ else
                     <AuthorizeView Roles="Secretario, Portero">
                         <Authorized>
                             <td>
-                                <button class="btn btn-warning btn-sm" @onclick="() => AbrirModalEditar(h)">Editar</button>
-                                <button class="btn btn-danger btn-sm" @onclick="() => Eliminar(h.IdHorarioEspecial)">Borrar</button>
+                                <button class="btn btn-sm btn-outline-warning me-1" @onclick="() => AbrirModalEditar(h)">Editar</button>
+                                <button class="btn btn-sm btn-outline-danger" @onclick="() => Eliminar(h.IdHorarioEspecial)">Borrar</button>
                             </td>
                         </Authorized>
                     </AuthorizeView>

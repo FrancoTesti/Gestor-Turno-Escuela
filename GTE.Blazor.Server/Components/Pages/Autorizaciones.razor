@@ -104,8 +104,8 @@
             else
             {
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover align-middle">
-                        <thead class="table-light">
+                    <table class="table table-striped align-middle">
+                        <thead class="table-dark">
                             <tr>
                                 <th>Nombre y Apellido</th>
                                 <th>Grado y División</th>
@@ -131,7 +131,7 @@
                                     <AuthorizeView Roles="Secretario">
                                         <Authorized>
                                             <td class="text-center">
-                                                <button class="btn btn-outline-danger btn-sm" @onclick="() => QuitarAutorizacion(alu.IdAlumno)">
+                                                <button class="btn btn-sm btn-outline-danger" @onclick="() => QuitarAutorizacion(alu.IdAlumno)">
                                                     Quitar
                                                 </button>
                                             </td>

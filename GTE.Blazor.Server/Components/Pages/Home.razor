@@ -11,137 +11,126 @@
     </p>
 </div>
 
-<div class="row g-3">
-    <AuthorizeView Roles="Secretario,Portero">
-        <Authorized>
-            <div class="col-md-4">
-                <a class="card h-100 text-decoration-none shadow-sm" href="alumnos">
-                    <div class="card-body">
-                        <h5 class="card-title">Alumnos</h5>
-                        <p class="card-text text-muted mb-0">
-                            Consultá el listado, buscá por curso o turno y administrá los legajos.
-                        </p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a class="card h-100 text-decoration-none shadow-sm" href="retiros">
-                    <div class="card-body">
-                        <h5 class="card-title">Retiros</h5>
-                        <p class="card-text text-muted mb-0">
-                            Registrá la entrega de alumnos a un tutor autorizado.
-                        </p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a class="card h-100 text-decoration-none shadow-sm" href="salidas">
-                    <div class="card-body">
-                        <h5 class="card-title">Salidas de curso</h5>
-                        <p class="card-text text-muted mb-0">
-                            Marcá qué curso está saliendo. La pantalla de la puerta lo muestra al instante.
-                        </p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a class="card h-100 text-decoration-none shadow-sm" href="horariosespeciales">
-                    <div class="card-body">
-                        <h5 class="card-title">Horarios especiales</h5>
-                        <p class="card-text text-muted mb-0">
-                            Cargá las salidas a una hora distinta por una actividad puntual.
-                        </p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a class="card h-100 text-decoration-none shadow-sm" href="tutores">
-                    <div class="card-body">
-                        <h5 class="card-title">Tutores</h5>
-                        <p class="card-text text-muted mb-0">
-                            Datos de contacto de los adultos autorizados a retirar.
-                        </p>
-                    </div>
-                </a>
-            </div>
-        </Authorized>
-    </AuthorizeView>
+@* Las mismas secciones y el mismo orden que el menú de la izquierda, para que
+   sea fácil ubicarse en cualquiera de las dos. *@
+@foreach (var seccion in secciones)
+{
+    <section class="mb-4">
+        <h6 class="text-uppercase text-muted mb-3">@seccion.Titulo</h6>
 
-    <AuthorizeView Roles="Secretario">
-        <Authorized>
-            <div class="col-md-4">
-                <a class="card h-100 text-decoration-none shadow-sm" href="autorizaciones">
-                    <div class="card-body">
-                        <h5 class="card-title">Autorizaciones</h5>
-                        <p class="card-text text-muted mb-0">
-                            Definí qué tutor puede retirar a cada alumno.
-                        </p>
-                    </div>
-                </a>
-            </div>
-        </Authorized>
-    </AuthorizeView>
-
-    <div class="col-md-4">
-        <a class="card h-100 text-decoration-none shadow-sm" href="cursos">
-            <div class="card-body">
-                <h5 class="card-title">Cursos</h5>
-                <p class="card-text text-muted mb-0">
-                    Grados, divisiones, turnos y horario de salida de cada curso.
-                </p>
-            </div>
-        </a>
-    </div>
-
-    <AuthorizeView Roles="Tutor">
-        <Authorized>
-            <div class="col-md-4">
-                <a class="card h-100 text-decoration-none shadow-sm" href="mis-alumnos">
-                    <div class="card-body">
-                        <h5 class="card-title">Mis alumnos</h5>
-                        <p class="card-text text-muted mb-0">
-                            Los alumnos a tu cargo, con su curso, horario de salida y estado.
-                        </p>
-                    </div>
-                </a>
-            </div>
-        </Authorized>
-    </AuthorizeView>
-
-    <AuthorizeView Roles="Secretario,Portero">
-        <Authorized>
-            <div class="col-md-4">
-                <a class="card h-100 text-decoration-none shadow-sm" href="reportealumnos">
-                    <div class="card-body">
-                        <h5 class="card-title">Reporte de alumnos</h5>
-                        <p class="card-text text-muted mb-0">
-                            Cantidad de alumnos por curso y turno, con gráfico.
-                        </p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a class="card h-100 text-decoration-none shadow-sm" href="reporteretiros">
-                    <div class="card-body">
-                        <h5 class="card-title">Reporte de retiros</h5>
-                        <p class="card-text text-muted mb-0">
-                            Retiros de un período, con el detalle de los alumnos.
-                        </p>
-                    </div>
-                </a>
-            </div>
-        </Authorized>
-    </AuthorizeView>
-</div>
+        <div class="row g-3">
+            @foreach (var acceso in seccion.Accesos)
+            {
+                <div class="col-sm-6 col-xl-4">
+                    <a class="card h-100 text-decoration-none shadow-sm tarjeta-inicio" href="@acceso.Direccion">
+                        <div class="card-body">
+                            <h5 class="card-title">@acceso.Titulo</h5>
+                            <p class="card-text text-muted mb-0">@acceso.Descripcion</p>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    </section>
+}
 
 @code {
     private string? nombreCompleto;
     private string? rol;
+    private List<Seccion> secciones = new();
 
     protected override async Task OnInitializedAsync()
     {
         nombreCompleto = await AuthService.GetNombreCompletoAsync()
             ?? await AuthService.GetUsernameAsync();
         rol = await AuthService.GetRoleAsync();
+
+        secciones = ArmarSecciones(rol)
+            .Where(seccion => seccion.Accesos.Count > 0)
+            .ToList();
+    }
+
+    private static List<Seccion> ArmarSecciones(string? rol)
+    {
+        return new List<Seccion>
+        {
+            new("Día a día", new List<Acceso>
+            {
+                new("Salidas de curso",
+                    "Marcá qué curso está saliendo. La pantalla de la puerta lo muestra al instante.",
+                    "salidas", "Secretario", "Portero"),
+                new("Retiros",
+                    "Registrá la entrega de alumnos a un tutor autorizado.",
+                    "retiros", "Secretario", "Portero"),
+                new("Alumnos",
+                    "Consultá el listado, buscá por curso o turno y administrá los legajos.",
+                    "alumnos", "Secretario", "Portero"),
+                new("Horarios especiales",
+                    "Cargá las salidas a una hora distinta por una actividad puntual.",
+                    "horariosespeciales", "Secretario", "Portero"),
+                new("Mis alumnos",
+                    "Los alumnos a tu cargo, con su curso, horario de salida y estado.",
+                    "mis-alumnos", "Tutor")
+            }),
+            new("Administración", new List<Acceso>
+            {
+                new("Cursos",
+                    "Grados, divisiones, turnos y horario de salida de cada curso.",
+                    "cursos", "Secretario", "Portero", "Tutor"),
+                new("Tutores",
+                    "Datos de contacto de los adultos autorizados a retirar.",
+                    "tutores", "Secretario", "Portero"),
+                new("Autorizaciones",
+                    "Definí qué tutor puede retirar a cada alumno.",
+                    "autorizaciones", "Secretario")
+            }),
+            new("Reportes", new List<Acceso>
+            {
+                new("Reporte de alumnos",
+                    "Cantidad de alumnos por curso y turno, con gráfico.",
+                    "reportealumnos", "Secretario", "Portero"),
+                new("Reporte de retiros",
+                    "Retiros de un período, con el detalle de los alumnos.",
+                    "reporteretiros", "Secretario", "Portero")
+            })
+        }
+        .Select(seccion => new Seccion(
+            seccion.Titulo,
+            seccion.Accesos.Where(acceso => acceso.EsPara(rol)).ToList()))
+        .ToList();
+    }
+
+    /// <summary>Una pantalla a la que se puede entrar desde el inicio.</summary>
+    private sealed class Acceso
+    {
+        private readonly string[] rolesPermitidos;
+
+        public Acceso(string titulo, string descripcion, string direccion, params string[] roles)
+        {
+            Titulo = titulo;
+            Descripcion = descripcion;
+            Direccion = direccion;
+            rolesPermitidos = roles;
+        }
+
+        public string Titulo { get; }
+        public string Descripcion { get; }
+        public string Direccion { get; }
+
+        public bool EsPara(string? rol) =>
+            rol is not null && rolesPermitidos.Contains(rol, StringComparer.OrdinalIgnoreCase);
+    }
+
+    /// <summary>Grupo de pantallas que se muestra con un título.</summary>
+    private sealed class Seccion
+    {
+        public Seccion(string titulo, List<Acceso> accesos)
+        {
+            Titulo = titulo;
+            Accesos = accesos;
+        }
+
+        public string Titulo { get; }
+        public List<Acceso> Accesos { get; }
     }
 }

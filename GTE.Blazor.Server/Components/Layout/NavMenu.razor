@@ -6,6 +6,8 @@
 
 <input type="checkbox" title="Navigation menu" class="navbar-toggler" />
 
+@* El menú está agrupado por tipo de tarea y, adentro de cada grupo, primero lo
+   que se usa todos los días. *@
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="flex-column">
         <div class="nav-item px-3">
@@ -13,21 +15,12 @@
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Inicio
             </NavLink>
         </div>
-        
+
         <AuthorizeView Roles="Secretario,Portero">
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="alumnos">
-                    <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Alumnos
-                </NavLink>
-            </div>
+            <div class="nav-seccion">Día a día</div>
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="salidas">
                     <span class="bi bi-box-arrow-up-right-nav-menu" aria-hidden="true"></span> Salidas de curso
-                </NavLink>
-            </div>
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="tutores">
-                    <span class="bi bi-people-fill-nav-menu" aria-hidden="true"></span> Tutores
                 </NavLink>
             </div>
             <div class="nav-item px-3">
@@ -36,26 +29,37 @@
                 </NavLink>
             </div>
             <div class="nav-item px-3">
+                <NavLink class="nav-link" href="alumnos">
+                    <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Alumnos
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
                 <NavLink class="nav-link" href="horariosespeciales">
-                    <span class="bi bi-clock-fill-nav-menu" aria-hidden="true"></span> Horarios Esp.
+                    <span class="bi bi-clock-fill-nav-menu" aria-hidden="true"></span> Horarios esp.
                 </NavLink>
             </div>
+        </AuthorizeView>
+
+        <AuthorizeView Roles="Tutor">
+            <div class="nav-seccion">Día a día</div>
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="reportealumnos">
-                    <span class="bi bi-bar-chart-fill-nav-menu" aria-hidden="true"></span> Rep. Alumnos
+                <NavLink class="nav-link" href="mis-alumnos">
+                    <span class="bi bi-people-fill-nav-menu" aria-hidden="true"></span> Mis alumnos
                 </NavLink>
             </div>
+        </AuthorizeView>
+
+        <div class="nav-seccion">Administración</div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="cursos">
+                <span class="bi bi-book-fill-nav-menu" aria-hidden="true"></span> Cursos
+            </NavLink>
+        </div>
+        <AuthorizeView Roles="Secretario,Portero">
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="reporteretiros">
-                    <span class="bi bi-table-nav-menu" aria-hidden="true"></span> Rep. Retiros
+                <NavLink class="nav-link" href="tutores">
+                    <span class="bi bi-people-fill-nav-menu" aria-hidden="true"></span> Tutores
                 </NavLink>
-            </div>
-            @* La pantalla de la puerta se abre en otra ventana, para dejarla
-               fija en el televisor o el monitor de la entrada. *@
-            <div class="nav-item px-3">
-                <a class="nav-link" href="cartelera" target="_blank" rel="noopener">
-                    <span class="bi bi-display-nav-menu" aria-hidden="true"></span> Pantalla de salida
-                </a>
             </div>
         </AuthorizeView>
 
@@ -67,19 +71,26 @@
             </div>
         </AuthorizeView>
 
-        <AuthorizeView Roles="Tutor">
+        <AuthorizeView Roles="Secretario,Portero">
+            <div class="nav-seccion">Reportes</div>
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="mis-alumnos">
-                    <span class="bi bi-people-fill-nav-menu" aria-hidden="true"></span> Mis alumnos
+                <NavLink class="nav-link" href="reportealumnos">
+                    <span class="bi bi-bar-chart-fill-nav-menu" aria-hidden="true"></span> Rep. alumnos
                 </NavLink>
             </div>
-        </AuthorizeView>
-
-        <AuthorizeView>
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="cursos">
-                    <span class="bi bi-book-fill-nav-menu" aria-hidden="true"></span> Cursos
+                <NavLink class="nav-link" href="reporteretiros">
+                    <span class="bi bi-table-nav-menu" aria-hidden="true"></span> Rep. retiros
                 </NavLink>
+            </div>
+
+            @* La pantalla de la puerta se abre en otra ventana, para dejarla
+               fija en el televisor o el monitor de la entrada. *@
+            <div class="nav-seccion">Pantalla de la puerta</div>
+            <div class="nav-item px-3">
+                <a class="nav-link" href="cartelera" target="_blank" rel="noopener">
+                    <span class="bi bi-display-nav-menu" aria-hidden="true"></span> Pantalla de salida
+                </a>
             </div>
         </AuthorizeView>
     </nav>

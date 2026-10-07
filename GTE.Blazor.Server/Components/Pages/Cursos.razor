@@ -19,8 +19,8 @@
 @if (cursos == null) { <p><em>Cargando...</em></p> }
 else
 {
-    <table class="table table-striped">
-        <thead>
+    <table class="table table-striped align-middle">
+        <thead class="table-dark">
             <tr>
                 <th>Grado</th><th>Curso</th><th>Turno</th><th>Horario Salida</th>
                 <AuthorizeView Roles="Secretario">
@@ -36,8 +36,8 @@ else
                     <AuthorizeView Roles="Secretario">
                         <Authorized>
                             <td>
-                                <button class="btn btn-warning btn-sm" @onclick="() => AbrirModalEditar(c)">Editar</button>
-                                <button class="btn btn-danger btn-sm" @onclick="() => Eliminar(c.IdCurso)">Borrar</button>
+                                <button class="btn btn-sm btn-outline-warning me-1" @onclick="() => AbrirModalEditar(c)">Editar</button>
+                                <button class="btn btn-sm btn-outline-danger" @onclick="() => Eliminar(c.IdCurso)">Borrar</button>
                             </td>
                         </Authorized>
                     </AuthorizeView>

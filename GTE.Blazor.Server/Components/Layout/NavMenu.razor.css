@@ -51,6 +51,16 @@
     padding-bottom: 0.5rem;
 }
 
+/* Título de cada grupo del menú (día a día, administración, reportes). */
+.nav-seccion {
+    color: #8d99a6;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 1rem 1.25rem 0.25rem;
+}
+
     .nav-item:first-of-type {
         padding-top: 1rem;
     }

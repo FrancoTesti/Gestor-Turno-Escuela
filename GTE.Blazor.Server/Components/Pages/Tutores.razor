@@ -26,8 +26,8 @@ else if (tutores.Count == 0)
 }
 else
 {
-    <table class="table table-striped">
-        <thead>
+    <table class="table table-striped align-middle">
+        <thead class="table-dark">
             <tr>
                 <th>Nombre y Apellido</th>
                 <th>DNI</th>
@@ -53,8 +53,8 @@ else
                     <AuthorizeView Roles="Secretario">
                         <Authorized>
                             <td>
-                                <button class="btn btn-warning btn-sm" @onclick="() => AbrirModalEditar(t)">Editar</button>
-                                <button class="btn btn-danger btn-sm" @onclick="() => Eliminar(t.IdTutor)">Borrar</button>
+                                <button class="btn btn-sm btn-outline-warning me-1" @onclick="() => AbrirModalEditar(t)">Editar</button>
+                                <button class="btn btn-sm btn-outline-danger" @onclick="() => Eliminar(t.IdTutor)">Borrar</button>
                             </td>
                         </Authorized>
                     </AuthorizeView>
