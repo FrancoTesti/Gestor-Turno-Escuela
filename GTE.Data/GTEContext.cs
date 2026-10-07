@@ -127,6 +127,7 @@ namespace GTE.Data
                 entity.Property(e => e.IdAutorizacion).ValueGeneratedOnAdd();
                 entity.Property(e => e.AlumnoId).IsRequired();
                 entity.Property(e => e.TutorId).IsRequired();
+                entity.Property(e => e.Parentesco).IsRequired().HasMaxLength(50);
             });
 
             modelBuilder.Entity<Retiro>(entity =>
@@ -235,12 +236,18 @@ namespace GTE.Data
                 "Pilar", "Dante", "Valentino", "Malena", "Bruno", "Ámbar"
             };
 
+            // Nombres de tutores y de tutoras por separado, así el parentesco que se
+            // carga (padre o madre) es coherente con el nombre.
             string[] nombresDeTutores =
             {
-                "Analía", "Marcelo", "Silvana", "Gustavo", "Verónica", "Diego",
-                "Patricia", "Fernando", "Lorena", "Alejandro", "Gabriela", "Sergio",
-                "Mónica", "Pablo", "Claudia", "Roberto", "Andrea", "Martín",
-                "Silvia", "Jorge", "Natalia", "Cristian", "Vanesa", "Hernán"
+                "Marcelo", "Gustavo", "Diego", "Fernando", "Alejandro", "Sergio",
+                "Pablo", "Roberto", "Martín", "Jorge", "Cristian", "Hernán"
+            };
+
+            string[] nombresDeTutoras =
+            {
+                "Analía", "Silvana", "Verónica", "Patricia", "Lorena", "Gabriela",
+                "Mónica", "Claudia", "Andrea", "Silvia", "Natalia", "Vanesa"
             };
 
             string[] apellidos =
@@ -255,7 +262,6 @@ namespace GTE.Data
                 "Ibarra", "Salinas", "Duarte", "Escobar", "Montero", "Toledo"
             };
 
-            string[] parentescos = { "Padre", "Madre", "Tutor" };
             string[] motivosDeRetiro =
             {
                 "Turno médico", "Actividad extraprogramática", "Retiro de hermanos",
@@ -306,15 +312,18 @@ namespace GTE.Data
                     });
                 }
 
+                bool esMujer = t == 2 || (t > 2 && t % 2 == 0);
+
                 tutoresDeEjemplo.Add(new
                 {
                     IdTutor = t,
                     Nombre = t == 1 ? "Franco"
                         : t == 2 ? "Mariana"
-                        : nombresDeTutores[(t - 3) % nombresDeTutores.Length],
+                        : esMujer ? nombresDeTutoras[(t / 2) % nombresDeTutoras.Length]
+                        : nombresDeTutores[(t / 2) % nombresDeTutores.Length],
                     Apellido = apellidos[t - 1],
                     Dni = (30000000 + (t * 137)).ToString(),
-                    Parentesco = parentescos[t % parentescos.Length],
+                    Parentesco = esMujer ? "Madre" : "Padre",
                     Telefono = $"11-{4000 + t}-{1000 + (t * 7)}",
                     // Un tutor con restricción, para poder probar que el sistema no
                     // lo deja retirar alumnos.
@@ -350,17 +359,23 @@ namespace GTE.Data
                     {
                         IdAutorizacion = autorizacionesDeEjemplo.Count + 1,
                         AlumnoId = proximoAlumno,
-                        TutorId = tutor
+                        TutorId = tutor,
+                        Parentesco = tutor == 2 || (tutor > 2 && tutor % 2 == 0) ? "Madre" : "Padre"
                     });
 
                     // Algunos alumnos también quedan autorizados para otro adulto.
                     if (proximoAlumno % 4 == 0)
                     {
+                        int otroTutor = tutor == CantidadDeTutores ? 1 : tutor + 1;
+
                         autorizacionesDeEjemplo.Add(new
                         {
                             IdAutorizacion = autorizacionesDeEjemplo.Count + 1,
                             AlumnoId = proximoAlumno,
-                            TutorId = tutor == CantidadDeTutores ? 1 : tutor + 1
+                            TutorId = otroTutor,
+                            // Con este otro adulto el parentesco es distinto: eso es lo
+                            // que antes no se podía representar.
+                            Parentesco = otroTutor == 2 || (otroTutor > 2 && otroTutor % 2 == 0) ? "Tía" : "Tío"
                         });
                     }
 

@@ -17,33 +17,46 @@ else
     <div class="card mb-4">
         <div class="card-body text-center">
             <h5>Gráfico de Alumnos</h5>
-            <svg width="800" height="300" style="border: 1px solid #ccc; background: #f9f9f9; padding: 10px;">
-                @if (datos.Count > 0)
+            @{
+                int maxCantidad = datos.Count > 0 ? Math.Max(1, datos.Max(d => d.Cantidad)) : 1;
+                const int AnchoSvg = 820;
+                const int AltoSvg = 330;
+                const int BaseY = 250;              // línea donde apoyan las barras
+                const int AltoMaximoBarra = 190;
+                const int MargenIzquierdo = 50;
+
+                // Con muchos cursos las barras se angostan para que entren todos y
+                // las etiquetas de abajo no queden cortadas.
+                int paso = datos.Count == 0
+                    ? 90
+                    : Math.Min(90, Math.Max(38, (AnchoSvg - MargenIzquierdo - 20) / datos.Count));
+
+                int anchoBarra = Math.Max(14, paso - 14);
+            }
+
+            @* Sin relleno interno: el que había empujaba el dibujo y recortaba las
+               etiquetas de abajo. *@
+            <svg width="@AnchoSvg" height="@AltoSvg" style="border: 1px solid #ccc; background: #f9f9f9;">
+                @for (int i = 0; i < datos.Count; i++)
                 {
-                    int maxCantidad = datos.Max(d => d.Cantidad) == 0 ? 1 : datos.Max(d => d.Cantidad);
-                    int barWidth = 40;
-                    int gap = 20;
-                    int svgHeight = 250;
-                    int startX = 50;
+                    var d = datos[i];
+                    int altoBarra = (int)((double)d.Cantidad / maxCantidad * AltoMaximoBarra);
+                    int x = MargenIzquierdo + (i * paso);
+                    int y = BaseY - altoBarra;
+                    int centro = x + (anchoBarra / 2);
+                    string color = d.Turno.Contains("Mañana") ? "#4CAF50"
+                        : d.Turno.Contains("Tarde") ? "#2196F3" : "#FF9800";
 
-                    for (int i = 0; i < datos.Count; i++)
-                    {
-                        var d = datos[i];
-                        int barHeight = (int)((double)d.Cantidad / maxCantidad * 200);
-                        int x = startX + i * (barWidth + gap);
-                        int y = svgHeight - barHeight;
-                        string color = d.Turno.Contains("Mañana") ? "#4CAF50" : (d.Turno.Contains("Tarde") ? "#2196F3" : "#FF9800");
+                    // El compilador de Razor reserva la etiqueta <text>, así que las
+                    // etiquetas del gráfico se arman como texto ya formado.
+                    string nombreCurso = System.Net.WebUtility.HtmlEncode($"{d.Grado} {d.Curso}");
+                    string nombreTurno = System.Net.WebUtility.HtmlEncode(d.Turno);
 
-                        <!-- Barra -->
-                        <rect x="@x" y="@y" width="@barWidth" height="@barHeight" fill="@color" />
-                        
-                        <!-- Etiqueta de cantidad arriba de la barra -->
-                        @((MarkupString)$"<text x='{x + barWidth/2}' y='{y - 5}' font-size='12' text-anchor='middle' fill='#000'>{d.Cantidad}</text>")
-                        
-                        <!-- Etiqueta del curso debajo -->
-                        @((MarkupString)$"<text x='{x + barWidth/2}' y='{svgHeight + 15}' font-size='10' text-anchor='middle' fill='#000'>{d.Grado} {d.Curso}</text>")
-                        @((MarkupString)$"<text x='{x + barWidth/2}' y='{svgHeight + 30}' font-size='10' text-anchor='middle' fill='#555'>{d.Turno}</text>")
-                    }
+                    <rect x="@x" y="@y" width="@anchoBarra" height="@altoBarra" fill="@color" />
+
+                    @((MarkupString)$"<text x='{centro}' y='{y - 6}' font-size='12' text-anchor='middle' fill='#000'>{d.Cantidad}</text>")
+                    @((MarkupString)$"<text x='{centro}' y='{BaseY + 18}' font-size='11' text-anchor='middle' fill='#000'>{nombreCurso}</text>")
+                    @((MarkupString)$"<text x='{centro}' y='{BaseY + 34}' font-size='11' text-anchor='middle' fill='#555'>{nombreTurno}</text>")
                 }
             </svg>
             <div class="mt-3">

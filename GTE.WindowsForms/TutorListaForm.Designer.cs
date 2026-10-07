@@ -16,6 +16,10 @@ namespace GTE.WindowsForms
         private void InitializeComponent()
         {
             this.lblTitle = new System.Windows.Forms.Label();
+            this.lblFiltroNombre = new System.Windows.Forms.Label();
+            this.txtFiltroNombre = new System.Windows.Forms.TextBox();
+            this.lblFiltroCurso = new System.Windows.Forms.Label();
+            this.cmbFiltroCurso = new System.Windows.Forms.ComboBox();
             this.btnNuevo = new System.Windows.Forms.Button();
             this.btnEditar = new System.Windows.Forms.Button();
             this.btnEliminar = new System.Windows.Forms.Button();
@@ -32,6 +36,39 @@ namespace GTE.WindowsForms
             this.lblTitle.Size = new System.Drawing.Size(230, 37);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Gestión de Tutores";
+            // 
+            // lblFiltroNombre
+            // 
+            this.lblFiltroNombre.AutoSize = true;
+            this.lblFiltroNombre.Location = new System.Drawing.Point(20, 24);
+            this.lblFiltroNombre.Name = "lblFiltroNombre";
+            this.lblFiltroNombre.Size = new System.Drawing.Size(170, 20);
+            this.lblFiltroNombre.TabIndex = 20;
+            this.lblFiltroNombre.Text = "Buscar por nombre o DNI";
+            // 
+            // txtFiltroNombre
+            // 
+            this.txtFiltroNombre.Location = new System.Drawing.Point(20, 48);
+            this.txtFiltroNombre.Name = "txtFiltroNombre";
+            this.txtFiltroNombre.Size = new System.Drawing.Size(180, 30);
+            this.txtFiltroNombre.TabIndex = 21;
+            // 
+            // lblFiltroCurso
+            // 
+            this.lblFiltroCurso.AutoSize = true;
+            this.lblFiltroCurso.Location = new System.Drawing.Point(212, 24);
+            this.lblFiltroCurso.Name = "lblFiltroCurso";
+            this.lblFiltroCurso.Size = new System.Drawing.Size(120, 20);
+            this.lblFiltroCurso.TabIndex = 22;
+            this.lblFiltroCurso.Text = "Curso del alumno";
+            // 
+            // cmbFiltroCurso
+            // 
+            this.cmbFiltroCurso.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbFiltroCurso.Location = new System.Drawing.Point(212, 48);
+            this.cmbFiltroCurso.Name = "cmbFiltroCurso";
+            this.cmbFiltroCurso.Size = new System.Drawing.Size(190, 30);
+            this.cmbFiltroCurso.TabIndex = 23;
             // 
             // btnNuevo
             // 
@@ -94,6 +131,10 @@ namespace GTE.WindowsForms
             this.Controls.Add(this.btnEditar);
             this.Controls.Add(this.btnNuevo);
             this.Controls.Add(this.lblTitle);
+            this.Controls.Add(this.cmbFiltroCurso);
+            this.Controls.Add(this.lblFiltroCurso);
+            this.Controls.Add(this.txtFiltroNombre);
+            this.Controls.Add(this.lblFiltroNombre);
             this.Name = "TutorListaForm";
             this.Text = "Tutores";
             this.Load += new System.EventHandler(this.TutorListaForm_Load);
@@ -103,6 +144,10 @@ namespace GTE.WindowsForms
         }
 
         private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.Label lblFiltroNombre;
+        private System.Windows.Forms.TextBox txtFiltroNombre;
+        private System.Windows.Forms.Label lblFiltroCurso;
+        private System.Windows.Forms.ComboBox cmbFiltroCurso;
         private System.Windows.Forms.Button btnNuevo;
         private System.Windows.Forms.Button btnEditar;
         private System.Windows.Forms.Button btnEliminar;

@@ -16,6 +16,40 @@
     </Authorized>
 </AuthorizeView>
 
+<div class="card mb-3">
+    <div class="card-body">
+        <h6 class="card-subtitle mb-3 text-muted">Buscar por filtros</h6>
+        <div class="row g-2 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label">Nombre, apellido o DNI</label>
+                <input class="form-control" placeholder="Escribí para filtrar"
+                       @bind="filtroTexto" @bind:event="oninput" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Parentesco</label>
+                <select class="form-control" @bind="filtroParentesco">
+                    <option value="">Todos</option>
+                    @foreach (var parentesco in ParentescosDisponibles)
+                    {
+                        <option value="@parentesco">@parentesco</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Restricción</label>
+                <select class="form-control" @bind="filtroRestriccion">
+                    <option value="todos">Todos</option>
+                    <option value="si">Sólo con restricción</option>
+                    <option value="no">Sólo sin restricción</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-outline-secondary" @onclick="LimpiarFiltros">Limpiar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @if (tutores == null)
 {
     <p><em>Cargando...</em></p>
@@ -23,6 +57,10 @@
 else if (tutores.Count == 0)
 {
     <p>No hay tutores registrados.</p>
+}
+else if (!TutoresFiltrados.Any())
+{
+    <p>No se encontraron tutores con esos filtros.</p>
 }
 else
 {
@@ -41,7 +79,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var t in tutores)
+            @foreach (var t in TutoresFiltrados)
             {
                 <tr>
                     <td>@t.Nombre @t.Apellido</td>
@@ -130,6 +168,35 @@ else
     private TutorDTO tutorEditando = new();
     private bool mostrarModal;
     private bool esEdicion;
+    private string? filtroTexto;
+    private string filtroParentesco = string.Empty;
+    private string filtroRestriccion = "todos";
+
+    private IEnumerable<string> ParentescosDisponibles =>
+        (tutores ?? new List<TutorDTO>())
+            .Select(t => t.Parentesco)
+            .Where(p => !string.IsNullOrWhiteSpace(p))
+            .Distinct()
+            .OrderBy(p => p);
+
+    /// <summary>Tutores que pasan los filtros de la pantalla.</summary>
+    private IEnumerable<TutorDTO> TutoresFiltrados =>
+        (tutores ?? new List<TutorDTO>()).Where(t =>
+            (string.IsNullOrWhiteSpace(filtroTexto)
+                || t.Nombre.Contains(filtroTexto, StringComparison.OrdinalIgnoreCase)
+                || t.Apellido.Contains(filtroTexto, StringComparison.OrdinalIgnoreCase)
+                || t.Dni.Contains(filtroTexto, StringComparison.OrdinalIgnoreCase))
+            && (string.IsNullOrEmpty(filtroParentesco) || t.Parentesco == filtroParentesco)
+            && (filtroRestriccion == "todos"
+                || (filtroRestriccion == "si" && t.TieneRestriccion)
+                || (filtroRestriccion == "no" && !t.TieneRestriccion)));
+
+    private void LimpiarFiltros()
+    {
+        filtroTexto = null;
+        filtroParentesco = string.Empty;
+        filtroRestriccion = "todos";
+    }
 
     protected override async Task OnInitializedAsync()
     {

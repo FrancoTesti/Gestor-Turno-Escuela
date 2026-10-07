@@ -21,11 +21,24 @@
             </div>
             <div class="col-md-2">
                 <label class="form-label">Grado</label>
-                <input class="form-control" @bind="filtro.Grado" />
+                @* Opciones limitadas: los grados que existen, no texto libre. *@
+                <select class="form-control" @bind="filtro.Grado">
+                    <option value="">Todos</option>
+                    @foreach (var grado in GradosDisponibles)
+                    {
+                        <option value="@grado">@grado</option>
+                    }
+                </select>
             </div>
             <div class="col-md-2">
                 <label class="form-label">División</label>
-                <input class="form-control" @bind="filtro.Curso" />
+                <select class="form-control" @bind="filtro.Curso">
+                    <option value="">Todas</option>
+                    @foreach (var division in DivisionesDisponibles)
+                    {
+                        <option value="@division">@division</option>
+                    }
+                </select>
             </div>
             <div class="col-md-2">
                 <label class="form-label">Estado</label>
@@ -148,6 +161,12 @@ else
     private AlumnoDTO alumnoEditando = new();
     private FiltroDeAlumnos filtro = new();
     private bool mostrarModal;
+
+    private IEnumerable<string> GradosDisponibles =>
+        (cursos ?? new List<CursoEscolarDTO>()).Select(c => c.Grado).Distinct().OrderBy(g => g);
+
+    private IEnumerable<string> DivisionesDisponibles =>
+        (cursos ?? new List<CursoEscolarDTO>()).Select(c => c.Curso).Distinct().OrderBy(c => c);
 
     protected override async Task OnInitializedAsync()
     {

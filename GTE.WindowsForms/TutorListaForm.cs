@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using GTE.DTOs;
@@ -10,12 +12,23 @@ namespace GTE.WindowsForms
     public partial class TutorListaForm : Form
     {
         private readonly TutorApiClient _apiClient = new TutorApiClient();
+        private readonly CursoEscolarApiClient _cursosClient = new CursoEscolarApiClient();
+        private readonly AlumnoApiClient _alumnosClient = new AlumnoApiClient();
+        private readonly AutorizacionApiClient _autorizacionesClient = new AutorizacionApiClient();
+
+        private List<TutorDTO> _tutores = new();
+        private List<AlumnoDTO> _alumnos = new();
+        private List<AutorizacionDTO> _autorizaciones = new();
 
         public TutorListaForm()
         {
             InitializeComponent();
             ApplyStyles();
             Tema.AcomodarControles(this);
+
+            // Los filtros se aplican mientras se escribe o se cambia el curso.
+            txtFiltroNombre.TextChanged += (_, _) => AplicarFiltros();
+            cmbFiltroCurso.SelectedIndexChanged += (_, _) => AplicarFiltros();
         }
 
         private void ApplyStyles()
@@ -45,6 +58,29 @@ namespace GTE.WindowsForms
         private async void TutorListaForm_Load(object sender, EventArgs e)
         {
             await AplicarPermisosSegunRol();
+
+            try
+            {
+                // Para poder filtrar por curso hace falta saber qué alumnos tiene
+                // autorizado cada tutor.
+                _alumnos = await _alumnosClient.GetAllAsync();
+                _autorizaciones = await _autorizacionesClient.GetAllAsync();
+
+                var cursos = await _cursosClient.GetAllAsync();
+
+                cmbFiltroCurso.Items.Clear();
+                cmbFiltroCurso.Items.Add(new OpcionDeCurso(null, "Todos los cursos"));
+                foreach (var curso in cursos)
+                    cmbFiltroCurso.Items.Add(new OpcionDeCurso(curso.IdCurso, $"{curso.Grado} {curso.Curso} ({curso.Turno})"));
+
+                cmbFiltroCurso.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"No se pudieron cargar los cursos: {ex.Message}", "Tutores",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
             await RefreshGrid();
         }
 
@@ -66,15 +102,66 @@ namespace GTE.WindowsForms
         {
             try
             {
-                var tutores = await _apiClient.GetAllAsync();
-                dgvTutores.DataSource = tutores;
-                ConfigureColumns();
+                _tutores = await _apiClient.GetAllAsync();
+                AplicarFiltros();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al cargar tutores: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        /// <summary>
+        /// Muestra los tutores que pasan los filtros: por nombre, apellido o DNI, y
+        /// por el curso de alguno de los alumnos que tiene autorizados.
+        /// </summary>
+        private void AplicarFiltros()
+        {
+            IEnumerable<TutorDTO> visibles = _tutores;
+
+            string texto = txtFiltroNombre.Text.Trim();
+            if (texto.Length > 0)
+            {
+                visibles = visibles.Where(t =>
+                    t.Nombre.Contains(texto, StringComparison.OrdinalIgnoreCase)
+                    || t.Apellido.Contains(texto, StringComparison.OrdinalIgnoreCase)
+                    || t.Dni.Contains(texto, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (cmbFiltroCurso.SelectedItem is OpcionDeCurso { IdCurso: int idCurso })
+            {
+                var alumnosDelCurso = _alumnos
+                    .Where(a => a.IdCurso == idCurso)
+                    .Select(a => a.IdAlumno)
+                    .ToHashSet();
+
+                var tutoresDelCurso = _autorizaciones
+                    .Where(a => alumnosDelCurso.Contains(a.AlumnoId))
+                    .Select(a => a.TutorId)
+                    .ToHashSet();
+
+                visibles = visibles.Where(t => tutoresDelCurso.Contains(t.IdTutor));
+            }
+
+            dgvTutores.DataSource = null;
+            dgvTutores.DataSource = visibles.ToList();
+            ConfigureColumns();
+        }
+
+        /// <summary>Un curso de la lista de filtros. El nulo es "todos".</summary>
+        private sealed class OpcionDeCurso
+        {
+            public OpcionDeCurso(int? idCurso, string texto)
+            {
+                IdCurso = idCurso;
+                Texto = texto;
+            }
+
+            public int? IdCurso { get; }
+            public string Texto { get; }
+
+            public override string ToString() => Texto;
         }
 
         private void ConfigureColumns()

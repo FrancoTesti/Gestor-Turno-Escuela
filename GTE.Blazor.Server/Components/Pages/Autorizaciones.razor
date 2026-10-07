@@ -45,8 +45,10 @@
                 <div class="col-md-6 mt-3 mt-md-0">
                     <div class="p-2 border rounded bg-light">
                         <strong>Detalles del Tutor:</strong><br />
-                        <span>Teléfono: @tutorSeleccionado.Telefono</span> | 
-                        <span>Parentesco: @tutorSeleccionado.Parentesco</span>
+                        <span>Teléfono: @tutorSeleccionado.Telefono</span> |
+                        @* Es el parentesco habitual del tutor: el de cada alumno puede
+                           ser distinto y se ve en la tabla de abajo. *@
+                        <span>Parentesco con el que suele venir: @tutorSeleccionado.Parentesco</span>
                     </div>
                 </div>
             }
@@ -64,13 +66,22 @@
                 </div>
                 <div class="card-body">
                     <div class="row g-2 align-items-end">
-                        <div class="col-md-8">
+                        <div class="col-md-5">
                             <label class="form-label">Seleccionar Alumno Disponible:</label>
                             <select class="form-select" @bind="alumnoAAutorizarId">
                                 <option value="0">-- Seleccione un Alumno --</option>
                                 @foreach (var alu in AlumnosDisponibles)
                                 {
                                     <option value="@alu.IdAlumno">@alu.Nombre @alu.Apellido - @alu.Grado @alu.Curso (@alu.Turno)</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Parentesco con este alumno:</label>
+                            <select class="form-select" @bind="parentescoNuevo">
+                                @foreach (var parentesco in ParentescosPosibles)
+                                {
+                                    <option value="@parentesco">@parentesco</option>
                                 }
                             </select>
                         </div>
@@ -110,6 +121,7 @@
                                 <th>Nombre y Apellido</th>
                                 <th>Grado y División</th>
                                 <th>Turno</th>
+                                <th>Parentesco</th>
                                 <th>Estado</th>
                                 <AuthorizeView Roles="Secretario">
                                     <Authorized>
@@ -125,6 +137,7 @@
                                     <td><strong>@alu.Nombre @alu.Apellido</strong></td>
                                     <td>@alu.Grado @alu.Curso</td>
                                     <td>@alu.Turno</td>
+                                    <td>@ParentescoDe(alu.IdAlumno)</td>
                                     <td>
                                         <EstadoBadge Estado="@alu.Estado" />
                                     </td>
@@ -155,6 +168,18 @@
     private TutorDTO? tutorSeleccionado => tutores?.FirstOrDefault(t => t.IdTutor == tutorSeleccionadoId);
     private int alumnoAAutorizarId = 0;
     private string mensajeExito = string.Empty;
+    private string parentescoNuevo = string.Empty;
+    private Dictionary<int, string> parentescos = new();
+
+    private static readonly string[] ParentescosPosibles =
+    {
+        "Padre", "Madre", "Tutor", "Tío", "Tía", "Abuelo", "Abuela", "Hermano", "Hermana"
+    };
+
+    private string ParentescoDe(int alumnoId) =>
+        parentescos.TryGetValue(alumnoId, out string? parentesco) && !string.IsNullOrWhiteSpace(parentesco)
+            ? parentesco
+            : "-";
 
     private IEnumerable<AlumnoDTO> AlumnosDisponibles
     {
@@ -182,6 +207,9 @@
         if (int.TryParse(e.Value?.ToString(), out int id) && id > 0)
         {
             tutorSeleccionadoId = id;
+            // Se propone el parentesco habitual del tutor; se puede cambiar por
+            // alumno, porque con cada chico la relación puede ser otra.
+            parentescoNuevo = tutorSeleccionado?.Parentesco ?? string.Empty;
             await CargarAutorizacionesDelTutor(id);
         }
         else
@@ -197,6 +225,12 @@
         await EjecutarAsync(async () =>
         {
             alumnosAutorizados = await AutorizacionesClient.GetAlumnosAutorizadosByTutorAsync(tutorId);
+
+            // El parentesco viene con cada autorización, no con el tutor.
+            var autorizaciones = await AutorizacionesClient.GetByTutorIdAsync(tutorId);
+            parentescos = autorizaciones
+                .GroupBy(a => a.AlumnoId)
+                .ToDictionary(g => g.Key, g => g.First().Parentesco);
         });
     }
 
@@ -210,7 +244,8 @@
             var dto = new AutorizacionDTO
             {
                 TutorId = tutorSeleccionadoId,
-                AlumnoId = alumnoAAutorizarId
+                AlumnoId = alumnoAAutorizarId,
+                Parentesco = parentescoNuevo
             };
 
             await AutorizacionesClient.AddAsync(dto);

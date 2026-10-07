@@ -40,7 +40,8 @@ namespace GTE.Application.Services
                     TutorId = auto.TutorId,
                     TutorNombreCompleto = tutor != null ? $"{tutor.Nombre} {tutor.Apellido}" : null,
                     AlumnoId = auto.AlumnoId,
-                    AlumnoNombreCompleto = alumno != null ? $"{alumno.Nombre} {alumno.Apellido}" : null
+                    AlumnoNombreCompleto = alumno != null ? $"{alumno.Nombre} {alumno.Apellido}" : null,
+                    Parentesco = auto.Parentesco
                 });
             }
 
@@ -61,7 +62,8 @@ namespace GTE.Application.Services
                 TutorId = auto.TutorId,
                 TutorNombreCompleto = tutor != null ? $"{tutor.Nombre} {tutor.Apellido}" : null,
                 AlumnoId = auto.AlumnoId,
-                AlumnoNombreCompleto = alumno != null ? $"{alumno.Nombre} {alumno.Apellido}" : null
+                AlumnoNombreCompleto = alumno != null ? $"{alumno.Nombre} {alumno.Apellido}" : null,
+                Parentesco = auto.Parentesco
             };
         }
 
@@ -81,7 +83,8 @@ namespace GTE.Application.Services
                     TutorId = auto.TutorId,
                     TutorNombreCompleto = tutorNombre,
                     AlumnoId = auto.AlumnoId,
-                    AlumnoNombreCompleto = alumno != null ? $"{alumno.Nombre} {alumno.Apellido}" : null
+                    AlumnoNombreCompleto = alumno != null ? $"{alumno.Nombre} {alumno.Apellido}" : null,
+                    Parentesco = auto.Parentesco
                 });
             }
 
@@ -124,7 +127,10 @@ namespace GTE.Application.Services
             if (yaAutorizado)
                 return (false, "El tutor ya se encuentra autorizado para retirar a este alumno.", null);
 
-            var autorizacion = new Autorizacion(dto.AlumnoId, dto.TutorId);
+            // Si no se eligió un parentesco se usa el que tiene cargado el tutor.
+            string parentesco = string.IsNullOrWhiteSpace(dto.Parentesco) ? tutor.Parentesco : dto.Parentesco;
+
+            var autorizacion = new Autorizacion(dto.AlumnoId, dto.TutorId, parentesco);
             await _autorizacionRepository.AddAsync(autorizacion);
 
             var resultadoDto = new AutorizacionDTO
@@ -133,7 +139,8 @@ namespace GTE.Application.Services
                 TutorId = tutor.IdTutor,
                 TutorNombreCompleto = $"{tutor.Nombre} {tutor.Apellido}",
                 AlumnoId = alumno.IdAlumno,
-                AlumnoNombreCompleto = $"{alumno.Nombre} {alumno.Apellido}"
+                AlumnoNombreCompleto = $"{alumno.Nombre} {alumno.Apellido}",
+                Parentesco = autorizacion.Parentesco
             };
 
             return (true, "Autorización registrada correctamente.", resultadoDto);

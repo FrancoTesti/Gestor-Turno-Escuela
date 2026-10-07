@@ -57,7 +57,10 @@ namespace GTE.WindowsForms
             // 
             this.cmbTutores.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbTutores.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTutores.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
+            // Se puede escribir el nombre y el sistema va ofreciendo las opciones.
+            this.cmbTutores.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cmbTutores.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cmbTutores.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.cmbTutores.FormattingEnabled = true;
             this.cmbTutores.Location = new System.Drawing.Point(150, 16);
