@@ -2,14 +2,16 @@
 @attribute [Authorize(Roles = "Tutor")]
 @inherits PaginaConApiBase
 @inject TutorApiClient TutoresClient
+@implements IDisposable
 
 <PageTitle>Mis alumnos</PageTitle>
 
-<h3>Mis alumnos a cargo</h3>
-
-<button class="btn btn-outline-primary btn-sm mb-3" @onclick="CargarAsync" disabled="@cargando">
-    @(cargando ? "Actualizando..." : "Actualizar")
-</button>
+<div class="d-flex justify-content-between align-items-start">
+    <h3 class="mb-1">Mis alumnos a cargo</h3>
+    <button class="btn btn-outline-primary btn-sm" @onclick="CargarAsync" disabled="@cargando">
+        @(cargando ? "Actualizando..." : "Actualizar")
+    </button>
+</div>
 
 @if (!string.IsNullOrEmpty(MensajeError))
 {
@@ -22,52 +24,169 @@
 }
 else if (alumnos.Count == 0)
 {
-    <div class="alert alert-info">
-        Todavía no tenés alumnos autorizados a tu cargo. Consultá con la secretaría.
+    <div class="ma-aviso-vacio">
+        <p class="mb-1">Todavía no tenés alumnos a cargo.</p>
+        <p class="mb-0 ma-apagado">
+            La autorización la carga la secretaría: pedí que registren tu nombre y tu DNI
+            para los chicos que retirás. Sin esa autorización la portería no puede entregarlos.
+        </p>
     </div>
 }
 else
 {
-    <table class="table table-striped align-middle">
-        <thead class="table-dark">
-            <tr>
-                <th>Alumno</th>
-                <th>Curso</th>
-                <th>Turno</th>
-                <th>Horario de salida</th>
-                <th>Estado</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var a in alumnos)
-            {
+    <p class="ma-resumen">@Resumen</p>
+
+    @if (AlumnosSaliendo.Count > 0)
+    {
+        <div class="ma-aviso-saliendo">
+            <p class="ma-aviso-titulo">@TextoDeAhora</p>
+            <p class="ma-aviso-detalle">Decile tu DNI a la portería para que registren la entrega.</p>
+        </div>
+    }
+    else
+    {
+        <div class="ma-aviso-tranquilo">
+            <p class="mb-0">Ahora no está saliendo ninguno de tus cursos. @TextoSiguiente</p>
+        </div>
+    }
+
+    <h5 class="ma-seccion">Salidas de hoy</h5>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle mb-0">
+            <thead class="table-dark">
                 <tr>
-                    <td>@a.Nombre @a.Apellido</td>
-                    <td>@a.Grado @a.Curso</td>
-                    <td>@a.Turno</td>
-                    <td>@a.HorarioSalida.ToString(@"hh\:mm")</td>
-                    <td>
-                        <EstadoBadge Estado="@a.Estado" />
-                        @if (a.EstaSaliendo)
-                        {
-                            @* Sin nombres en la pantalla de la puerta, el aviso de
-                               que el curso está saliendo le llega al tutor acá. *@
-                            <span class="badge bg-primary ms-1">Su curso está saliendo</span>
-                        }
-                    </td>
+                    <th style="width: 100px;">Sale</th>
+                    <th>Alumno</th>
+                    <th style="width: 130px;">Curso</th>
+                    <th style="width: 130px;">Turno</th>
+                    <th style="width: 150px;">Estado</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var a in AlumnosOrdenados)
+                {
+                    <tr class="@(a.EstaSaliendo ? "ma-fila-saliendo" : null)">
+                        <td class="ma-hora">@a.HorarioSalida.ToString(@"hh\:mm")</td>
+                        <td>
+                            <strong>@a.Nombre @a.Apellido</strong>
+                            @if (a.EstaSaliendo)
+                            {
+                                @* La pantalla de la puerta no muestra nombres, así que el
+                                   aviso de que el curso está saliendo llega acá. *@
+                                <span class="badge bg-primary ms-2">Está saliendo</span>
+                            }
+                        </td>
+                        <td>@a.Grado @a.Curso</td>
+                        <td>@a.Turno</td>
+                        <td><EstadoBadge Estado="@a.Estado" /></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <h5 class="ma-seccion">Cómo retirar a un alumno</h5>
+
+    <div class="ma-ayuda">
+        <p class="mb-2">
+            Cuando el curso termina su horario, esperá en la puerta y decile tu DNI a la
+            portería: ahí registran la entrega del alumno.
+        </p>
+        <p class="mb-0">
+            Si necesitás retirarlo antes de esa hora, la secretaría puede cargar un
+            horario especial para ese día.
+        </p>
+    </div>
 }
+
+@* Los estilos van en la pantalla y no en la hoja compartida: así se ven aunque el
+   navegador tenga guardada una versión vieja del css. *@
+<style>
+    .ma-resumen {
+        color: #495057;
+        margin-bottom: 1rem;
+    }
+
+    .ma-aviso-saliendo {
+        background-color: #0a58ca;
+        color: #ffffff;
+        border-radius: 10px;
+        padding: 16px 20px;
+        margin-bottom: 1.5rem;
+    }
+
+    .ma-aviso-titulo {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .ma-aviso-detalle {
+        color: rgba(255, 255, 255, 0.88);
+        margin-bottom: 0;
+    }
+
+    .ma-aviso-tranquilo {
+        background-color: #f1f3f5;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        color: #343a40;
+        padding: 14px 20px;
+        margin-bottom: 1.5rem;
+    }
+
+    .ma-aviso-vacio {
+        background-color: #ffffff;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        padding: 20px 24px;
+    }
+
+    .ma-apagado {
+        color: #495057;
+    }
+
+    /* Más aire arriba del título de cada parte que abajo: así se lee por bloques. */
+    .ma-seccion {
+        margin-top: 2rem;
+        margin-bottom: 0.75rem;
+    }
+
+    /* Las horas se leen como una columna de números y no como texto suelto. */
+    .ma-hora {
+        font-variant-numeric: tabular-nums;
+        font-weight: 600;
+    }
+
+    .ma-fila-saliendo {
+        --bs-table-bg: #e7f1ff;
+        --bs-table-striped-bg: #e7f1ff;
+        --bs-table-hover-bg: #dbe9ff;
+    }
+
+    .ma-ayuda {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        color: #495057;
+        padding: 16px 20px;
+        max-width: 75ch;
+    }
+</style>
 
 @code {
     private List<AlumnoACargoDTO>? alumnos;
     private bool cargando;
+    private readonly CancellationTokenSource cancelacion = new();
 
     protected override async Task OnInitializedAsync()
     {
         await CargarAsync();
+
+        // El tutor deja esta pantalla abierta mientras espera en la puerta: así
+        // el aviso de que el curso está saliendo aparece solo, sin recargar.
+        _ = RefrescarCadaVeinteSegundosAsync();
     }
 
     private async Task CargarAsync()
@@ -80,5 +199,109 @@ else
         });
 
         cargando = false;
+    }
+
+    private async Task RefrescarCadaVeinteSegundosAsync()
+    {
+        try
+        {
+            while (!cancelacion.IsCancellationRequested)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(20), cancelacion.Token);
+
+                // Sin el cartel de "Actualizando": es un refresco de fondo.
+                alumnos = await TutoresClient.GetMisAlumnosAsync();
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // La pantalla se cerró: no hay nada más que hacer.
+        }
+        catch (Exception)
+        {
+            // Si el refresco de fondo falla, queda el botón Actualizar.
+        }
+    }
+
+    public void Dispose() => cancelacion.Cancel();
+
+    /// <summary>Los alumnos por orden de salida: es el orden en que se van del colegio.</summary>
+    private List<AlumnoACargoDTO> AlumnosOrdenados =>
+        (alumnos ?? new List<AlumnoACargoDTO>())
+            .OrderBy(a => a.HorarioSalida)
+            .ThenBy(a => a.Apellido)
+            .ToList();
+
+    private List<AlumnoACargoDTO> AlumnosSaliendo =>
+        AlumnosOrdenados.Where(a => a.EstaSaliendo).ToList();
+
+    /// <summary>Una línea con cuántos alumnos son y a qué hora salen hoy.</summary>
+    private string Resumen
+    {
+        get
+        {
+            var todos = AlumnosOrdenados;
+            if (todos.Count == 0)
+                return string.Empty;
+
+            int cursos = todos.Select(a => $"{a.Grado} {a.Curso}").Distinct().Count();
+
+            string alumnosTexto = todos.Count == 1 ? "1 alumno a cargo" : $"{todos.Count} alumnos a cargo";
+            string cursosTexto = cursos == 1 ? "en 1 curso" : $"en {cursos} cursos";
+
+            string horarios = Listar(
+                todos.Select(a => a.HorarioSalida.ToString(@"hh\:mm")).Distinct().OrderBy(h => h));
+
+            return $"Tenés {alumnosTexto} {cursosTexto}. Hoy salen a las {horarios}.";
+        }
+    }
+
+    private string TextoDeAhora
+    {
+        get
+        {
+            var saliendo = AlumnosSaliendo;
+            var cursos = saliendo.Select(a => $"{a.Grado} {a.Curso}").Distinct().ToList();
+            string nombres = Listar(saliendo.Select(a => $"{a.Nombre} {a.Apellido}"));
+
+            return cursos.Count == 1
+                ? $"Ahora está saliendo {cursos[0]}: {nombres}."
+                : $"Ahora están saliendo {Listar(cursos)}: {nombres}.";
+        }
+    }
+
+    /// <summary>Qué sale después, para cuando todavía no empezó ninguna salida.</summary>
+    private string TextoSiguiente
+    {
+        get
+        {
+            var todos = AlumnosOrdenados;
+            if (todos.Count == 0)
+                return string.Empty;
+
+            TimeSpan ahora = DateTime.Now.TimeOfDay;
+            var proximo = todos
+                .Where(a => a.HorarioSalida >= ahora)
+                .OrderBy(a => a.HorarioSalida)
+                .FirstOrDefault();
+
+            return proximo is null
+                ? "Ya pasaron todos los horarios de hoy."
+                : $"La próxima es a las {proximo.HorarioSalida.ToString(@"hh\:mm")} ({proximo.Grado} {proximo.Curso}).";
+        }
+    }
+
+    /// <summary>Une los elementos como se habla: "a, b y c".</summary>
+    private static string Listar(IEnumerable<string> elementos)
+    {
+        var lista = elementos.ToList();
+
+        return lista.Count switch
+        {
+            0 => string.Empty,
+            1 => lista[0],
+            _ => $"{string.Join(", ", lista.Take(lista.Count - 1))} y {lista[^1]}"
+        };
     }
 }
