@@ -8,6 +8,49 @@
     <link rel="stylesheet" href="app.css" />
     <link rel="stylesheet" href="GTE.Blazor.Server.styles.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
+
+    @* Los estilos del aviso van acá y no en app.css: así viajan con la página y
+       no dependen de que el navegador tenga la hoja de estilos actualizada. *@
+    <style>
+        #components-reconnect-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 2000;
+            justify-content: center;
+            padding: 20px 16px;
+        }
+
+        #components-reconnect-modal.components-reconnect-show,
+        #components-reconnect-modal.components-reconnect-failed,
+        #components-reconnect-modal.components-reconnect-rejected {
+            display: flex;
+        }
+
+        #components-reconnect-modal .aviso-de-conexion {
+            background: #fff3cd;
+            border: 1px solid #ffe69c;
+            border-radius: 10px;
+            padding: 16px 22px;
+            max-width: 520px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        #components-reconnect-modal .aviso-titulo {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin: 0;
+        }
+
+        #components-reconnect-modal .aviso-detalle {
+            color: #6c757d;
+            margin: 6px 0 12px;
+        }
+    </style>
+
     @* Con prerenderizado: la pantalla se arma en el servidor y llega en el
        primer HTML, así nunca queda en blanco esperando que se conecte el
        circuito de Blazor (que es lo que pasaba al abrir la aplicación).
@@ -19,6 +62,23 @@
     <HeadOutlet @rendermode="InteractiveServer" />
 </head>
 <body>
+    @* Aviso para cuando se corta la conexión con el servidor. El framework de
+       Blazor usa este mismo elemento para mostrar su propio cartel, pero el suyo
+       está en inglés y tapa toda la pantalla, así que parecía que la aplicación
+       se había quedado en blanco. Acá se avisa en castellano y se deja ver la
+       pantalla que hay detrás. *@
+    <div id="components-reconnect-modal">
+        <div class="aviso-de-conexion">
+            <p class="aviso-titulo">Se perdió la conexión con el servidor</p>
+            <p class="aviso-detalle">
+                Reintentando... Si el aviso no desaparece, recargá la página.
+            </p>
+            <button type="button" class="btn btn-primary" onclick="location.reload()">
+                Recargar la página
+            </button>
+        </div>
+    </div>
+
     <Routes @rendermode="InteractiveServer" />
     <script src="_framework/blazor.web.js"></script>
 </body>
