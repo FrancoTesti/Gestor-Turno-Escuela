@@ -1,7 +1,5 @@
 @page "/login"
 @layout EmptyLayout
-@inject IAuthService AuthService
-@inject NavigationManager Nav
 
 <PageTitle>Iniciar sesión</PageTitle>
 
@@ -14,29 +12,26 @@
                 <p class="text-muted mb-0">Sistema de gestión de retiros</p>
             </div>
 
-            <EditForm Model="loginModel" OnValidSubmit="HandleLogin" FormName="login">
+            @if (mensajeError is not null)
+            {
+                <div class="alert alert-danger py-2 mb-3">@mensajeError</div>
+            }
+
+            <form method="post" action="/cuenta/entrar">
                 <div class="mb-3">
-                    <label class="form-label">Usuario</label>
-                    <InputText @bind-Value="loginModel.Username" class="form-control" placeholder="Ingrese su usuario" disabled="@(!interactivo)" />
+                    <label class="form-label" for="usuario">Usuario</label>
+                    <input id="usuario" name="usuario" class="form-control"
+                           placeholder="Ingrese su usuario" autocomplete="username" autofocus />
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Contraseña</label>
-                    <InputText @bind-Value="loginModel.Password" type="password" class="form-control" placeholder="Ingrese su contraseña" disabled="@(!interactivo)" />
+                    <label class="form-label" for="clave">Contraseña</label>
+                    <input id="clave" name="clave" type="password" class="form-control"
+                           placeholder="Ingrese su contraseña" autocomplete="current-password" />
                 </div>
 
-                @if (mensajeError is not null)
-                {
-                    <div class="alert alert-danger py-2 mb-3">
-                        @mensajeError
-                    </div>
-                }
-
-
-                <button type="submit" class="btn btn-primary w-100 py-2" disabled="@(cargando || !interactivo)">
-                    @(cargando ? "Ingresando..." : "Ingresar")
-                </button>
-            </EditForm>
+                <button type="submit" class="btn btn-primary w-100 py-2">Ingresar</button>
+            </form>
         </div>
     </div>
 </div>
@@ -58,49 +53,13 @@
 </style>
 
 @code {
-    private LoginData loginModel = new();
-    private string? mensajeError;
-    private bool cargando;
-    private bool interactivo;
+    [SupplyParameterFromQuery(Name = "error")]
+    private string? Error { get; set; }
 
-    protected override void OnAfterRender(bool primerRender)
+    private string? mensajeError => Error switch
     {
-        if (primerRender)
-        {
-            interactivo = true;
-            StateHasChanged();
-        }
-    }
-
-    private async Task HandleLogin()
-    {
-        mensajeError = null;
-        cargando = true;
-
-        try
-        {
-            if (await AuthService.LoginAsync(loginModel.Username, loginModel.Password))
-                Nav.NavigateTo("/");
-            else
-                mensajeError = "Usuario o contraseña incorrectos.";
-        }
-        catch (ApiNoDisponibleException ex)
-        {
-            mensajeError = ex.Message;
-        }
-        catch (Exception ex)
-        {
-            mensajeError = $"No se pudo iniciar sesión: {ex.Message}";
-        }
-        finally
-        {
-            cargando = false;
-        }
-    }
-
-    public class LoginData
-    {
-        public string Username { get; set; } = "";
-        public string Password { get; set; } = "";
-    }
+        "datos" => "Usuario o contraseña incorrectos.",
+        "api" => "No se pudo conectar con la API. Verificá que el proyecto GTE.WebAPI esté en ejecución.",
+        _ => null
+    };
 }

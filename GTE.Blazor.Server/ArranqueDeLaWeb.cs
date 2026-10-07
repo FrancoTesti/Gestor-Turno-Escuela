@@ -26,9 +26,7 @@ namespace GTE.Blazor.Server
 
             services.AddScoped<CarteleraApiClient>();
 
-            services.AddScoped<BlazorAuthService>();
-            services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<BlazorAuthService>());
-            services.AddScoped<IAuthService>(sp => sp.GetRequiredService<BlazorAuthService>());
+            services.AddScoped<IAuthService, SesionDeLaWeb>();
 
             services
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -36,6 +34,9 @@ namespace GTE.Blazor.Server
                 {
                     options.LoginPath = "/login";
                     options.AccessDeniedPath = "/login";
+                    options.Cookie.Name = "GTE.Sesion";
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(120);
+                    options.SlidingExpiration = true;
 
                     options.Events.OnRedirectToLogin = contexto =>
                     {

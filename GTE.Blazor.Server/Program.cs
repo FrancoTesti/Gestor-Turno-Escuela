@@ -23,6 +23,8 @@ app.UseAuthorization();
 
 app.UseAntiforgery();
 
+app.MapCuentaEndpoints();
+
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
