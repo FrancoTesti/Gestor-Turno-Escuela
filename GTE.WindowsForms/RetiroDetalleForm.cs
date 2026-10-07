@@ -75,13 +75,9 @@ namespace GTE.WindowsForms
             btnCancelar.FlatStyle = FlatStyle.Flat;
             btnCancelar.FlatAppearance.BorderSize = 0;
 
-            dgvDetalles.BackgroundColor = Color.FromArgb(49, 53, 56);
-            dgvDetalles.ForeColor = Color.Black;
-            dgvDetalles.BorderStyle = BorderStyle.None;
-            dgvDetalles.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvDetalles.MultiSelect = false;
+            Tema.Grilla(dgvDetalles);
+
             dgvDetalles.AutoGenerateColumns = false;
-            dgvDetalles.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(241, 243, 245);
 
             ConfigureDetallesGrid();
         }

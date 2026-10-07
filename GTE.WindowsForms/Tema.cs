@@ -58,9 +58,16 @@ namespace GTE.WindowsForms
                 combo.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
-        /// <summary>Deja la grilla con el mismo aspecto que las tablas de la web.</summary>
+        /// <summary>
+        /// Deja la grilla con el mismo aspecto que las tablas de la web, con el
+        /// texto cómodo para leer en pantallas grandes: las columnas se reparten
+        /// todo el ancho disponible, así la tabla se agranda con la ventana en
+        /// lugar de dejar un hueco a la derecha.
+        /// </summary>
         public static void Grilla(DataGridView grilla)
         {
+            const float TamanioDeLetra = 11F;
+
             grilla.BackgroundColor = Superficie;
             grilla.BorderStyle = BorderStyle.None;
             grilla.GridColor = Color.FromArgb(233, 236, 239);
@@ -68,18 +75,22 @@ namespace GTE.WindowsForms
             grilla.MultiSelect = false;
             grilla.RowHeadersVisible = false;
             grilla.EnableHeadersVisualStyles = false;
+            grilla.AllowUserToResizeRows = false;
 
             grilla.ColumnHeadersDefaultCellStyle.BackColor = Barra;
             grilla.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
             grilla.ColumnHeadersDefaultCellStyle.SelectionBackColor = Barra;
-            grilla.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI Semibold", 9.5F, FontStyle.Bold);
-            grilla.ColumnHeadersHeight = 36;
+            grilla.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI Semibold", TamanioDeLetra, FontStyle.Bold);
+            grilla.ColumnHeadersDefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            grilla.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 
-            grilla.RowTemplate.Height = 30;
-            grilla.DefaultCellStyle.Font = new Font("Segoe UI", 9.5F);
+            grilla.RowTemplate.Height = 34;
+            grilla.DefaultCellStyle.Font = new Font("Segoe UI", TamanioDeLetra);
             grilla.DefaultCellStyle.SelectionBackColor = Color.FromArgb(207, 226, 255);
             grilla.DefaultCellStyle.SelectionForeColor = Texto;
             grilla.AlternatingRowsDefaultCellStyle.BackColor = Fondo;
+
+            grilla.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
         public static void Boton(Button boton, Color color)

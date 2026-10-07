@@ -32,14 +32,8 @@ namespace GTE.WindowsForms
             btnConsultar.FlatStyle = FlatStyle.Flat;
             btnConsultar.FlatAppearance.BorderSize = 0;
 
-            foreach (var grilla in new[] { dgvRetiros, dgvDetalle })
-            {
-                grilla.BackgroundColor = Color.White;
-                grilla.BorderStyle = BorderStyle.None;
-                grilla.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                grilla.MultiSelect = false;
-                grilla.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(241, 243, 245);
-            }
+            Tema.Grilla(dgvRetiros);
+            Tema.Grilla(dgvDetalle);
         }
 
         private async void ReporteRetirosForm_Load(object sender, EventArgs e)

@@ -96,10 +96,7 @@ namespace GTE.WindowsForms
             btnEliminar.BackColor = Color.FromArgb(220, 53, 69);
             btnEliminar.ForeColor = Color.White;
             btnEliminar.FlatStyle = FlatStyle.Flat;
-            dgvHorarios.BackgroundColor = Color.White;
-            dgvHorarios.BorderStyle = BorderStyle.None;
-            dgvHorarios.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvHorarios.MultiSelect = false;
+            Tema.Grilla(dgvHorarios);
         }
 
         private async void HorarioEspecialListaForm_Load(object sender, EventArgs e)

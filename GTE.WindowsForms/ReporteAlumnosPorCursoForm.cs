@@ -26,11 +26,7 @@ namespace GTE.WindowsForms
             lblTitle.ForeColor = Color.FromArgb(33, 37, 41);
             lblTotal.ForeColor = Color.FromArgb(33, 37, 41);
 
-            dgvDatos.BackgroundColor = Color.White;
-            dgvDatos.BorderStyle = BorderStyle.None;
-            dgvDatos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvDatos.MultiSelect = false;
-            dgvDatos.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(241, 243, 245);
+            Tema.Grilla(dgvDatos);
         }
 
         private async void ReporteAlumnosPorCursoForm_Load(object sender, EventArgs e)

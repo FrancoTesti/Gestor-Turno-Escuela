@@ -40,11 +40,7 @@ namespace GTE.WindowsForms
             btnQuitar.FlatStyle = FlatStyle.Flat;
             btnQuitar.FlatAppearance.BorderSize = 0;
 
-            dgvAlumnosAutorizados.BackgroundColor = Color.White;
-            dgvAlumnosAutorizados.BorderStyle = BorderStyle.None;
-            dgvAlumnosAutorizados.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvAlumnosAutorizados.MultiSelect = false;
-            dgvAlumnosAutorizados.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(241, 243, 245);
+            Tema.Grilla(dgvAlumnosAutorizados);
         }
 
         private async void AutorizacionListaForm_Load(object sender, EventArgs e)

@@ -39,11 +39,7 @@ namespace GTE.WindowsForms
             btnEliminar.FlatStyle = FlatStyle.Flat;
             btnEliminar.FlatAppearance.BorderSize = 0;
 
-            dgvCursos.BackgroundColor = Color.White;
-            dgvCursos.BorderStyle = BorderStyle.None;
-            dgvCursos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvCursos.MultiSelect = false;
-            dgvCursos.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(241, 243, 245);
+            Tema.Grilla(dgvCursos);
         }
 
         private async void CursoEscolarListaForm_Load(object sender, EventArgs e)

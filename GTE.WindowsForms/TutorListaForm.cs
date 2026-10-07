@@ -38,11 +38,7 @@ namespace GTE.WindowsForms
             btnEliminar.FlatStyle = FlatStyle.Flat;
             btnEliminar.FlatAppearance.BorderSize = 0;
 
-            dgvTutores.BackgroundColor = Color.White;
-            dgvTutores.BorderStyle = BorderStyle.None;
-            dgvTutores.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvTutores.MultiSelect = false;
-            dgvTutores.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(241, 243, 245);
+            Tema.Grilla(dgvTutores);
         }
 
         private async void TutorListaForm_Load(object sender, EventArgs e)
