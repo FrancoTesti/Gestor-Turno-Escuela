@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -92,7 +92,7 @@ namespace GTE.Dominio
                 throw new InvalidOperationException("El retiro debe tener un tutor válido asignado.");
 
             if (IdPersonal <= 0)
-                throw new InvalidOperationException("El retiro debe tener un personal válido asignado.");
+                throw new InvalidOperationException("El retiro debe tener personal válido asignado.");
 
             if (FechaHora > DateTime.Now.AddMinutes(5))
                 throw new InvalidOperationException("La fecha del retiro no puede ser futura.");

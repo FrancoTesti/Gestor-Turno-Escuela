@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -25,8 +25,8 @@ namespace GTE.WindowsForms
         {
             InitializeComponent();
             _isEditMode = false;
-            ApplyStyles();
             Tema.AcomodarControles(this);
+            ApplyStyles();
         }
 
         public RetiroDetalleForm(RetiroDTO retiro) : this()

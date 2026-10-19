@@ -1,4 +1,4 @@
-﻿using GTE.DTOs;
+using GTE.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -60,8 +60,7 @@ namespace GTE.Clients
                 return await response.Content.ReadFromJsonAsync<CursoEscolarDTO>() ?? dto;
             }
 
-            var error = await response.Content.ReadAsStringAsync();
-            throw new Exception($"Error al agregar curso escolar: {error}");
+            throw new Exception(await LeerMensajeDeErrorAsync(response, "Error al agregar curso escolar."));
         }
 
         public async Task<bool> UpdateAsync(CursoEscolarDTO dto)
@@ -72,7 +71,13 @@ namespace GTE.Clients
             var response = await client.PutAsJsonAsync("cursos", dto);
             await HandleUnauthorizedResponseAsync(response);
 
-            return response.IsSuccessStatusCode;
+            if (response.IsSuccessStatusCode)
+                return true;
+
+            if ((int)response.StatusCode == 400 || (int)response.StatusCode == 409)
+                throw new Exception(await LeerMensajeDeErrorAsync(response, "No se pudo actualizar el curso escolar."));
+
+            return false;
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -83,7 +88,13 @@ namespace GTE.Clients
             var response = await client.DeleteAsync($"cursos/{id}");
             await HandleUnauthorizedResponseAsync(response);
 
-            return response.IsSuccessStatusCode;
+            if (response.IsSuccessStatusCode)
+                return true;
+
+            if ((int)response.StatusCode == 400 || (int)response.StatusCode == 409)
+                throw new Exception(await LeerMensajeDeErrorAsync(response, "No se pudo eliminar el curso escolar."));
+
+            return false;
         }
     }
 }

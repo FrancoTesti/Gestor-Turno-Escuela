@@ -182,10 +182,17 @@ namespace GTE.WindowsForms
             if (dgvHorarios.SelectedRows.Count == 0) return;
             var obj = dgvHorarios.SelectedRows[0].DataBoundItem as HorarioEspecialDTO;
             if (obj == null) return;
-            if (MessageBox.Show("¿Eliminar horario?", "Confirmar", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("¿Está seguro de que desea eliminar este horario especial?", "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                await _apiClient.DeleteAsync(obj.IdHorarioEspecial);
-                await RefreshGrid();
+                try
+                {
+                    await _apiClient.DeleteAsync(obj.IdHorarioEspecial);
+                    await RefreshGrid();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al eliminar el horario especial: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }

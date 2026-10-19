@@ -9,14 +9,14 @@
                     }
                     else
                     {
-                        <p>No tienes permiso para ver esta pantalla.</p>
+                        <p>No tenés permiso para ver esta pantalla.</p>
                     }
                 </NotAuthorized>
             </AuthorizeRouteView>
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />
         </Found>
         <NotFound>
-            <PageTitle>Not found</PageTitle>
+            <PageTitle>Página no encontrada</PageTitle>
             <LayoutView Layout="@typeof(MainLayout)">
                 <p role="alert">La ruta no existe.</p>
             </LayoutView>

@@ -203,14 +203,17 @@ else
             {
                 await Task.Delay(TimeSpan.FromSeconds(20), cancelacion.Token);
 
-                alumnos = await TutoresClient.GetMisAlumnosAsync();
-                await InvokeAsync(StateHasChanged);
+                try
+                {
+                    alumnos = await TutoresClient.GetMisAlumnosAsync();
+                    await InvokeAsync(StateHasChanged);
+                }
+                catch (Exception) when (!cancelacion.IsCancellationRequested)
+                {
+                }
             }
         }
         catch (OperationCanceledException)
-        {
-        }
-        catch (Exception)
         {
         }
     }

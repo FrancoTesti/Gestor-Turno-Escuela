@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -45,7 +45,7 @@ namespace GTE.Application.Services
                 return (false, "Debe seleccionar un tutor válido.", null);
 
             if (dto.IdPersonal <= 0)
-                return (false, "Debe seleccionar un personal válido.", null);
+                return (false, "Debe seleccionar personal válido.", null);
 
             if (dto.Detalles == null || dto.Detalles.Count == 0)
                 return (false, "El retiro debe contener al menos un alumno.", null);
@@ -122,7 +122,7 @@ namespace GTE.Application.Services
                 return (false, "Debe seleccionar un tutor válido.", null);
 
             if (dto.IdPersonal <= 0)
-                return (false, "Debe seleccionar un personal válido.", null);
+                return (false, "Debe seleccionar personal válido.", null);
 
             if (dto.Detalles == null || dto.Detalles.Count == 0)
                 return (false, "El retiro debe contener al menos un alumno.", null);
@@ -135,7 +135,9 @@ namespace GTE.Application.Services
                 return (false, "El tutor especificado no existe.", null);
 
             if (tutor.TieneRestriccion)
-                return (false, $"El tutor {tutor.Nombre} {tutor.Apellido} posee restricciones legales.", null);
+                return (false, $"El tutor {tutor.Nombre} {tutor.Apellido} posee restricciones legales para retirar alumnos.", null);
+
+            var anterioresIds = existing.Detalles.Select(d => d.IdAlumno).ToHashSet();
 
             foreach (var det in dto.Detalles)
             {
@@ -143,9 +145,12 @@ namespace GTE.Application.Services
                 if (alumno == null)
                     return (false, $"El alumno con ID {det.IdAlumno} no existe.", null);
 
+                if (!anterioresIds.Contains(det.IdAlumno) && alumno.Estado != "Presente")
+                    return (false, $"El alumno {alumno.Nombre} {alumno.Apellido} no se encuentra presente (Estado actual: '{alumno.Estado}').", null);
+
                 bool autorizado = await _autorizacionRepository.EstaAutorizadoAsync(dto.IdTutor, det.IdAlumno);
                 if (!autorizado)
-                    return (false, $"El tutor {tutor.Nombre} {tutor.Apellido} no está autorizado para el alumno {alumno.Nombre} {alumno.Apellido}.", null);
+                    return (false, $"El tutor {tutor.Nombre} {tutor.Apellido} no se encuentra autorizado para retirar al alumno {alumno.Nombre} {alumno.Apellido}.", null);
             }
 
             var retiro = new Retiro(
@@ -168,13 +173,54 @@ namespace GTE.Application.Services
             if (!actualizado)
                 return (false, "No se pudo actualizar el retiro.", null);
 
+            var nuevosIds = dto.Detalles.Select(d => d.IdAlumno).ToHashSet();
+
+            foreach (var idNuevo in nuevosIds.Except(anterioresIds))
+            {
+                var alumno = await _alumnoRepository.GetAsync(idNuevo);
+                if (alumno != null)
+                {
+                    alumno.SetEstado("Retirado");
+                    await _alumnoRepository.UpdateAsync(alumno);
+                }
+            }
+
+            foreach (var idQuitado in anterioresIds.Except(nuevosIds))
+            {
+                var alumno = await _alumnoRepository.GetAsync(idQuitado);
+                if (alumno != null && alumno.Estado == "Retirado")
+                {
+                    alumno.SetEstado("Presente");
+                    await _alumnoRepository.UpdateAsync(alumno);
+                }
+            }
+
             var modificado = await _retiroRepository.GetAsync(dto.IdRetiro);
             return (true, "Retiro modificado correctamente.", modificado == null ? null : MapToDTO(modificado));
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            return await _retiroRepository.DeleteAsync(id);
+            var existing = await _retiroRepository.GetAsync(id);
+            if (existing == null)
+                return false;
+
+            var idsAlumnos = existing.Detalles.Select(d => d.IdAlumno).Distinct().ToList();
+            bool eliminado = await _retiroRepository.DeleteAsync(id);
+            if (eliminado)
+            {
+                foreach (var idAlumno in idsAlumnos)
+                {
+                    var alumno = await _alumnoRepository.GetAsync(idAlumno);
+                    if (alumno != null && alumno.Estado == "Retirado")
+                    {
+                        alumno.SetEstado("Presente");
+                        await _alumnoRepository.UpdateAsync(alumno);
+                    }
+                }
+            }
+
+            return eliminado;
         }
 
         public async Task<IEnumerable<AlumnoDTO>> GetAlumnosAutorizadosAsync(int tutorId)

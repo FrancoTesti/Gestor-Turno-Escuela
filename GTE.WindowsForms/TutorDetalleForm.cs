@@ -17,8 +17,8 @@ namespace GTE.WindowsForms
         {
             InitializeComponent();
             _isEditMode = false;
-            ApplyStyles();
             Tema.AcomodarControles(this);
+            ApplyStyles();
         }
 
         public TutorDetalleForm(TutorDTO tutor) : this()

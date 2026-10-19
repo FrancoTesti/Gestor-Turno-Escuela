@@ -34,7 +34,7 @@ namespace GTE.Clients
             var response = await client.PostAsJsonAsync("horariosespeciales", dto);
             await HandleUnauthorizedResponseAsync(response);
             if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<HorarioEspecialDTO>() ?? dto;
-            throw new Exception($"Error al agregar: {await response.Content.ReadAsStringAsync()}");
+            throw new Exception(await LeerMensajeDeErrorAsync(response, "Error al agregar el horario especial."));
         }
 
         public async Task<bool> UpdateAsync(HorarioEspecialDTO dto)
@@ -43,7 +43,8 @@ namespace GTE.Clients
             using var client = await CreateHttpClientAsync();
             var response = await client.PutAsJsonAsync("horariosespeciales", dto);
             await HandleUnauthorizedResponseAsync(response);
-            if (!response.IsSuccessStatusCode) throw new Exception(await response.Content.ReadAsStringAsync());
+            if (!response.IsSuccessStatusCode)
+                throw new Exception(await LeerMensajeDeErrorAsync(response, "Error al actualizar el horario especial."));
             return true;
         }
 

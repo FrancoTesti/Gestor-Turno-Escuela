@@ -39,6 +39,10 @@ namespace GTE.WebAPI
                 {
                     return Results.BadRequest(new { error = ex.Message });
                 }
+                catch (Exception)
+                {
+                    return Results.BadRequest(new { error = "Ya existe un curso con ese grado, división y turno." });
+                }
             })
             .WithName("AddCurso")
             .Produces<CursoEscolarDTO>(StatusCodes.Status201Created)
@@ -57,6 +61,10 @@ namespace GTE.WebAPI
                 {
                     return Results.BadRequest(new { error = ex.Message });
                 }
+                catch (Exception)
+                {
+                    return Results.BadRequest(new { error = "Ya existe otro curso con ese grado, división y turno." });
+                }
             })
             .WithName("UpdateCurso")
             .Produces(StatusCodes.Status204NoContent)
@@ -67,12 +75,20 @@ namespace GTE.WebAPI
 
             app.MapDelete("/cursos/{id:int}", async (int id, ICursoEscolarService service) =>
             {
-                var deleted = await service.DeleteAsync(id);
-                return deleted ? Results.NoContent() : Results.NotFound();
+                try
+                {
+                    var deleted = await service.DeleteAsync(id);
+                    return deleted ? Results.NoContent() : Results.NotFound();
+                }
+                catch (Exception)
+                {
+                    return Results.BadRequest(new { error = "No se puede eliminar el curso porque tiene alumnos o salidas asociadas." });
+                }
             })
             .WithName("DeleteCurso")
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi()
             .RequireAuthorization(Politicas.SoloSecretario);
         }

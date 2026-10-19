@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GTE.Clients
 {
-    public class SesionExpiradaException : Exception
+    public class SesionExpiradaException : UnauthorizedAccessException
     {
         public SesionExpiradaException(string mensaje) : base(mensaje) { }
     }

@@ -107,7 +107,13 @@ namespace GTE.Clients
             var response = await client.DeleteAsync($"tutores/{id}");
             await HandleUnauthorizedResponseAsync(response);
 
-            return response.IsSuccessStatusCode;
+            if (response.IsSuccessStatusCode)
+                return true;
+
+            if ((int)response.StatusCode == 400 || (int)response.StatusCode == 409)
+                throw new Exception(await LeerMensajeDeErrorAsync(response, "No se pudo eliminar el tutor."));
+
+            return false;
         }
 
     }
