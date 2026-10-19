@@ -68,6 +68,9 @@ namespace Servicio
         public async Task ActualizarAsync(HorarioEspecialDTO dto)
         {
             Validar(dto);
+            var alu = await _alumnoRepo.GetAsync(dto.IdAlumno);
+            if (alu == null) throw new Exception("El alumno especificado no existe.");
+
             var h = await _horarioRepo.ObtenerPorIdAsync(dto.IdHorarioEspecial);
             if (h == null) throw new Exception("Horario especial no encontrado.");
 

@@ -240,18 +240,18 @@ namespace GTE.Data
 
             string[] apellidos =
             {
-                "Testi", "Gomez", "Perez", "Rodriguez", "Fernandez", "Lopez",
-                "Martinez", "Diaz", "Alvarez", "Romero", "Sosa", "Torres",
-                "Benitez", "Flores", "Acosta", "Medina", "Herrera", "Aguirre",
-                "Castro", "Gimenez", "Suarez", "Molina", "Ortiz", "Silva",
-                "Rojas", "Dominguez", "Cabrera", "Luna", "Paz", "Vega",
-                "Bravo", "Ferreyra", "Quiroga", "Rios", "Cardozo", "Villalba",
+                "Testi", "Gómez", "Pérez", "Rodríguez", "Fernández", "López",
+                "Martínez", "Díaz", "Álvarez", "Romero", "Sosa", "Torres",
+                "Benítez", "Flores", "Acosta", "Medina", "Herrera", "Aguirre",
+                "Castro", "Giménez", "Suárez", "Molina", "Ortiz", "Silva",
+                "Rojas", "Domínguez", "Cabrera", "Luna", "Paz", "Vega",
+                "Bravo", "Ferreyra", "Quiroga", "Ríos", "Cardozo", "Villalba",
                 "Navarro", "Arias", "Godoy", "Coronel", "Ocampo", "Ledesma",
                 "Ibarra", "Salinas", "Duarte", "Escobar", "Montero", "Toledo",
-                "Vera", "Ramirez", "Barrera", "Farias", "Peralta", "Maldonado",
-                "Carrizo", "Alderete", "Bogado", "Zarate", "Pereyra", "Agüero",
-                "Bustos", "Chavez", "Correa", "Caceres", "Zamora", "Ojeda",
-                "Vargas", "Baez", "Leiva", "Arce", "Ponce", "Sanabria"
+                "Vera", "Ramírez", "Barrera", "Farías", "Peralta", "Maldonado",
+                "Carrizo", "Alderete", "Bogado", "Zárate", "Pereyra", "Agüero",
+                "Bustos", "Chávez", "Correa", "Cáceres", "Zamora", "Ojeda",
+                "Vargas", "Báez", "Leiva", "Arce", "Ponce", "Sanabria"
             };
 
             string[] motivosDeRetiro =
@@ -461,7 +461,7 @@ namespace GTE.Data
 
             modelBuilder.Entity<Portero>().HasData(
                 new { IdPersonal = 2, Nombre = "Renzo Scollo", PuertaAsignada = "Puerta Principal", IdUsuario = 2 },
-                new { IdPersonal = 3, Nombre = "Carlos Martinez", PuertaAsignada = "Puerta Secundaria", IdUsuario = 4 }
+                new { IdPersonal = 3, Nombre = "Carlos Martínez", PuertaAsignada = "Puerta Secundaria", IdUsuario = 4 }
             );
 
             modelBuilder.Entity<Tutor>().HasData(tutoresDeEjemplo);

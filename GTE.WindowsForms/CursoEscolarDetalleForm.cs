@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using GTE.DTOs;
@@ -16,8 +16,8 @@ namespace GTE.WindowsForms
         {
             InitializeComponent();
             _isEditMode = false;
-            ApplyStyles();
             Tema.AcomodarControles(this);
+            ApplyStyles();
         }
 
         public CursoEscolarDetalleForm(CursoEscolarDTO curso) : this()

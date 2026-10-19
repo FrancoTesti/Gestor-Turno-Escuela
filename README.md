@@ -4,7 +4,7 @@ Bienvenido al repositorio del Trabajo Práctico Integrador (Entrega Final) del G
 
 ## Arquitectura y Proyectos
 El sistema está dividido en varias capas utilizando Clean Architecture y .NET 8:
-- **Libreria de clases (Dominio)**: Entidades del negocio.
+- **Librería de clases (Dominio)**: Entidades del negocio.
 - **GTE.Data**: Acceso a datos con Entity Framework Core.
 - **Servicio (GTE.Application.Services)**: Lógica de negocio y servicios de aplicación.
 - **GTE.DTOs**: Objetos de transferencia de datos.
@@ -59,9 +59,9 @@ El sistema cuenta con 3 roles. Puedes probarlos utilizando estas credenciales (l
 
 | Rol | Usuario | Contraseña | Permisos Principales |
 |---|---|---|---|
-| **Secretario** | `admin` | `admin123` | Control total (Ver/Editar Alumnos, Cursos, Retiros, Horarios y los dos reportes). |
-| **Portero** | `porteria1` | `porteria123` | Solo lectura de alumnos, gestión de retiros y salidas, y el reporte de retiros. No puede editar alumnos ni ver el reporte de alumnos. |
-| **Tutor** | `tutor1` | `tutor123` | Solo lectura de cursos. No puede ver el resto del sistema. |
+| **Secretario** | `admin` | `admin123` | Control total (ABMC de Alumnos, Cursos, Tutores, Autorizaciones, Retiros, Horarios Especiales, Salidas de curso y ambos reportes). |
+| **Portero** | `porteria1` | `porteria123` | Lectura de alumnos, cursos, tutores y autorizaciones; gestión de retiros, horarios especiales y salidas de curso; y reporte de retiros. |
+| **Tutor** | `tutor1` | `tutor123` | Lectura de cursos escolares y consulta en vivo de sus alumnos a cargo ("Mis alumnos"). |
 
 ---
 *Desarrollado por Franco Testi, Renzo Scollo y Alejandro Ciesco.*

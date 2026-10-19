@@ -10,7 +10,7 @@ namespace GTE.Clients
 
         private const string DireccionPorDefecto = "http://localhost:5117/";
 
-        private const string WebPorDefecto = "http://localhost:5001";
+        private const string WebPorDefecto = "http://localhost:5129";
 
         private static string direccion = LeerDelEntorno();
 

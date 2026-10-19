@@ -33,7 +33,7 @@ namespace GTE.WebAPI
                 }
                 catch (Exception ex)
                 {
-                    return Results.BadRequest(ex.Message);
+                    return Results.BadRequest(new { error = ex.Message });
                 }
             });
 
@@ -46,7 +46,7 @@ namespace GTE.WebAPI
                 }
                 catch (Exception ex)
                 {
-                    return Results.BadRequest(ex.Message);
+                    return Results.BadRequest(new { error = ex.Message });
                 }
             });
 

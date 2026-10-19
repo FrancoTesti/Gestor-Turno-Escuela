@@ -42,7 +42,7 @@ namespace GTE.WindowsForms
             dtpDesde.Value = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
             dtpHasta.Value = DateTime.Today;
 
-            lblTotal.Text = "Elegí un período y apretá Consultar.";
+            lblTotal.Text = "Seleccione un período y presione Consultar.";
         }
 
         private async void btnConsultar_Click(object sender, EventArgs e)
@@ -52,6 +52,13 @@ namespace GTE.WindowsForms
 
         private async Task Consultar()
         {
+            if (dtpDesde.Value.Date > dtpHasta.Value.Date)
+            {
+                MessageBox.Show("La fecha 'Desde' no puede ser posterior a la fecha 'Hasta'.", "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             try
             {
                 _retiros = await _apiClient.GetRetirosAsync(dtpDesde.Value.Date, dtpHasta.Value.Date);
@@ -64,6 +71,9 @@ namespace GTE.WindowsForms
                     Alumnos = retiro.Detalles.Count,
                     Observaciones = retiro.Observaciones
                 }).ToList();
+
+                if (dgvRetiros.Columns.Contains("Entrego"))
+                    dgvRetiros.Columns["Entrego"].HeaderText = "Entregó";
 
                 dgvDetalle.DataSource = null;
 
@@ -105,6 +115,9 @@ namespace GTE.WindowsForms
                 HoraSalida = detalle.HoraSalida.ToString(@"hh\:mm"),
                 Estado = detalle.Estado
             }).ToList();
+
+            if (dgvDetalle.Columns.Contains("HoraSalida"))
+                dgvDetalle.Columns["HoraSalida"].HeaderText = "Hora de Salida";
         }
     }
 }

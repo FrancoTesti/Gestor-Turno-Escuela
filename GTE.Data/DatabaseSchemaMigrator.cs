@@ -108,6 +108,25 @@ END;
 
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_SalidasDeCurso_IdCurso_FechaHoraFin' AND object_id = OBJECT_ID('SalidasDeCurso'))
     CREATE INDEX IX_SalidasDeCurso_IdCurso_FechaHoraFin ON SalidasDeCurso(IdCurso, FechaHoraFin);");
+
+            await context.Database.ExecuteSqlRawAsync(@"
+UPDATE Personal SET Nombre = N'Carlos Martínez' WHERE Nombre = N'Carlos Martinez';
+
+DECLARE @reemplazos TABLE (SinTilde nvarchar(50), ConTilde nvarchar(50));
+INSERT INTO @reemplazos (SinTilde, ConTilde) VALUES
+    (N'Gomez', N'Gómez'), (N'Perez', N'Pérez'), (N'Rodriguez', N'Rodríguez'),
+    (N'Fernandez', N'Fernández'), (N'Lopez', N'López'), (N'Martinez', N'Martínez'),
+    (N'Diaz', N'Díaz'), (N'Alvarez', N'Álvarez'), (N'Benitez', N'Benítez'),
+    (N'Gimenez', N'Giménez'), (N'Suarez', N'Suárez'), (N'Dominguez', N'Domínguez'),
+    (N'Rios', N'Ríos'), (N'Ramirez', N'Ramírez'), (N'Farias', N'Farías'),
+    (N'Zarate', N'Zárate'), (N'Chavez', N'Chávez'), (N'Caceres', N'Cáceres'),
+    (N'Baez', N'Báez');
+
+UPDATE a SET a.Apellido = r.ConTilde
+FROM Alumnos a INNER JOIN @reemplazos r ON a.Apellido COLLATE Latin1_General_CS_AI = r.SinTilde COLLATE Latin1_General_CS_AI;
+
+UPDATE t SET t.Apellido = r.ConTilde
+FROM Tutores t INNER JOIN @reemplazos r ON t.Apellido COLLATE Latin1_General_CS_AI = r.SinTilde COLLATE Latin1_General_CS_AI;");
         }
     }
 }

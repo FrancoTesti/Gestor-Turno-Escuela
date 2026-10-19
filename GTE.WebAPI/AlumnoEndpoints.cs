@@ -78,12 +78,20 @@ namespace GTE.WebAPI
 
             app.MapDelete("/alumnos/{id:int}", async (int id, IAlumnoService service) =>
             {
-                var deleted = await service.DeleteAsync(id);
-                return deleted ? Results.NoContent() : Results.NotFound();
+                try
+                {
+                    var deleted = await service.DeleteAsync(id);
+                    return deleted ? Results.NoContent() : Results.NotFound();
+                }
+                catch (Exception)
+                {
+                    return Results.BadRequest(new { error = "No se puede eliminar el alumno porque tiene retiros o registros asociados." });
+                }
             })
             .WithName("DeleteAlumno")
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi()
             .RequireAuthorization(Politicas.SoloSecretario);
         }

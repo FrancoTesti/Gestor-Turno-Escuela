@@ -56,6 +56,12 @@ namespace GTE.WindowsForms
             bool esSecretario = rol == "Secretario";
 
             pnlActions.Visible = esSecretario;
+            if (!esSecretario && dgvAlumnosAutorizados.Top > 150)
+            {
+                int diff = dgvAlumnosAutorizados.Top - pnlActions.Top;
+                dgvAlumnosAutorizados.Top = pnlActions.Top;
+                dgvAlumnosAutorizados.Height += diff;
+            }
         }
 
         private async Task CargarDatosIniciales()
@@ -190,7 +196,7 @@ namespace GTE.WindowsForms
 
             if (tutorId <= 0)
             {
-                MessageBox.Show("Elegí un tutor de la lista (podés escribir el nombre y el sistema te lo sugiere).",
+                MessageBox.Show("Por favor, seleccione un tutor de la lista (puede escribir el nombre para buscarlo).",
                     "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -212,10 +218,12 @@ namespace GTE.WindowsForms
 
             try
             {
+                var tutor = _tutores.FirstOrDefault(t => t.IdTutor == tutorId);
                 var dto = new AutorizacionDTO
                 {
                     TutorId = tutorId,
-                    AlumnoId = alumnoId
+                    AlumnoId = alumnoId,
+                    Parentesco = tutor?.Parentesco ?? string.Empty
                 };
 
                 await _apiClient.AddAsync(dto);

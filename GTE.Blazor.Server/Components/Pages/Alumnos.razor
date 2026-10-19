@@ -4,6 +4,8 @@
 @inject AlumnoApiClient AlumnosClient
 @inject CursoEscolarApiClient CursosClient
 
+<PageTitle>Alumnos</PageTitle>
+
 <h3>Gestión de Alumnos</h3>
 
 @if (!string.IsNullOrEmpty(MensajeError))
@@ -211,7 +213,11 @@ else
 
     private async Task Guardar()
     {
-        if (alumnoEditando.IdCurso == 0) return;
+        if (alumnoEditando.IdCurso == 0)
+        {
+            MensajeError = "Seleccione un curso.";
+            return;
+        }
 
         await EjecutarAsync(async () =>
         {

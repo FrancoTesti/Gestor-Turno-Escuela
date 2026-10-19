@@ -111,12 +111,20 @@ namespace GTE.WebAPI
 
             app.MapDelete("/tutores/{id:int}", async (int id, ITutorService service) =>
             {
-                var eliminado = await service.DeleteAsync(id);
-                return eliminado ? Results.NoContent() : Results.NotFound();
+                try
+                {
+                    var eliminado = await service.DeleteAsync(id);
+                    return eliminado ? Results.NoContent() : Results.NotFound();
+                }
+                catch (Exception)
+                {
+                    return Results.BadRequest(new { error = "No se puede eliminar el tutor porque tiene retiros registrados." });
+                }
             })
             .WithName("DeleteTutor")
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi()
             .RequireAuthorization(Politicas.SoloSecretario);
         }

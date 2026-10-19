@@ -19,6 +19,7 @@ namespace GTE.WindowsForms
             InitializeComponent();
             ApplyStyles();
             Tema.AcomodarControles(this);
+            pnlGrafico.Resize += (_, _) => pnlGrafico.Invalidate();
         }
 
         private void ApplyStyles()
@@ -135,7 +136,7 @@ namespace GTE.WindowsForms
                     x + (anchoBarra - medidaEtiqueta.Width) / 2, area.Bottom + 6);
 
                 var medidaTurno = g.MeasureString(fila.Turno, fuenteTurno);
-                g.DrawString(fila.Turno, fuenteTurno, new SolidBrush(ColorDeTurno(fila.Turno)),
+                g.DrawString(fila.Turno, fuenteTurno, brocha,
                     x + (anchoBarra - medidaTurno.Width) / 2, area.Bottom + 24);
             }
         }

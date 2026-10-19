@@ -4,6 +4,8 @@
 @inject GTE.Clients.ReporteApiClient ReporteClient
 @using GTE.DTOs
 
+<PageTitle>Reporte de retiros</PageTitle>
+
 <h3>Reporte: Retiros por Rango de Fechas</h3>
 
 @if (!string.IsNullOrEmpty(MensajeError))
@@ -101,6 +103,12 @@ else
 
     private async Task Consultar()
     {
+        if (fechaDesde.HasValue && fechaHasta.HasValue && fechaDesde.Value.Date > fechaHasta.Value.Date)
+        {
+            MensajeError = "La fecha 'Desde' no puede ser posterior a la fecha 'Hasta'.";
+            return;
+        }
+
         await EjecutarAsync(async () => {
             retiros = await ReporteClient.GetRetirosAsync(fechaDesde, fechaHasta);
             retiroExpandido = 0;

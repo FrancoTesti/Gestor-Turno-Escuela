@@ -1,9 +1,11 @@
 @page "/horariosespeciales"
-@attribute [Authorize]
+@attribute [Authorize(Roles = "Secretario,Portero")]
 @inherits PaginaConApiBase
 @inject GTE.Clients.HorarioEspecialApiClient HorarioClient
 @inject GTE.Clients.AlumnoApiClient AlumnoClient
 @using GTE.DTOs
+
+<PageTitle>Horarios especiales</PageTitle>
 
 <h3>Horarios Especiales</h3>
 
@@ -138,7 +140,7 @@ else
     {
         if (horarioEditando.IdAlumno == 0)
         {
-            MensajeError = "Seleccione un alumno";
+            MensajeError = "Seleccione un alumno.";
             return;
         }
 
