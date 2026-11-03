@@ -108,6 +108,48 @@ END;
 
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_SalidasDeCurso_IdCurso_FechaHoraFin' AND object_id = OBJECT_ID('SalidasDeCurso'))
     CREATE INDEX IX_SalidasDeCurso_IdCurso_FechaHoraFin ON SalidasDeCurso(IdCurso, FechaHoraFin);");
+
+            await context.Database.ExecuteSqlRawAsync(@"
+IF OBJECT_ID('Cursos', 'U') IS NOT NULL
+BEGIN
+    IF COL_LENGTH('Cursos', 'HorarioLunes') IS NULL
+        EXEC(N'ALTER TABLE Cursos ADD HorarioLunes time NULL');
+    IF COL_LENGTH('Cursos', 'HorarioMartes') IS NULL
+        EXEC(N'ALTER TABLE Cursos ADD HorarioMartes time NULL');
+    IF COL_LENGTH('Cursos', 'HorarioMiercoles') IS NULL
+        EXEC(N'ALTER TABLE Cursos ADD HorarioMiercoles time NULL');
+    IF COL_LENGTH('Cursos', 'HorarioJueves') IS NULL
+        EXEC(N'ALTER TABLE Cursos ADD HorarioJueves time NULL');
+    IF COL_LENGTH('Cursos', 'HorarioViernes') IS NULL
+        EXEC(N'ALTER TABLE Cursos ADD HorarioViernes time NULL');
+END;");
+
+            await context.Database.ExecuteSqlRawAsync(@"
+IF OBJECT_ID('Cursos', 'U') IS NOT NULL AND COL_LENGTH('Cursos', 'HorarioLunes') IS NOT NULL
+BEGIN
+    UPDATE Cursos
+    SET HorarioLunes = ISNULL(HorarioLunes, ISNULL(HorarioSalida, CAST('12:00:00' AS time))),
+        HorarioMartes = ISNULL(HorarioMartes, ISNULL(HorarioSalida, CAST('12:00:00' AS time))),
+        HorarioMiercoles = ISNULL(HorarioMiercoles, ISNULL(HorarioSalida, CAST('12:00:00' AS time))),
+        HorarioJueves = ISNULL(HorarioJueves, ISNULL(HorarioSalida, CAST('12:00:00' AS time))),
+        HorarioViernes = ISNULL(HorarioViernes, ISNULL(HorarioSalida, CAST('12:00:00' AS time)))
+    WHERE HorarioLunes IS NULL
+       OR HorarioMartes IS NULL
+       OR HorarioMiercoles IS NULL
+       OR HorarioJueves IS NULL
+       OR HorarioViernes IS NULL;
+
+    IF EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('Cursos') AND name = 'HorarioLunes' AND is_nullable = 1)
+        ALTER TABLE Cursos ALTER COLUMN HorarioLunes time NOT NULL;
+    IF EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('Cursos') AND name = 'HorarioMartes' AND is_nullable = 1)
+        ALTER TABLE Cursos ALTER COLUMN HorarioMartes time NOT NULL;
+    IF EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('Cursos') AND name = 'HorarioMiercoles' AND is_nullable = 1)
+        ALTER TABLE Cursos ALTER COLUMN HorarioMiercoles time NOT NULL;
+    IF EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('Cursos') AND name = 'HorarioJueves' AND is_nullable = 1)
+        ALTER TABLE Cursos ALTER COLUMN HorarioJueves time NOT NULL;
+    IF EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('Cursos') AND name = 'HorarioViernes' AND is_nullable = 1)
+        ALTER TABLE Cursos ALTER COLUMN HorarioViernes time NOT NULL;
+END;");
         }
     }
 }

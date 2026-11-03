@@ -8,15 +8,13 @@ namespace GTE.WindowsForms
 {
     public sealed class AccesoDirecto
     {
-        public AccesoDirecto(string titulo, string descripcion, Action abrir)
+        public AccesoDirecto(string titulo, Action abrir)
         {
             Titulo = titulo;
-            Descripcion = descripcion;
             Abrir = abrir;
         }
 
         public string Titulo { get; }
-        public string Descripcion { get; }
         public Action Abrir { get; }
     }
 
@@ -35,7 +33,7 @@ namespace GTE.WindowsForms
     public class HomeForm : Form
     {
         private const int AnchoTarjeta = 300;
-        private const int AltoTarjeta = 104;
+        private const int AltoTarjeta = 54;
 
         private readonly FlowLayoutPanel pnlTarjetas = new FlowLayoutPanel();
         private readonly List<Label> titulosDeSeccion = new();
@@ -106,17 +104,7 @@ namespace GTE.WindowsForms
             foreach (var tarjeta in tarjetas)
             {
                 tarjeta.Width = ancho;
-
-                var titulo = tarjeta.Controls["lblTituloTarjeta"] as Label;
-                var descripcion = tarjeta.Controls["lblDescripcion"] as Label;
-
-                if (titulo == null || descripcion == null)
-                    continue;
-
-                descripcion.Width = ancho - 32;
-                descripcion.Top = titulo.Bottom + 8;
-                descripcion.Height = Math.Max(40, descripcion.PreferredHeight);
-                tarjeta.Height = descripcion.Bottom + 14;
+                tarjeta.Height = AltoTarjeta;
             }
         }
 
@@ -157,21 +145,9 @@ namespace GTE.WindowsForms
                 Cursor = Cursors.Hand
             };
 
-            var lblDescripcion = new Label
-            {
-                Text = seccion.Descripcion,
-                Name = "lblDescripcion",
-                Location = new Point(16, 46),
-                Size = new Size(AnchoTarjeta - 32, 46),
-                Font = new Font("Segoe UI", 9F),
-                ForeColor = Tema.TextoSuave,
-                Cursor = Cursors.Hand
-            };
-
             tarjeta.Controls.Add(lblTitulo);
-            tarjeta.Controls.Add(lblDescripcion);
 
-            foreach (Control parte in new Control[] { tarjeta, lblTitulo, lblDescripcion })
+            foreach (Control parte in new Control[] { tarjeta, lblTitulo })
             {
                 parte.Click += (_, _) => seccion.Abrir();
                 parte.MouseEnter += (_, _) => Resaltar(tarjeta, lblTitulo, encendido: true);

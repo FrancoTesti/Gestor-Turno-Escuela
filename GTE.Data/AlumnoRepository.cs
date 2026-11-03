@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -61,7 +61,8 @@ namespace GTE.Data
         {
             const string sql = @"
                 SELECT a.IdAlumno, a.Nombre, a.Apellido, a.IdCurso, a.Estado,
-                       c.Grado, c.Curso, c.Turno, c.HorarioSalida
+                       c.Grado, c.Curso, c.Turno, c.HorarioSalida,
+                       c.HorarioLunes, c.HorarioMartes, c.HorarioMiercoles, c.HorarioJueves, c.HorarioViernes
                 FROM Alumnos a
                 INNER JOIN Cursos c ON c.IdCurso = a.IdCurso
                 WHERE (@Nombre IS NULL OR Nombre LIKE @NombreBusqueda OR Apellido LIKE @NombreBusqueda)
@@ -96,8 +97,15 @@ namespace GTE.Data
                     reader.GetInt32(3));
                 alumno.SetEstado(reader.GetString(4));
                 alumno.SetCursoEscolar(new CursoEscolar(
-                    reader.GetInt32(3), reader.GetString(5), reader.GetString(6),
-                    reader.GetString(7), reader.GetTimeSpan(8)));
+                    reader.GetInt32(3),
+                    reader.GetString(5),
+                    reader.GetString(6),
+                    reader.GetString(7),
+                    reader.GetTimeSpan(9),
+                    reader.GetTimeSpan(10),
+                    reader.GetTimeSpan(11),
+                    reader.GetTimeSpan(12),
+                    reader.GetTimeSpan(13)));
                 alumnos.Add(alumno);
             }
 

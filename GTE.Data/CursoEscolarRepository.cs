@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,7 +41,12 @@ namespace GTE.Data
             existing.SetGrado(curso.Grado);
             existing.SetCurso(curso.Curso);
             existing.SetTurno(curso.Turno);
-            existing.SetHorarioSalida(curso.HorarioSalida);
+            existing.SetHorariosSemana(
+                curso.HorarioLunes,
+                curso.HorarioMartes,
+                curso.HorarioMiercoles,
+                curso.HorarioJueves,
+                curso.HorarioViernes);
 
             await _context.SaveChangesAsync();
             return true;

@@ -24,16 +24,39 @@ internal sealed class AlumnoServiceFalso : IAlumnoService
 
 internal sealed class CursoEscolarServiceFalso : ICursoEscolarService
 {
-    public Task<CursoEscolarDTO> AddAsync(CursoEscolarDTO dto) => Task.FromResult(dto);
+    private readonly List<CursoEscolarDTO> _cursos = new();
 
-    public Task<CursoEscolarDTO?> GetAsync(int id) => Task.FromResult<CursoEscolarDTO?>(null);
+    public CursoEscolarServiceFalso() { }
+
+    public CursoEscolarServiceFalso(IEnumerable<CursoEscolarDTO> cursos)
+    {
+        _cursos.AddRange(cursos);
+    }
+
+    public Task<CursoEscolarDTO> AddAsync(CursoEscolarDTO dto)
+    {
+        _cursos.Add(dto);
+        return Task.FromResult(dto);
+    }
+
+    public Task<CursoEscolarDTO?> GetAsync(int id) =>
+        Task.FromResult(_cursos.FirstOrDefault(c => c.IdCurso == id));
 
     public Task<IEnumerable<CursoEscolarDTO>> GetAllAsync() =>
-        Task.FromResult<IEnumerable<CursoEscolarDTO>>(Array.Empty<CursoEscolarDTO>());
+        Task.FromResult<IEnumerable<CursoEscolarDTO>>(_cursos.ToList());
 
-    public Task<bool> UpdateAsync(CursoEscolarDTO dto) => Task.FromResult(true);
+    public Task<bool> UpdateAsync(CursoEscolarDTO dto)
+    {
+        var idx = _cursos.FindIndex(c => c.IdCurso == dto.IdCurso);
+        if (idx >= 0) _cursos[idx] = dto;
+        return Task.FromResult(true);
+    }
 
-    public Task<bool> DeleteAsync(int id) => Task.FromResult(true);
+    public Task<bool> DeleteAsync(int id)
+    {
+        _cursos.RemoveAll(c => c.IdCurso == id);
+        return Task.FromResult(true);
+    }
 }
 
 internal sealed class RetiroServiceFalso : IRetiroService
@@ -264,9 +287,21 @@ internal sealed class CursoEscolarRepositoryFalso : ICursoEscolarRepository
     public Task<IEnumerable<CursoEscolar>> GetAllAsync() =>
         Task.FromResult<IEnumerable<CursoEscolar>>(_cursos.ToList());
 
-    public Task<bool> UpdateAsync(CursoEscolar curso) => Task.FromResult(true);
+    public Task<bool> UpdateAsync(CursoEscolar curso)
+    {
+        var index = _cursos.FindIndex(c => c.IdCurso == curso.IdCurso);
+        if (index >= 0)
+        {
+            _cursos[index] = curso;
+        }
+        return Task.FromResult(true);
+    }
 
-    public Task<bool> DeleteAsync(int id) => Task.FromResult(true);
+    public Task<bool> DeleteAsync(int id)
+    {
+        _cursos.RemoveAll(c => c.IdCurso == id);
+        return Task.FromResult(true);
+    }
 }
 
 internal sealed class RetiroServiceConDatos : IRetiroService
@@ -371,7 +406,7 @@ internal sealed class SalidaDeCursoRepositoryFalso : ISalidaDeCursoRepository
 
 internal sealed class SalidaDeCursoServiceFalso : ISalidaDeCursoService
 {
-    public Task<CarteleraDTO> GetCarteleraAsync() => Task.FromResult(new CarteleraDTO());
+    public Task<CarteleraDTO> GetCarteleraAsync(DateTime? momento = null) => Task.FromResult(new CarteleraDTO());
 
     public Task<IEnumerable<SalidaDeCursoDTO>> GetDelDiaAsync(DateTime dia) =>
         Task.FromResult<IEnumerable<SalidaDeCursoDTO>>(Array.Empty<SalidaDeCursoDTO>());

@@ -36,6 +36,7 @@
                 <p class="cartelera-chico">
                     Próximo: @cartelera.Proximo.Grado @cartelera.Proximo.Curso
                     a las @cartelera.Proximo.HorarioSalida.ToString(@"hh\:mm")
+                    <span class="cartelera-contexto-dia">(@ContextoDiaProximo())</span>
                 </p>
             }
             <p class="cartelera-chico">Actualizado a las @ultimaActualizacion?.ToString(@"HH\:mm")</p>
@@ -121,6 +122,12 @@
         font-size: 1.8rem;
         color: #a9c5dd;
         margin-top: 12px;
+    }
+
+    .cartelera-contexto-dia {
+        color: #8ecae6;
+        font-size: 1.4rem;
+        margin-left: 6px;
     }
 
     .cartelera-cursos {
@@ -241,6 +248,27 @@
         return string.IsNullOrWhiteSpace(curso.Puerta)
             ? $"Desde las {hora}"
             : $"Sale por {curso.Puerta} desde las {hora}";
+    }
+
+    private static string NombreDia(DayOfWeek dia) => dia switch
+    {
+        DayOfWeek.Monday => "Lunes",
+        DayOfWeek.Tuesday => "Martes",
+        DayOfWeek.Wednesday => "Miércoles",
+        DayOfWeek.Thursday => "Jueves",
+        DayOfWeek.Friday => "Viernes",
+        DayOfWeek.Saturday => "Sábado",
+        DayOfWeek.Sunday => "Domingo",
+        _ => dia.ToString()
+    };
+
+    private string ContextoDiaProximo()
+    {
+        var diaActual = horaActual.DayOfWeek;
+        if (diaActual == DayOfWeek.Saturday || diaActual == DayOfWeek.Sunday)
+            return "Horario de Lunes";
+
+        return NombreDia(diaActual);
     }
 
     public void Dispose() => cancelacion.Cancel();

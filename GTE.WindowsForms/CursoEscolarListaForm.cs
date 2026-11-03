@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
@@ -76,18 +76,74 @@ namespace GTE.WindowsForms
 
         private void ConfigureColumns()
         {
-            if (dgvCursos.Columns.Count > 0)
+            if (dgvCursos.Columns.Count == 0)
+                return;
+
+            if (dgvCursos.Columns["IdCurso"] != null)
             {
-                dgvCursos.Columns["IdCurso"].HeaderText = "ID Curso";
-                dgvCursos.Columns["IdCurso"].Width = 100;
+                dgvCursos.Columns["IdCurso"].HeaderText = "ID";
+                dgvCursos.Columns["IdCurso"].Width = 50;
+                dgvCursos.Columns["IdCurso"].DisplayIndex = 0;
+            }
+            if (dgvCursos.Columns["Grado"] != null)
+            {
                 dgvCursos.Columns["Grado"].HeaderText = "Grado";
-                dgvCursos.Columns["Grado"].Width = 150;
-                dgvCursos.Columns["Curso"].HeaderText = "Curso / División";
-                dgvCursos.Columns["Curso"].Width = 150;
+                dgvCursos.Columns["Grado"].Width = 80;
+                dgvCursos.Columns["Grado"].DisplayIndex = 1;
+            }
+            if (dgvCursos.Columns["Curso"] != null)
+            {
+                dgvCursos.Columns["Curso"].HeaderText = "División";
+                dgvCursos.Columns["Curso"].Width = 80;
+                dgvCursos.Columns["Curso"].DisplayIndex = 2;
+            }
+            if (dgvCursos.Columns["Turno"] != null)
+            {
                 dgvCursos.Columns["Turno"].HeaderText = "Turno";
-                dgvCursos.Columns["Turno"].Width = 120;
-                dgvCursos.Columns["HorarioSalida"].HeaderText = "Horario Salida";
-                dgvCursos.Columns["HorarioSalida"].Width = 200;
+                dgvCursos.Columns["Turno"].Width = 80;
+                dgvCursos.Columns["Turno"].DisplayIndex = 3;
+            }
+            if (dgvCursos.Columns["HorarioSalidaLunes"] != null)
+            {
+                dgvCursos.Columns["HorarioSalidaLunes"].HeaderText = "Lun";
+                dgvCursos.Columns["HorarioSalidaLunes"].Width = 65;
+                dgvCursos.Columns["HorarioSalidaLunes"].DefaultCellStyle.Format = @"hh\:mm";
+                dgvCursos.Columns["HorarioSalidaLunes"].DisplayIndex = 4;
+            }
+            if (dgvCursos.Columns["HorarioSalidaMartes"] != null)
+            {
+                dgvCursos.Columns["HorarioSalidaMartes"].HeaderText = "Mar";
+                dgvCursos.Columns["HorarioSalidaMartes"].Width = 65;
+                dgvCursos.Columns["HorarioSalidaMartes"].DefaultCellStyle.Format = @"hh\:mm";
+                dgvCursos.Columns["HorarioSalidaMartes"].DisplayIndex = 5;
+            }
+            if (dgvCursos.Columns["HorarioSalidaMiercoles"] != null)
+            {
+                dgvCursos.Columns["HorarioSalidaMiercoles"].HeaderText = "Mié";
+                dgvCursos.Columns["HorarioSalidaMiercoles"].Width = 65;
+                dgvCursos.Columns["HorarioSalidaMiercoles"].DefaultCellStyle.Format = @"hh\:mm";
+                dgvCursos.Columns["HorarioSalidaMiercoles"].DisplayIndex = 6;
+            }
+            if (dgvCursos.Columns["HorarioSalidaJueves"] != null)
+            {
+                dgvCursos.Columns["HorarioSalidaJueves"].HeaderText = "Jue";
+                dgvCursos.Columns["HorarioSalidaJueves"].Width = 65;
+                dgvCursos.Columns["HorarioSalidaJueves"].DefaultCellStyle.Format = @"hh\:mm";
+                dgvCursos.Columns["HorarioSalidaJueves"].DisplayIndex = 7;
+            }
+            if (dgvCursos.Columns["HorarioSalidaViernes"] != null)
+            {
+                dgvCursos.Columns["HorarioSalidaViernes"].HeaderText = "Vie";
+                dgvCursos.Columns["HorarioSalidaViernes"].Width = 65;
+                dgvCursos.Columns["HorarioSalidaViernes"].DefaultCellStyle.Format = @"hh\:mm";
+                dgvCursos.Columns["HorarioSalidaViernes"].DisplayIndex = 8;
+            }
+            if (dgvCursos.Columns["HorarioSalida"] != null)
+            {
+                dgvCursos.Columns["HorarioSalida"].HeaderText = "Salida Hoy";
+                dgvCursos.Columns["HorarioSalida"].Width = 90;
+                dgvCursos.Columns["HorarioSalida"].DefaultCellStyle.Format = @"hh\:mm";
+                dgvCursos.Columns["HorarioSalida"].DisplayIndex = 9;
             }
         }
 

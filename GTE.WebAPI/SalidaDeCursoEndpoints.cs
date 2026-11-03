@@ -11,9 +11,9 @@ namespace GTE.WebAPI
     {
         public static void MapSalidaDeCursoEndpoints(this WebApplication app)
         {
-            app.MapGet("/cartelera", async (ISalidaDeCursoService service) =>
+            app.MapGet("/cartelera", async (ISalidaDeCursoService service, DateTime? fecha = null) =>
             {
-                var cartelera = await service.GetCarteleraAsync();
+                var cartelera = await service.GetCarteleraAsync(fecha);
                 return Results.Ok(cartelera);
             })
             .WithName("GetCartelera")

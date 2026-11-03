@@ -8,7 +8,7 @@ namespace GTE.Application.Services
 {
     public interface ISalidaDeCursoService
     {
-        Task<CarteleraDTO> GetCarteleraAsync();
+        Task<CarteleraDTO> GetCarteleraAsync(DateTime? momento = null);
 
         Task<IEnumerable<SalidaDeCursoDTO>> GetDelDiaAsync(DateTime dia);
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using GTE.DTOs;
@@ -35,7 +35,12 @@ namespace GTE.WindowsForms
             lblGrado.ForeColor = Color.FromArgb(206, 212, 218);
             lblCurso.ForeColor = Color.FromArgb(206, 212, 218);
             lblTurno.ForeColor = Color.FromArgb(206, 212, 218);
-            lblHorario.ForeColor = Color.FromArgb(206, 212, 218);
+            lblHorariosSemana.ForeColor = Color.FromArgb(206, 212, 218);
+            lblLunes.ForeColor = Color.FromArgb(206, 212, 218);
+            lblMartes.ForeColor = Color.FromArgb(206, 212, 218);
+            lblMiercoles.ForeColor = Color.FromArgb(206, 212, 218);
+            lblJueves.ForeColor = Color.FromArgb(206, 212, 218);
+            lblViernes.ForeColor = Color.FromArgb(206, 212, 218);
 
             txtGrado.BackColor = Color.FromArgb(49, 53, 56);
             txtGrado.ForeColor = Color.White;
@@ -49,9 +54,16 @@ namespace GTE.WindowsForms
             cmbTurno.ForeColor = Color.White;
             cmbTurno.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            txtHorario.BackColor = Color.FromArgb(49, 53, 56);
-            txtHorario.ForeColor = Color.White;
-            txtHorario.BorderStyle = BorderStyle.FixedSingle;
+            Tema.Entrada(dtpLunes);
+            Tema.Entrada(dtpMartes);
+            Tema.Entrada(dtpMiercoles);
+            Tema.Entrada(dtpJueves);
+            Tema.Entrada(dtpViernes);
+
+            btnCopiarSemana.BackColor = Color.FromArgb(23, 162, 184);
+            btnCopiarSemana.ForeColor = Color.White;
+            btnCopiarSemana.FlatStyle = FlatStyle.Flat;
+            btnCopiarSemana.FlatAppearance.BorderSize = 0;
 
             btnGuardar.BackColor = Color.FromArgb(40, 167, 69);
             btnGuardar.ForeColor = Color.White;
@@ -72,7 +84,23 @@ namespace GTE.WindowsForms
                 txtGrado.Text = _cursoExistente.Grado;
                 txtCurso.Text = _cursoExistente.Curso;
                 cmbTurno.SelectedItem = _cursoExistente.Turno;
-                txtHorario.Text = _cursoExistente.HorarioSalida.ToString(@"hh\:mm");
+
+                TimeSpan fallback = _cursoExistente.HorarioSalida != TimeSpan.Zero
+                    ? _cursoExistente.HorarioSalida
+                    : new TimeSpan(12, 0, 0);
+
+                TimeSpan lun = _cursoExistente.HorarioSalidaLunes != TimeSpan.Zero ? _cursoExistente.HorarioSalidaLunes : fallback;
+                TimeSpan mar = _cursoExistente.HorarioSalidaMartes != TimeSpan.Zero ? _cursoExistente.HorarioSalidaMartes : fallback;
+                TimeSpan mie = _cursoExistente.HorarioSalidaMiercoles != TimeSpan.Zero ? _cursoExistente.HorarioSalidaMiercoles : fallback;
+                TimeSpan jue = _cursoExistente.HorarioSalidaJueves != TimeSpan.Zero ? _cursoExistente.HorarioSalidaJueves : fallback;
+                TimeSpan vie = _cursoExistente.HorarioSalidaViernes != TimeSpan.Zero ? _cursoExistente.HorarioSalidaViernes : fallback;
+
+                DateTime baseDate = DateTime.Today;
+                dtpLunes.Value = baseDate.Add(lun);
+                dtpMartes.Value = baseDate.Add(mar);
+                dtpMiercoles.Value = baseDate.Add(mie);
+                dtpJueves.Value = baseDate.Add(jue);
+                dtpViernes.Value = baseDate.Add(vie);
             }
         }
 
@@ -81,9 +109,24 @@ namespace GTE.WindowsForms
             if (!_isEditMode)
             {
                 lblTitle.Text = "Nuevo Curso Escolar";
-                txtHorario.Text = "12:00";
-                cmbTurno.SelectedIndex = 0;
+                var defaultTime = DateTime.Today.AddHours(12);
+                dtpLunes.Value = defaultTime;
+                dtpMartes.Value = defaultTime;
+                dtpMiercoles.Value = defaultTime;
+                dtpJueves.Value = defaultTime;
+                dtpViernes.Value = defaultTime;
+                if (cmbTurno.Items.Count > 0)
+                    cmbTurno.SelectedIndex = 0;
             }
+        }
+
+        private void btnCopiarSemana_Click(object sender, EventArgs e)
+        {
+            var horarioLunes = dtpLunes.Value;
+            dtpMartes.Value = horarioLunes;
+            dtpMiercoles.Value = horarioLunes;
+            dtpJueves.Value = horarioLunes;
+            dtpViernes.Value = horarioLunes;
         }
 
         private async void btnGuardar_Click(object sender, EventArgs e)
@@ -91,21 +134,19 @@ namespace GTE.WindowsForms
             string grado = txtGrado.Text.Trim();
             string curso = txtCurso.Text.Trim();
             string turno = cmbTurno.SelectedItem?.ToString() ?? string.Empty;
-            string horarioText = txtHorario.Text.Trim();
 
-            if (string.IsNullOrEmpty(grado) || string.IsNullOrEmpty(curso) || string.IsNullOrEmpty(turno) || string.IsNullOrEmpty(horarioText))
+            if (string.IsNullOrEmpty(grado) || string.IsNullOrEmpty(curso) || string.IsNullOrEmpty(turno))
             {
                 MessageBox.Show("Por favor complete todos los campos.", "Campos vacíos",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (!TimeSpan.TryParse(horarioText, out TimeSpan horario))
-            {
-                MessageBox.Show("El horario debe tener un formato válido (Ej: 12:15 o 12:15:00).", "Horario Inválido",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            TimeSpan horarioLunes = new TimeSpan(dtpLunes.Value.Hour, dtpLunes.Value.Minute, 0);
+            TimeSpan horarioMartes = new TimeSpan(dtpMartes.Value.Hour, dtpMartes.Value.Minute, 0);
+            TimeSpan horarioMiercoles = new TimeSpan(dtpMiercoles.Value.Hour, dtpMiercoles.Value.Minute, 0);
+            TimeSpan horarioJueves = new TimeSpan(dtpJueves.Value.Hour, dtpJueves.Value.Minute, 0);
+            TimeSpan horarioViernes = new TimeSpan(dtpViernes.Value.Hour, dtpViernes.Value.Minute, 0);
 
             try
             {
@@ -117,7 +158,12 @@ namespace GTE.WindowsForms
                         Grado = grado,
                         Curso = curso,
                         Turno = turno,
-                        HorarioSalida = horario
+                        HorarioSalida = horarioLunes,
+                        HorarioSalidaLunes = horarioLunes,
+                        HorarioSalidaMartes = horarioMartes,
+                        HorarioSalidaMiercoles = horarioMiercoles,
+                        HorarioSalidaJueves = horarioJueves,
+                        HorarioSalidaViernes = horarioViernes
                     };
                     bool ok = await _apiClient.UpdateAsync(dto);
                     if (ok)
@@ -139,7 +185,12 @@ namespace GTE.WindowsForms
                         Grado = grado,
                         Curso = curso,
                         Turno = turno,
-                        HorarioSalida = horario
+                        HorarioSalida = horarioLunes,
+                        HorarioSalidaLunes = horarioLunes,
+                        HorarioSalidaMartes = horarioMartes,
+                        HorarioSalidaMiercoles = horarioMiercoles,
+                        HorarioSalidaJueves = horarioJueves,
+                        HorarioSalidaViernes = horarioViernes
                     };
                     var creado = await _apiClient.AddAsync(dto);
                     if (creado != null)

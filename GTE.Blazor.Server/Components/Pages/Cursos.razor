@@ -22,9 +22,17 @@ else
     <table class="table table-striped align-middle">
         <thead class="table-dark">
             <tr>
-                <th>Grado</th><th>Curso</th><th>Turno</th><th>Horario Salida</th>
+                <th>Grado</th>
+                <th>Curso</th>
+                <th>Turno</th>
+                <th title="Horario correspondiente a hoy">Hoy</th>
+                <th>Lun</th>
+                <th>Mar</th>
+                <th>Mié</th>
+                <th>Jue</th>
+                <th>Vie</th>
                 <AuthorizeView Roles="Secretario">
-                    <Authorized><th class="text-center" style="width: 180px;">Acciones</th></Authorized>
+                    <Authorized><th class="text-center" style="width: 160px;">Acciones</th></Authorized>
                 </AuthorizeView>
             </tr>
         </thead>
@@ -32,7 +40,15 @@ else
             @foreach (var c in cursos)
             {
                 <tr>
-                    <td>@c.Grado</td><td>@c.Curso</td><td>@c.Turno</td><td>@c.HorarioSalida</td>
+                    <td>@c.Grado</td>
+                    <td>@c.Curso</td>
+                    <td>@c.Turno</td>
+                    <td><span class="badge bg-primary">@c.HorarioSalida.ToString(@"hh\:mm")</span></td>
+                    <td>@c.HorarioSalidaLunes.ToString(@"hh\:mm")</td>
+                    <td>@c.HorarioSalidaMartes.ToString(@"hh\:mm")</td>
+                    <td>@c.HorarioSalidaMiercoles.ToString(@"hh\:mm")</td>
+                    <td>@c.HorarioSalidaJueves.ToString(@"hh\:mm")</td>
+                    <td>@c.HorarioSalidaViernes.ToString(@"hh\:mm")</td>
                     <AuthorizeView Roles="Secretario">
                         <Authorized>
                             <td class="text-center text-nowrap">
@@ -50,7 +66,7 @@ else
 @if (mostrarModal)
 {
     <div class="modal fade show d-block" style="background: rgba(0,0,0,0.5);">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">@(cursoEditando.IdCurso == 0 ? "Nuevo Curso" : "Editar Curso")</h5>
@@ -74,9 +90,35 @@ else
                                 <option value="Noche">Noche</option>
                             </InputSelect>
                         </div>
-                        <div class="mb-3">
-                            <label>Horario Salida</label>
-                            <input type="time" class="form-control" value="@HorarioSalidaString" @onchange="@(e => HorarioSalidaString = e.Value?.ToString() ?? "")" />
+                        <div class="card mb-3 p-3 bg-light">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label class="form-label fw-bold mb-0">Horarios de Salida Semanales</label>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="CopiarLunesATodos">
+                                    Copiar Lunes a todos los días
+                                </button>
+                            </div>
+                            <div class="row g-2">
+                                <div class="col-sm-6 col-md">
+                                    <label class="form-label small">Lunes</label>
+                                    <input type="time" class="form-control" value="@HorarioLunesString" @onchange="@(e => HorarioLunesString = e.Value?.ToString() ?? "")" />
+                                </div>
+                                <div class="col-sm-6 col-md">
+                                    <label class="form-label small">Martes</label>
+                                    <input type="time" class="form-control" value="@HorarioMartesString" @onchange="@(e => HorarioMartesString = e.Value?.ToString() ?? "")" />
+                                </div>
+                                <div class="col-sm-6 col-md">
+                                    <label class="form-label small">Miércoles</label>
+                                    <input type="time" class="form-control" value="@HorarioMiercolesString" @onchange="@(e => HorarioMiercolesString = e.Value?.ToString() ?? "")" />
+                                </div>
+                                <div class="col-sm-6 col-md">
+                                    <label class="form-label small">Jueves</label>
+                                    <input type="time" class="form-control" value="@HorarioJuevesString" @onchange="@(e => HorarioJuevesString = e.Value?.ToString() ?? "")" />
+                                </div>
+                                <div class="col-sm-6 col-md">
+                                    <label class="form-label small">Viernes</label>
+                                    <input type="time" class="form-control" value="@HorarioViernesString" @onchange="@(e => HorarioViernesString = e.Value?.ToString() ?? "")" />
+                                </div>
+                            </div>
                         </div>
                         <div class="mt-4 text-end">
                             <button type="button" class="btn btn-secondary me-2" @onclick="CerrarModal">Cancelar</button>
@@ -94,6 +136,36 @@ else
     private CursoEscolarDTO cursoEditando = new();
     private bool mostrarModal;
 
+    private string HorarioLunesString
+    {
+        get => cursoEditando.HorarioSalidaLunes.ToString(@"hh\:mm");
+        set { if (TimeSpan.TryParse(value, out var ts)) cursoEditando.HorarioSalidaLunes = ts; }
+    }
+
+    private string HorarioMartesString
+    {
+        get => cursoEditando.HorarioSalidaMartes.ToString(@"hh\:mm");
+        set { if (TimeSpan.TryParse(value, out var ts)) cursoEditando.HorarioSalidaMartes = ts; }
+    }
+
+    private string HorarioMiercolesString
+    {
+        get => cursoEditando.HorarioSalidaMiercoles.ToString(@"hh\:mm");
+        set { if (TimeSpan.TryParse(value, out var ts)) cursoEditando.HorarioSalidaMiercoles = ts; }
+    }
+
+    private string HorarioJuevesString
+    {
+        get => cursoEditando.HorarioSalidaJueves.ToString(@"hh\:mm");
+        set { if (TimeSpan.TryParse(value, out var ts)) cursoEditando.HorarioSalidaJueves = ts; }
+    }
+
+    private string HorarioViernesString
+    {
+        get => cursoEditando.HorarioSalidaViernes.ToString(@"hh\:mm");
+        set { if (TimeSpan.TryParse(value, out var ts)) cursoEditando.HorarioSalidaViernes = ts; }
+    }
+
     private string HorarioSalidaString
     {
         get => cursoEditando.HorarioSalida.ToString(@"hh\:mm");
@@ -109,33 +181,76 @@ else
 
     private void AbrirModalNuevo()
     {
-        cursoEditando = new CursoEscolarDTO { Turno = "Mañana" };
+        var horarioPorDefecto = new TimeSpan(12, 0, 0);
+        cursoEditando = new CursoEscolarDTO
+        {
+            Turno = "Mañana",
+            HorarioSalida = horarioPorDefecto,
+            HorarioSalidaLunes = horarioPorDefecto,
+            HorarioSalidaMartes = horarioPorDefecto,
+            HorarioSalidaMiercoles = horarioPorDefecto,
+            HorarioSalidaJueves = horarioPorDefecto,
+            HorarioSalidaViernes = horarioPorDefecto
+        };
         mostrarModal = true;
     }
 
     private void AbrirModalEditar(CursoEscolarDTO curso)
     {
+        var salidaLunes = curso.HorarioSalidaLunes != TimeSpan.Zero ? curso.HorarioSalidaLunes : curso.HorarioSalida;
         cursoEditando = new CursoEscolarDTO
         {
             IdCurso = curso.IdCurso,
             Grado = curso.Grado,
             Curso = curso.Curso,
             Turno = curso.Turno,
-            HorarioSalida = curso.HorarioSalida
+            HorarioSalida = curso.HorarioSalida,
+            HorarioSalidaLunes = salidaLunes,
+            HorarioSalidaMartes = curso.HorarioSalidaMartes != TimeSpan.Zero ? curso.HorarioSalidaMartes : salidaLunes,
+            HorarioSalidaMiercoles = curso.HorarioSalidaMiercoles != TimeSpan.Zero ? curso.HorarioSalidaMiercoles : salidaLunes,
+            HorarioSalidaJueves = curso.HorarioSalidaJueves != TimeSpan.Zero ? curso.HorarioSalidaJueves : salidaLunes,
+            HorarioSalidaViernes = curso.HorarioSalidaViernes != TimeSpan.Zero ? curso.HorarioSalidaViernes : salidaLunes
         };
         mostrarModal = true;
+    }
+
+    private void CopiarLunesATodos()
+    {
+        cursoEditando.HorarioSalidaMartes = cursoEditando.HorarioSalidaLunes;
+        cursoEditando.HorarioSalidaMiercoles = cursoEditando.HorarioSalidaLunes;
+        cursoEditando.HorarioSalidaJueves = cursoEditando.HorarioSalidaLunes;
+        cursoEditando.HorarioSalidaViernes = cursoEditando.HorarioSalidaLunes;
     }
 
     private void CerrarModal() => mostrarModal = false;
 
     private async Task Guardar()
     {
+        if (string.IsNullOrWhiteSpace(cursoEditando.Grado))
+        {
+            MensajeError = "El grado es obligatorio.";
+            return;
+        }
+        if (string.IsNullOrWhiteSpace(cursoEditando.Curso))
+        {
+            MensajeError = "La división es obligatoria.";
+            return;
+        }
+
         await EjecutarAsync(async () =>
         {
+            cursoEditando.HorarioSalida = cursoEditando.HorarioSalidaLunes;
+
             if (cursoEditando.IdCurso == 0)
+            {
                 await CursosClient.AddAsync(cursoEditando);
+            }
             else
-                await CursosClient.UpdateAsync(cursoEditando);
+            {
+                var ok = await CursosClient.UpdateAsync(cursoEditando);
+                if (!ok)
+                    throw new Exception("No se pudo actualizar el curso escolar en el servidor.");
+            }
 
             mostrarModal = false;
             await CargarDatos();

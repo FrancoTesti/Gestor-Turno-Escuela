@@ -39,7 +39,7 @@ namespace GTE.WebAPI
                     Grado = alumno.CursoEscolar?.Grado ?? string.Empty,
                     Curso = alumno.CursoEscolar?.Curso ?? string.Empty,
                     Turno = alumno.CursoEscolar?.Turno ?? string.Empty,
-                    HorarioSalida = alumno.CursoEscolar?.HorarioSalida ?? TimeSpan.Zero,
+                    HorarioSalida = alumno.CursoEscolar?.ObtenerHorarioSalida(DateTime.Today.DayOfWeek) ?? TimeSpan.Zero,
                     Estado = alumno.Estado,
                     EstaSaliendo = cursosSaliendo.Contains(alumno.IdCurso)
                 }).ToList();

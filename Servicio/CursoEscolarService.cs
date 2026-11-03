@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,10 +19,22 @@ namespace GTE.Application.Services
 
         public async Task<CursoEscolarDTO> AddAsync(CursoEscolarDTO dto)
         {
-            CursoEscolar curso = new CursoEscolar(0, dto.Grado, dto.Curso, dto.Turno, dto.HorarioSalida);
+            var lunes = dto.HorarioSalidaLunes != TimeSpan.Zero ? dto.HorarioSalidaLunes : dto.HorarioSalida;
+            var martes = dto.HorarioSalidaMartes != TimeSpan.Zero ? dto.HorarioSalidaMartes : dto.HorarioSalida;
+            var miercoles = dto.HorarioSalidaMiercoles != TimeSpan.Zero ? dto.HorarioSalidaMiercoles : dto.HorarioSalida;
+            var jueves = dto.HorarioSalidaJueves != TimeSpan.Zero ? dto.HorarioSalidaJueves : dto.HorarioSalida;
+            var viernes = dto.HorarioSalidaViernes != TimeSpan.Zero ? dto.HorarioSalidaViernes : dto.HorarioSalida;
+
+            CursoEscolar curso = new CursoEscolar(0, dto.Grado, dto.Curso, dto.Turno, lunes, martes, miercoles, jueves, viernes);
             await cursoRepository.AddAsync(curso);
 
             dto.IdCurso = curso.IdCurso;
+            dto.HorarioSalidaLunes = curso.HorarioLunes;
+            dto.HorarioSalidaMartes = curso.HorarioMartes;
+            dto.HorarioSalidaMiercoles = curso.HorarioMiercoles;
+            dto.HorarioSalidaJueves = curso.HorarioJueves;
+            dto.HorarioSalidaViernes = curso.HorarioViernes;
+            dto.HorarioSalida = curso.ObtenerHorarioSalida(DateTime.Today.DayOfWeek);
             return dto;
         }
 
@@ -44,7 +56,12 @@ namespace GTE.Application.Services
                 Grado = curso.Grado,
                 Curso = curso.Curso,
                 Turno = curso.Turno,
-                HorarioSalida = curso.HorarioSalida
+                HorarioSalida = curso.ObtenerHorarioSalida(DateTime.Today.DayOfWeek),
+                HorarioSalidaLunes = curso.HorarioLunes,
+                HorarioSalidaMartes = curso.HorarioMartes,
+                HorarioSalidaMiercoles = curso.HorarioMiercoles,
+                HorarioSalidaJueves = curso.HorarioJueves,
+                HorarioSalidaViernes = curso.HorarioViernes
             };
         }
 
@@ -58,7 +75,12 @@ namespace GTE.Application.Services
                 Grado = curso.Grado,
                 Curso = curso.Curso,
                 Turno = curso.Turno,
-                HorarioSalida = curso.HorarioSalida
+                HorarioSalida = curso.ObtenerHorarioSalida(DateTime.Today.DayOfWeek),
+                HorarioSalidaLunes = curso.HorarioLunes,
+                HorarioSalidaMartes = curso.HorarioMartes,
+                HorarioSalidaMiercoles = curso.HorarioMiercoles,
+                HorarioSalidaJueves = curso.HorarioJueves,
+                HorarioSalidaViernes = curso.HorarioViernes
             }).ToList();
         }
 
@@ -71,7 +93,14 @@ namespace GTE.Application.Services
             existing.SetGrado(dto.Grado);
             existing.SetCurso(dto.Curso);
             existing.SetTurno(dto.Turno);
-            existing.SetHorarioSalida(dto.HorarioSalida);
+
+            var lunes = dto.HorarioSalidaLunes != TimeSpan.Zero ? dto.HorarioSalidaLunes : dto.HorarioSalida;
+            var martes = dto.HorarioSalidaMartes != TimeSpan.Zero ? dto.HorarioSalidaMartes : dto.HorarioSalida;
+            var miercoles = dto.HorarioSalidaMiercoles != TimeSpan.Zero ? dto.HorarioSalidaMiercoles : dto.HorarioSalida;
+            var jueves = dto.HorarioSalidaJueves != TimeSpan.Zero ? dto.HorarioSalidaJueves : dto.HorarioSalida;
+            var viernes = dto.HorarioSalidaViernes != TimeSpan.Zero ? dto.HorarioSalidaViernes : dto.HorarioSalida;
+
+            existing.SetHorariosSemana(lunes, martes, miercoles, jueves, viernes);
 
             return await cursoRepository.UpdateAsync(existing);
         }

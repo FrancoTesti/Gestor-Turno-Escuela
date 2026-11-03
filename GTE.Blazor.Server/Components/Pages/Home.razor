@@ -11,7 +11,6 @@
     </p>
 </div>
 
-
 @foreach (var seccion in secciones)
 {
     <section class="mb-4">
@@ -22,9 +21,8 @@
             {
                 <div class="col-sm-6 col-xl-4">
                     <a class="card h-100 text-decoration-none shadow-sm tarjeta-inicio" href="@acceso.Direccion">
-                        <div class="card-body">
-                            <h5 class="card-title">@acceso.Titulo</h5>
-                            <p class="card-text text-muted mb-0">@acceso.Descripcion</p>
+                        <div class="card-body py-3">
+                            <h5 class="card-title mb-0">@acceso.Titulo</h5>
                         </div>
                     </a>
                 </div>
@@ -55,42 +53,22 @@
         {
             new("Día a día", new List<Acceso>
             {
-                new("Salidas de curso",
-                    "Marcá qué curso está saliendo. La pantalla de la puerta lo muestra al instante.",
-                    "salidas", "Secretario", "Portero"),
-                new("Retiros",
-                    "Registrá la entrega de alumnos a un tutor autorizado.",
-                    "retiros", "Secretario", "Portero"),
-                new("Alumnos",
-                    "Consultá el listado, buscá por curso o turno y administrá los legajos.",
-                    "alumnos", "Secretario", "Portero"),
-                new("Horarios especiales",
-                    "Cargá las salidas a una hora distinta por una actividad puntual.",
-                    "horariosespeciales", "Secretario", "Portero"),
-                new("Mis alumnos",
-                    "Los alumnos a tu cargo, con su curso, horario de salida y estado.",
-                    "mis-alumnos", "Tutor")
+                new("Salidas de curso", "salidas", "Secretario", "Portero"),
+                new("Retiros", "retiros", "Secretario", "Portero"),
+                new("Alumnos", "alumnos", "Secretario", "Portero"),
+                new("Horarios especiales", "horariosespeciales", "Secretario", "Portero"),
+                new("Mis alumnos", "mis-alumnos", "Tutor")
             }),
             new("Administración", new List<Acceso>
             {
-                new("Cursos",
-                    "Grados, divisiones, turnos y horario de salida de cada curso.",
-                    "cursos", "Secretario", "Portero", "Tutor"),
-                new("Tutores",
-                    "Datos de contacto de los adultos autorizados a retirar.",
-                    "tutores", "Secretario", "Portero"),
-                new("Autorizaciones",
-                    "Definí qué tutor puede retirar a cada alumno.",
-                    "autorizaciones", "Secretario", "Portero")
+                new("Cursos", "cursos", "Secretario", "Portero", "Tutor"),
+                new("Tutores", "tutores", "Secretario", "Portero"),
+                new("Autorizaciones", "autorizaciones", "Secretario", "Portero")
             }),
             new("Reportes", new List<Acceso>
             {
-                new("Reporte de alumnos",
-                    "Cantidad de alumnos por curso y turno, con gráfico.",
-                    "reportealumnos", "Secretario"),
-                new("Reporte de retiros",
-                    "Retiros de un período, con el detalle de los alumnos.",
-                    "reporteretiros", "Secretario", "Portero")
+                new("Reporte de alumnos", "reportealumnos", "Secretario"),
+                new("Reporte de retiros", "reporteretiros", "Secretario", "Portero")
             })
         }
         .Select(seccion => new Seccion(
@@ -103,16 +81,14 @@
     {
         private readonly string[] rolesPermitidos;
 
-        public Acceso(string titulo, string descripcion, string direccion, params string[] roles)
+        public Acceso(string titulo, string direccion, params string[] roles)
         {
             Titulo = titulo;
-            Descripcion = descripcion;
             Direccion = direccion;
             rolesPermitidos = roles;
         }
 
         public string Titulo { get; }
-        public string Descripcion { get; }
         public string Direccion { get; }
 
         public bool EsPara(string? rol) =>

@@ -24,7 +24,7 @@ namespace GTE.Application.Services
             _alumnoRepository = alumnoRepository;
         }
 
-        public async Task<CarteleraDTO> GetCarteleraAsync()
+        public async Task<CarteleraDTO> GetCarteleraAsync(DateTime? momento = null)
         {
             var enCurso = (await _salidaRepository.GetEnCursoAsync()).ToList();
             var alumnos = (await _alumnoRepository.GetAllAsync()).ToList();
@@ -42,12 +42,34 @@ namespace GTE.Application.Services
                 }).ToList()
             };
 
-            TimeSpan ahora = DateTime.Now.TimeOfDay;
+            DateTime actual = momento ?? DateTime.Now;
+            DayOfWeek diaSemana = actual.DayOfWeek;
+            TimeSpan horaActual = actual.TimeOfDay;
+
             var cursos = await _cursoRepository.GetAllAsync();
-            var proximo = cursos
-                .Where(c => c.HorarioSalida >= ahora)
-                .OrderBy(c => c.HorarioSalida)
-                .FirstOrDefault();
+
+            DayOfWeek diaEvaluado = (diaSemana == DayOfWeek.Saturday || diaSemana == DayOfWeek.Sunday)
+                ? DayOfWeek.Monday
+                : diaSemana;
+
+            CursoEscolar? proximo;
+            if (diaSemana == DayOfWeek.Saturday || diaSemana == DayOfWeek.Sunday)
+            {
+                proximo = cursos
+                    .Where(c => c.ObtenerHorarioSalida(diaEvaluado) >= horaActual)
+                    .OrderBy(c => c.ObtenerHorarioSalida(diaEvaluado))
+                    .FirstOrDefault()
+                    ?? cursos
+                        .OrderBy(c => c.ObtenerHorarioSalida(diaEvaluado))
+                        .FirstOrDefault();
+            }
+            else
+            {
+                proximo = cursos
+                    .Where(c => c.ObtenerHorarioSalida(diaEvaluado) >= horaActual)
+                    .OrderBy(c => c.ObtenerHorarioSalida(diaEvaluado))
+                    .FirstOrDefault();
+            }
 
             if (proximo != null)
             {
@@ -57,7 +79,12 @@ namespace GTE.Application.Services
                     Grado = proximo.Grado,
                     Curso = proximo.Curso,
                     Turno = proximo.Turno,
-                    HorarioSalida = proximo.HorarioSalida
+                    HorarioSalida = proximo.ObtenerHorarioSalida(diaEvaluado),
+                    HorarioSalidaLunes = proximo.HorarioLunes,
+                    HorarioSalidaMartes = proximo.HorarioMartes,
+                    HorarioSalidaMiercoles = proximo.HorarioMiercoles,
+                    HorarioSalidaJueves = proximo.HorarioJueves,
+                    HorarioSalidaViernes = proximo.HorarioViernes
                 };
             }
 
@@ -120,7 +147,7 @@ namespace GTE.Application.Services
                 Grado = salida.CursoEscolar.Grado,
                 Curso = salida.CursoEscolar.Curso,
                 Turno = salida.CursoEscolar.Turno,
-                HorarioSalida = salida.CursoEscolar.HorarioSalida,
+                HorarioSalida = salida.CursoEscolar.ObtenerHorarioSalida(salida.FechaHoraInicio.DayOfWeek),
                 Puerta = PuertaDe(salida.Personal),
                 PersonalNombre = salida.Personal.Nombre,
                 FechaHoraInicio = salida.FechaHoraInicio,

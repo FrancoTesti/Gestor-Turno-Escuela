@@ -73,6 +73,11 @@ namespace GTE.Data
                 entity.Property(e => e.Curso).IsRequired().HasMaxLength(50);
                 entity.Property(e => e.Turno).IsRequired().HasMaxLength(20);
                 entity.Property(e => e.HorarioSalida).IsRequired();
+                entity.Property(e => e.HorarioLunes).IsRequired();
+                entity.Property(e => e.HorarioMartes).IsRequired();
+                entity.Property(e => e.HorarioMiercoles).IsRequired();
+                entity.Property(e => e.HorarioJueves).IsRequired();
+                entity.Property(e => e.HorarioViernes).IsRequired();
                 entity.HasIndex(e => new { e.Grado, e.Curso, e.Turno }).IsUnique();
             });
 
@@ -263,13 +268,27 @@ namespace GTE.Data
             var cursosDeEjemplo = new List<object>();
             for (int i = 0; i < CantidadDeCursos; i++)
             {
+                var salidaBase = salidasPorGrado[i / divisiones.Length];
+                var salidaLunes = salidaBase;
+                var salidaMartes = salidaBase;
+                // Miércoles con diferenciación curricular: división B cursa taller institucional (+15 min)
+                var salidaMiercoles = (i % 2 == 1) ? salidaBase.Add(TimeSpan.FromMinutes(15)) : salidaBase;
+                var salidaJueves = salidaBase;
+                // Viernes con salida institucional anticipada (-30 min)
+                var salidaViernes = salidaBase.Subtract(TimeSpan.FromMinutes(30));
+
                 cursosDeEjemplo.Add(new
                 {
                     IdCurso = i + 1,
                     Grado = grados[i / divisiones.Length],
                     Curso = divisiones[i % divisiones.Length],
                     Turno = turnosPorGrado[i / divisiones.Length],
-                    HorarioSalida = salidasPorGrado[i / divisiones.Length]
+                    HorarioSalida = salidaBase,
+                    HorarioLunes = salidaLunes,
+                    HorarioMartes = salidaMartes,
+                    HorarioMiercoles = salidaMiercoles,
+                    HorarioJueves = salidaJueves,
+                    HorarioViernes = salidaViernes
                 });
             }
 
