@@ -1,0 +1,407 @@
+@page "/reportes-asistencias"
+@attribute [Authorize(Roles = "Secretario,Portero")]
+@inherits PaginaConApiBase
+@inject IAsistenciaApiClient AsistenciaClient
+@inject CursoEscolarApiClient CursoClient
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Reportes Oficiales Mi ESCUELA (Santa Fe)</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Reportes Oficiales Mi ESCUELA</h3>
+    <div class="d-flex gap-2 accion-botones">
+        <button class="btn btn-outline-success btn-sm" @onclick="ExportarCsvAsync" disabled="@(cargando || (tabActiva == "novedades" ? novedades == null || novedades.Count == 0 : espejo == null || espejo.Filas.Count == 0))">
+            <span class="bi bi-file-earmark-spreadsheet me-1"></span>Exportar a CSV / Excel
+        </button>
+        <button class="btn btn-outline-secondary btn-sm" @onclick="ImprimirAsync" disabled="@cargando">
+            <span class="bi bi-printer me-1"></span>Imprimir
+        </button>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(MensajeError))
+{
+    <div class="alert alert-danger alert-dismissible fade show alerta-flotante" role="alert">
+        @MensajeError
+        <button type="button" class="btn-close" @onclick="() => MensajeError = string.Empty"></button>
+    </div>
+}
+
+<ul class="nav nav-tabs mb-3 no-imprimir">
+    <li class="nav-item">
+        <button class="nav-link @(tabActiva == "novedades" ? "active fw-bold" : "")" @onclick="@(() => CambiarTab("novedades"))">
+            Novedades (Excepciones)
+        </button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link @(tabActiva == "espejo" ? "active fw-bold" : "")" @onclick="@(() => CambiarTab("espejo"))">
+            Espejo Semanal (Mi ESCUELA)
+        </button>
+    </li>
+</ul>
+
+@if (tabActiva == "novedades")
+{
+    <div class="card mb-3 shadow-sm no-imprimir">
+        <div class="card-body">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Curso:</label>
+                    <select class="form-select" @bind="idCursoNovedades">
+                        <option value="0">-- Seleccione curso --</option>
+                        @foreach (var c in cursos)
+                        {
+                            <option value="@c.IdCurso">@c.Grado @c.Curso (@c.Turno)</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Desde:</label>
+                    <input type="date" class="form-control" @bind="fechaDesdeNovedades" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Hasta:</label>
+                    <input type="date" class="form-control" @bind="fechaHastaNovedades" />
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary w-100" @onclick="ConsultarNovedadesAsync" disabled="@(idCursoNovedades <= 0 || cargando)">
+                        @(cargando ? "Consultando..." : "Consultar")
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (novedades == null)
+    {
+        <p class="text-muted"><em>Seleccione los filtros y presione Consultar para listar las excepciones del período...</em></p>
+    }
+    else if (novedades.Count == 0)
+    {
+        <div class="alert alert-info">
+            No se registraron excepciones ni inasistencias para el curso y rango de fechas seleccionado.
+        </div>
+    }
+    else
+    {
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="badge bg-secondary">Total excepciones encontradas: @novedades.Count</span>
+        </div>
+
+        <div class="table-responsive shadow-sm rounded">
+            <table class="table table-striped table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th style="width: 105px;">Fecha</th>
+                        <th style="width: 100px;">Día</th>
+                        <th>Alumno</th>
+                        <th style="width: 110px;">Curso</th>
+                        <th style="width: 100px;">Turno</th>
+                        <th>Tipo Inasistencia</th>
+                        <th style="width: 90px;" class="text-center">Valor</th>
+                        <th style="width: 100px;" class="text-center">Justificada</th>
+                        <th>Motivo</th>
+                        <th style="width: 100px;" class="text-center">No Computa</th>
+                        <th>Observaciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var nov in novedades)
+                    {
+                        <tr>
+                            <td>@nov.Fecha.ToString("dd/MM/yyyy")</td>
+                            <td>@nov.DiaSemana</td>
+                            <td><strong>@nov.AlumnoNombreCompleto</strong></td>
+                            <td>@nov.Curso</td>
+                            <td>@nov.Turno</td>
+                            <td>
+                                <span class="badge bg-danger">@nov.TipoInasistencia</span>
+                            </td>
+                            <td class="text-center fw-bold">@nov.ValorFalta.ToString("0.##")</td>
+                            <td class="text-center">
+                                @if (nov.Justificada)
+                                {
+                                    <span class="badge bg-info text-dark">Sí (J)</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">No (I)</span>
+                                }
+                            </td>
+                            <td>@(string.IsNullOrWhiteSpace(nov.Motivo) ? "-" : nov.Motivo)</td>
+                            <td class="text-center">
+                                @if (nov.NoComputa)
+                                {
+                                    <span class="badge bg-warning text-dark">No Computa</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">-</span>
+                                }
+                            </td>
+                            <td><small>@(string.IsNullOrWhiteSpace(nov.Observaciones) ? "-" : nov.Observaciones)</small></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}
+else if (tabActiva == "espejo")
+{
+    <div class="card mb-3 shadow-sm no-imprimir">
+        <div class="card-body">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-5">
+                    <label class="form-label fw-bold">Curso:</label>
+                    <select class="form-select" @bind="idCursoEspejo">
+                        <option value="0">-- Seleccione curso --</option>
+                        @foreach (var c in cursos)
+                        {
+                            <option value="@c.IdCurso">@c.Grado @c.Curso (@c.Turno)</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Semana de Referencia:</label>
+                    <input type="date" class="form-control" @bind="fechaSemanaEspejo" />
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary w-100" @onclick="ConsultarEspejoAsync" disabled="@(idCursoEspejo <= 0 || cargando)">
+                        @(cargando ? "Consultando..." : "Consultar")
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (espejo == null)
+    {
+        <p class="text-muted"><em>Seleccione el curso y semana de referencia y presione Consultar para ver la grilla ministerial...</em></p>
+    }
+    else if (espejo.Filas.Count == 0)
+    {
+        <div class="alert alert-info">
+            No se encontraron alumnos matriculados en el curso para generar el reporte espejo semanal.
+        </div>
+    }
+    else
+    {
+        <div class="card mb-3 bg-light border-0">
+            <div class="card-body py-2 d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="mb-0 text-primary">@espejo.Curso (@espejo.Turno)</h5>
+                    <small class="text-muted">
+                        Semana del Lunes <strong>@espejo.FechaLunes.ToString("dd/MM/yyyy")</strong> al Viernes <strong>@espejo.FechaViernes.ToString("dd/MM/yyyy")</strong>
+                    </small>
+                </div>
+                <div class="small text-muted">
+                    Códigos Oficiales: <span class="badge bg-success">P: Presente</span> <span class="badge bg-danger">A: Ausente</span> <span class="badge bg-warning text-dark">M: Media Falta</span> <span class="badge bg-warning text-dark">C: Cuarta Falta</span> <span class="badge bg-info text-dark">J: Justificada</span> <span class="badge bg-secondary">I: Injustificada</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive shadow-sm rounded">
+            <table class="table table-bordered table-striped align-middle mb-0 text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="text-start" style="width: 250px;">Alumno</th>
+                        <th style="width: 80px;">Lunes</th>
+                        <th style="width: 80px;">Martes</th>
+                        <th style="width: 80px;">Miércoles</th>
+                        <th style="width: 80px;">Jueves</th>
+                        <th style="width: 80px;">Viernes</th>
+                        <th style="width: 110px;">Total Faltas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var f in espejo.Filas)
+                    {
+                        <tr>
+                            <td class="text-start">
+                                <strong>@f.Alumno</strong>
+                            </td>
+                            <td><span class="@ObtenerClaseCodigo(f.Lunes)">@f.Lunes</span></td>
+                            <td><span class="@ObtenerClaseCodigo(f.Martes)">@f.Martes</span></td>
+                            <td><span class="@ObtenerClaseCodigo(f.Miercoles)">@f.Miercoles</span></td>
+                            <td><span class="@ObtenerClaseCodigo(f.Jueves)">@f.Jueves</span></td>
+                            <td><span class="@ObtenerClaseCodigo(f.Viernes)">@f.Viernes</span></td>
+                            <td class="fw-bold @(f.TotalFaltasPeriodo > 0 ? "text-danger" : "text-success")">
+                                @f.TotalFaltasPeriodo.ToString("0.##")
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}
+
+<style>
+    @@media print {
+        .no-imprimir, .sidebar, .top-row, .accion-botones, nav {
+            display: none !important;
+        }
+        .content {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        table {
+            font-size: 11px !important;
+        }
+    }
+</style>
+
+@code {
+    private string tabActiva = "novedades";
+    private List<CursoEscolarDTO> cursos = new();
+    private bool cargando = false;
+
+    // Tab Novedades
+    private int idCursoNovedades = 0;
+    private DateTime fechaDesdeNovedades = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+    private DateTime fechaHastaNovedades = DateTime.Today;
+    private List<ReporteNovedadItemDTO>? novedades;
+
+    // Tab Espejo
+    private int idCursoEspejo = 0;
+    private DateTime fechaSemanaEspejo = DateTime.Today;
+    private ReporteEspejoSemanaDTO? espejo;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await EjecutarAsync(async () =>
+        {
+            cursos = await CursoClient.GetAllAsync();
+            if (cursos.Count > 0)
+            {
+                idCursoNovedades = cursos[0].IdCurso;
+                idCursoEspejo = cursos[0].IdCurso;
+                await ConsultarNovedadesAsync();
+            }
+        });
+    }
+
+    private void CambiarTab(string tab)
+    {
+        tabActiva = tab;
+        MensajeError = string.Empty;
+    }
+
+    private async Task ConsultarNovedadesAsync()
+    {
+        if (idCursoNovedades <= 0) return;
+
+        cargando = true;
+        MensajeError = string.Empty;
+
+        await EjecutarAsync(async () =>
+        {
+            novedades = await AsistenciaClient.GetReporteNovedadesAsync(idCursoNovedades, fechaDesdeNovedades, fechaHastaNovedades);
+        });
+
+        cargando = false;
+    }
+
+    private async Task ConsultarEspejoAsync()
+    {
+        if (idCursoEspejo <= 0) return;
+
+        cargando = true;
+        MensajeError = string.Empty;
+
+        await EjecutarAsync(async () =>
+        {
+            espejo = await AsistenciaClient.GetReporteEspejoSemanalAsync(idCursoEspejo, fechaSemanaEspejo);
+        });
+
+        cargando = false;
+    }
+
+    private string ObtenerClaseCodigo(string codigo)
+    {
+        return codigo switch
+        {
+            "P" => "badge bg-success",
+            "A" => "badge bg-danger",
+            "M" or "C" or "TC" => "badge bg-warning text-dark",
+            "J" => "badge bg-info text-dark",
+            "I" => "badge bg-secondary",
+            _ => "badge bg-light text-dark border"
+        };
+    }
+
+    private async Task ExportarCsvAsync()
+    {
+        try
+        {
+            var sb = new System.Text.StringBuilder();
+
+            if (tabActiva == "novedades" && novedades != null && novedades.Count > 0)
+            {
+                // Header
+                sb.AppendLine("Fecha;Dia;Alumno;Curso;Turno;Tipo Inasistencia;Valor Falta;Justificada;Motivo;No Computa;Observaciones");
+                foreach (var n in novedades)
+                {
+                    string justificada = n.Justificada ? "Sí" : "No";
+                    string noComputa = n.NoComputa ? "Sí" : "No";
+                    sb.AppendLine($"{n.Fecha:dd/MM/yyyy};{SanitizarCsv(n.DiaSemana)};{SanitizarCsv(n.AlumnoNombreCompleto)};{SanitizarCsv(n.Curso)};{SanitizarCsv(n.Turno)};{SanitizarCsv(n.TipoInasistencia)};{n.ValorFalta.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)};{justificada};{SanitizarCsv(n.Motivo)};{noComputa};{SanitizarCsv(n.Observaciones)}");
+                }
+
+                await DescargarArchivoCsvAsync($"Novedades_Asistencias_{DateTime.Today:yyyyMMdd}.csv", sb.ToString());
+            }
+            else if (tabActiva == "espejo" && espejo != null && espejo.Filas.Count > 0)
+            {
+                // Header
+                sb.AppendLine($"Curso: {espejo.Curso};Turno: {espejo.Turno};Lunes: {espejo.FechaLunes:dd/MM/yyyy};Viernes: {espejo.FechaViernes:dd/MM/yyyy}");
+                sb.AppendLine("Alumno;Lunes;Martes;Miercoles;Jueves;Viernes;Total Faltas Periodo");
+                foreach (var f in espejo.Filas)
+                {
+                    sb.AppendLine($"{SanitizarCsv(f.Alumno)};{f.Lunes};{f.Martes};{f.Miercoles};{f.Jueves};{f.Viernes};{f.TotalFaltasPeriodo.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)}");
+                }
+
+                await DescargarArchivoCsvAsync($"Espejo_Semanal_{espejo.FechaLunes:yyyyMMdd}_{DateTime.Today:yyyyMMdd}.csv", sb.ToString());
+            }
+        }
+        catch (Exception ex)
+        {
+            MensajeError = $"Error al exportar reporte: {ex.Message}";
+        }
+    }
+
+    private static string SanitizarCsv(string? texto)
+    {
+        if (string.IsNullOrEmpty(texto)) return string.Empty;
+        var limpio = texto.Replace("\"", "\"\"");
+        if (limpio.Contains(';') || limpio.Contains('\n') || limpio.Contains('\r') || limpio.Contains('"'))
+        {
+            return $"\"{limpio}\"";
+        }
+        return limpio;
+    }
+
+    private async Task DescargarArchivoCsvAsync(string nombreArchivo, string contenido)
+    {
+        string contenidoConBom = "\uFEFF" + contenido;
+        byte[] bytes = System.Text.Encoding.UTF8.GetBytes(contenidoConBom);
+        string base64 = Convert.ToBase64String(bytes);
+
+        string jsScript = $@"
+            (function() {{
+                const a = document.createElement('a');
+                a.href = 'data:text/csv;charset=utf-8;base64,{base64}';
+                a.download = '{nombreArchivo}';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }})();
+        ";
+
+        await JSRuntime.InvokeVoidAsync("eval", jsScript);
+    }
+
+    private async Task ImprimirAsync()
+    {
+        await JSRuntime.InvokeVoidAsync("window.print");
+    }
+}

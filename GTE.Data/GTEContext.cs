@@ -19,6 +19,9 @@ namespace GTE.Data
         public DbSet<DetalleRetiro> DetalleRetiros { get; set; }
         public DbSet<HorarioEspecial> HorariosEspeciales { get; set; }
         public DbSet<SalidaDeCurso> SalidasDeCurso { get; set; }
+        public DbSet<TipoInasistencia> TiposInasistencia { get; set; }
+        public DbSet<InasistenciaAlumno> InasistenciasAlumnos { get; set; }
+        public DbSet<PlanillaAsistenciaDiaria> PlanillasAsistenciasDiarias { get; set; }
 
         public GTEContext(DbContextOptions<GTEContext> options) : base(options)
         {
@@ -203,6 +206,73 @@ namespace GTE.Data
                       .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasIndex(e => new { e.IdCurso, e.FechaHoraFin });
+            });
+
+            modelBuilder.Entity<TipoInasistencia>(entity =>
+            {
+                entity.ToTable("TiposInasistencia");
+                entity.HasKey(e => e.IdTipoInasistencia);
+                entity.Property(e => e.IdTipoInasistencia).ValueGeneratedOnAdd();
+                entity.Property(e => e.Nombre).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.ValorDecimal).HasPrecision(4, 2).IsRequired();
+                entity.Property(e => e.CodigoOficial).IsRequired().HasMaxLength(10);
+                entity.Property(e => e.EsActivo).IsRequired();
+                entity.HasIndex(e => e.CodigoOficial).IsUnique();
+            });
+
+            modelBuilder.Entity<InasistenciaAlumno>(entity =>
+            {
+                entity.ToTable("InasistenciasAlumnos");
+                entity.HasKey(e => e.IdInasistencia);
+                entity.Property(e => e.IdInasistencia).ValueGeneratedOnAdd();
+                entity.Property(e => e.IdAlumno).IsRequired();
+                entity.Property(e => e.Fecha).IsRequired();
+                entity.Property(e => e.IdTipoInasistencia).IsRequired();
+                entity.Property(e => e.Justificada).IsRequired();
+                entity.Property(e => e.Motivo).HasMaxLength(250);
+                entity.Property(e => e.NoComputa).IsRequired();
+                entity.Property(e => e.Observaciones).HasMaxLength(500);
+
+                entity.HasOne(e => e.Alumno)
+                      .WithMany()
+                      .HasForeignKey(e => e.IdAlumno)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.TipoInasistencia)
+                      .WithMany()
+                      .HasForeignKey(e => e.IdTipoInasistencia)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne<Retiro>()
+                      .WithMany()
+                      .HasForeignKey(e => e.IdRetiroOrigen)
+                      .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasIndex(e => new { e.IdAlumno, e.Fecha }).IsUnique();
+                entity.HasIndex(e => e.Fecha);
+            });
+
+            modelBuilder.Entity<PlanillaAsistenciaDiaria>(entity =>
+            {
+                entity.ToTable("PlanillasAsistenciasDiarias");
+                entity.HasKey(e => e.IdPlanilla);
+                entity.Property(e => e.IdPlanilla).ValueGeneratedOnAdd();
+                entity.Property(e => e.IdCurso).IsRequired();
+                entity.Property(e => e.Fecha).IsRequired();
+                entity.Property(e => e.Confirmada).IsRequired();
+                entity.Property(e => e.FechaHoraRegistro).IsRequired();
+
+                entity.HasOne(e => e.CursoEscolar)
+                      .WithMany()
+                      .HasForeignKey(e => e.IdCurso)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne<Personal>()
+                      .WithMany()
+                      .HasForeignKey(e => e.IdPersonalRegistrador)
+                      .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasIndex(e => new { e.IdCurso, e.Fecha }).IsUnique();
             });
 
 
@@ -524,6 +594,13 @@ namespace GTE.Data
                 new { IdHorarioEspecial = 1, IdAlumno = 13, DescripcionActividad = "Turno médico", HoraSalidaEspecial = new TimeSpan(10, 30, 0) },
                 new { IdHorarioEspecial = 2, IdAlumno = 62, DescripcionActividad = "Ensayo del acto", HoraSalidaEspecial = new TimeSpan(16, 0, 0) },
                 new { IdHorarioEspecial = 3, IdAlumno = 110, DescripcionActividad = "Entrenamiento deportivo", HoraSalidaEspecial = new TimeSpan(18, 30, 0) }
+            );
+
+            modelBuilder.Entity<TipoInasistencia>().HasData(
+                new TipoInasistencia(1, "Inasistencia Completa", 1.00m, "A", true),
+                new TipoInasistencia(2, "Media Falta", 0.50m, "M", true),
+                new TipoInasistencia(3, "Cuarto de Falta", 0.25m, "C", true),
+                new TipoInasistencia(4, "Tres Cuartos de Falta", 0.75m, "TC", true)
             );
         }
     }

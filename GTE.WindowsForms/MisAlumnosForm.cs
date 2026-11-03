@@ -14,10 +14,12 @@ namespace GTE.WindowsForms
         private readonly TutorApiClient _apiClient = new TutorApiClient();
         private readonly System.Windows.Forms.Timer _refresco = new();
         private bool _cargando;
+        private readonly Button btnVerHistorial = new Button();
 
         public MisAlumnosForm()
         {
             InitializeComponent();
+            InitializeCustomComponents();
             ApplyStyles();
             Tema.AcomodarControles(this);
 
@@ -25,11 +27,24 @@ namespace GTE.WindowsForms
             _refresco.Tick += async (_, _) => await RefrescarEnSegundoPlanoAsync();
         }
 
+        private void InitializeCustomComponents()
+        {
+            btnVerHistorial.Text = "Ver Historial Asistencia";
+            btnVerHistorial.Location = new Point(470, 26);
+            btnVerHistorial.Size = new Size(170, 32);
+            btnVerHistorial.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnVerHistorial.Click += btnVerHistorial_Click;
+            this.Controls.Add(btnVerHistorial);
+
+            dgvAlumnos.CellDoubleClick += (s, e) => AbrirHistorialSeleccionado();
+        }
+
         private void ApplyStyles()
         {
             Tema.Ventana(this);
             Tema.Titulo(lblTitle);
             Tema.Etiqueta(lblSub);
+            Tema.BotonPrimario(btnVerHistorial);
             Tema.BotonSecundario(btnActualizar);
             Tema.Grilla(dgvAlumnos);
 
@@ -99,13 +114,15 @@ namespace GTE.WindowsForms
             dgvAlumnos.DataSource = ordenados
                 .Select(a => new
                 {
+                    a.IdAlumno,
                     Sale = a.HorarioSalida,
                     Alumno = $"{a.Apellido}, {a.Nombre}",
                     Curso = $"{a.Grado} {a.Curso}",
                     a.Turno,
                     a.Estado,
                     Situacion = a.EstaSaliendo ? "Está saliendo" : "-",
-                    Saliendo = a.EstaSaliendo
+                    Saliendo = a.EstaSaliendo,
+                    AlumnoObj = a
                 })
                 .ToList();
 
@@ -118,6 +135,12 @@ namespace GTE.WindowsForms
         {
             if (dgvAlumnos.Columns.Count == 0)
                 return;
+
+            if (dgvAlumnos.Columns.Contains("IdAlumno"))
+                dgvAlumnos.Columns["IdAlumno"].Visible = false;
+
+            if (dgvAlumnos.Columns.Contains("AlumnoObj"))
+                dgvAlumnos.Columns["AlumnoObj"].Visible = false;
 
             dgvAlumnos.Columns["Sale"].HeaderText = "Sale";
             dgvAlumnos.Columns["Sale"].Width = 80;
@@ -210,5 +233,27 @@ namespace GTE.WindowsForms
                 1 => elementos[0],
                 _ => $"{string.Join(", ", elementos.Take(elementos.Count - 1))} y {elementos[^1]}"
             };
+
+        private void btnVerHistorial_Click(object? sender, EventArgs e)
+        {
+            AbrirHistorialSeleccionado();
+        }
+
+        private void AbrirHistorialSeleccionado()
+        {
+            if (dgvAlumnos.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Por favor, seleccione un alumno de la grilla para ver su historial de asistencias.", "Seleccionar Alumno",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            var fila = dgvAlumnos.SelectedRows[0];
+            if (fila.Cells["AlumnoObj"].Value is AlumnoACargoDTO alumno)
+            {
+                using var dialog = new AlumnoHistorialDialog(alumno.IdAlumno, $"{alumno.Nombre} {alumno.Apellido}");
+                dialog.ShowDialog(this);
+            }
+        }
     }
 }

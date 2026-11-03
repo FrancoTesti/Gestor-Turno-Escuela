@@ -150,6 +150,94 @@ BEGIN
     IF EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('Cursos') AND name = 'HorarioViernes' AND is_nullable = 1)
         ALTER TABLE Cursos ALTER COLUMN HorarioViernes time NOT NULL;
 END;");
+
+            await context.Database.ExecuteSqlRawAsync(@"
+IF OBJECT_ID('TiposInasistencia', 'U') IS NULL
+BEGIN
+    CREATE TABLE TiposInasistencia (
+        IdTipoInasistencia int IDENTITY(1,1) NOT NULL PRIMARY KEY,
+        Nombre nvarchar(100) NOT NULL,
+        ValorDecimal decimal(4,2) NOT NULL,
+        CodigoOficial nvarchar(10) NOT NULL,
+        EsActivo bit NOT NULL CONSTRAINT DF_TiposInasistencia_EsActivo DEFAULT (1)
+    );
+END;
+
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_TiposInasistencia_CodigoOficial' AND object_id = OBJECT_ID('TiposInasistencia'))
+    CREATE UNIQUE INDEX IX_TiposInasistencia_CodigoOficial ON TiposInasistencia(CodigoOficial);
+
+IF NOT EXISTS (SELECT 1 FROM TiposInasistencia WHERE CodigoOficial = 'A')
+BEGIN
+    SET IDENTITY_INSERT TiposInasistencia ON;
+    INSERT INTO TiposInasistencia (IdTipoInasistencia, Nombre, ValorDecimal, CodigoOficial, EsActivo)
+    VALUES (1, N'Inasistencia Completa', 1.00, N'A', 1);
+    SET IDENTITY_INSERT TiposInasistencia OFF;
+END;
+
+IF NOT EXISTS (SELECT 1 FROM TiposInasistencia WHERE CodigoOficial = 'M')
+BEGIN
+    SET IDENTITY_INSERT TiposInasistencia ON;
+    INSERT INTO TiposInasistencia (IdTipoInasistencia, Nombre, ValorDecimal, CodigoOficial, EsActivo)
+    VALUES (2, N'Media Falta', 0.50, N'M', 1);
+    SET IDENTITY_INSERT TiposInasistencia OFF;
+END;
+
+IF NOT EXISTS (SELECT 1 FROM TiposInasistencia WHERE CodigoOficial = 'C')
+BEGIN
+    SET IDENTITY_INSERT TiposInasistencia ON;
+    INSERT INTO TiposInasistencia (IdTipoInasistencia, Nombre, ValorDecimal, CodigoOficial, EsActivo)
+    VALUES (3, N'Cuarto de Falta', 0.25, N'C', 1);
+    SET IDENTITY_INSERT TiposInasistencia OFF;
+END;
+
+IF NOT EXISTS (SELECT 1 FROM TiposInasistencia WHERE CodigoOficial = 'TC')
+BEGIN
+    SET IDENTITY_INSERT TiposInasistencia ON;
+    INSERT INTO TiposInasistencia (IdTipoInasistencia, Nombre, ValorDecimal, CodigoOficial, EsActivo)
+    VALUES (4, N'Tres Cuartos de Falta', 0.75, N'TC', 1);
+    SET IDENTITY_INSERT TiposInasistencia OFF;
+END;
+
+IF OBJECT_ID('PlanillasAsistenciasDiarias', 'U') IS NULL
+BEGIN
+    CREATE TABLE PlanillasAsistenciasDiarias (
+        IdPlanilla int IDENTITY(1,1) NOT NULL PRIMARY KEY,
+        IdCurso int NOT NULL,
+        Fecha datetime2 NOT NULL,
+        Confirmada bit NOT NULL,
+        FechaHoraRegistro datetime2 NOT NULL,
+        IdPersonalRegistrador int NULL,
+        CONSTRAINT FK_PlanillasAsistenciasDiarias_Cursos_IdCurso FOREIGN KEY (IdCurso) REFERENCES Cursos(IdCurso),
+        CONSTRAINT FK_PlanillasAsistenciasDiarias_Personal_IdPersonalRegistrador FOREIGN KEY (IdPersonalRegistrador) REFERENCES Personal(IdPersonal) ON DELETE SET NULL
+    );
+END;
+
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_PlanillasAsistenciasDiarias_IdCurso_Fecha' AND object_id = OBJECT_ID('PlanillasAsistenciasDiarias'))
+    CREATE UNIQUE INDEX IX_PlanillasAsistenciasDiarias_IdCurso_Fecha ON PlanillasAsistenciasDiarias(IdCurso, Fecha);
+
+IF OBJECT_ID('InasistenciasAlumnos', 'U') IS NULL
+BEGIN
+    CREATE TABLE InasistenciasAlumnos (
+        IdInasistencia int IDENTITY(1,1) NOT NULL PRIMARY KEY,
+        IdAlumno int NOT NULL,
+        Fecha datetime2 NOT NULL,
+        IdTipoInasistencia int NOT NULL,
+        Justificada bit NOT NULL,
+        Motivo nvarchar(250) NOT NULL,
+        NoComputa bit NOT NULL,
+        Observaciones nvarchar(500) NOT NULL,
+        IdRetiroOrigen int NULL,
+        CONSTRAINT FK_InasistenciasAlumnos_Alumnos_IdAlumno FOREIGN KEY (IdAlumno) REFERENCES Alumnos(IdAlumno),
+        CONSTRAINT FK_InasistenciasAlumnos_TiposInasistencia_IdTipoInasistencia FOREIGN KEY (IdTipoInasistencia) REFERENCES TiposInasistencia(IdTipoInasistencia),
+        CONSTRAINT FK_InasistenciasAlumnos_Retiros_IdRetiroOrigen FOREIGN KEY (IdRetiroOrigen) REFERENCES Retiros(IdRetiro) ON DELETE SET NULL
+    );
+END;
+
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_InasistenciasAlumnos_IdAlumno_Fecha' AND object_id = OBJECT_ID('InasistenciasAlumnos'))
+    CREATE UNIQUE INDEX IX_InasistenciasAlumnos_IdAlumno_Fecha ON InasistenciasAlumnos(IdAlumno, Fecha);
+
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_InasistenciasAlumnos_Fecha' AND object_id = OBJECT_ID('InasistenciasAlumnos'))
+    CREATE INDEX IX_InasistenciasAlumnos_Fecha ON InasistenciasAlumnos(Fecha);");
         }
     }
 }

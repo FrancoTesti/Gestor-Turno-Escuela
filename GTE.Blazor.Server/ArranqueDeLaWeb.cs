@@ -25,6 +25,8 @@ namespace GTE.Blazor.Server
             services.AddScoped<SalidaDeCursoApiClient>();
 
             services.AddScoped<CarteleraApiClient>();
+            services.AddScoped<IAsistenciaApiClient, AsistenciaApiClient>();
+            services.AddScoped<AsistenciaApiClient>();
 
             services.AddScoped<BlazorAuthService>();
             services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<BlazorAuthService>());

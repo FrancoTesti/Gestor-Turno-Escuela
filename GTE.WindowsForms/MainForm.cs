@@ -12,15 +12,36 @@ namespace GTE.WindowsForms
     {
         private string? nombreMostrado;
         private string? rolMostrado;
+        private readonly Button btnAsistencias = new Button();
+        private readonly Button btnReportesAsistencias = new Button();
 
         public MainForm()
         {
             InitializeComponent();
+            InitializeCustomNavigation();
             ApplyStyles();
 
             pnlSidebar.Resize += (_, _) => AcomodarMenu();
 
             LoadUserData();
+        }
+
+        private void InitializeCustomNavigation()
+        {
+            btnAsistencias.Name = "btnAsistencias";
+            btnAsistencias.Text = "Asistencias";
+            btnAsistencias.UseVisualStyleBackColor = true;
+            btnAsistencias.Visible = false;
+            btnAsistencias.Click += btnAsistencias_Click;
+
+            btnReportesAsistencias.Name = "btnReportesAsistencias";
+            btnReportesAsistencias.Text = "Reportes Mi ESCUELA";
+            btnReportesAsistencias.UseVisualStyleBackColor = true;
+            btnReportesAsistencias.Visible = false;
+            btnReportesAsistencias.Click += btnReportesAsistencias_Click;
+
+            pnlSidebar.Controls.Add(btnAsistencias);
+            pnlSidebar.Controls.Add(btnReportesAsistencias);
         }
 
         private void ApplyStyles()
@@ -36,8 +57,8 @@ namespace GTE.WindowsForms
 
             foreach (var boton in new[]
                      {
-                         btnInicio, btnSalidas, btnAlumnos, btnCursos, btnTutores, btnRetiros, btnAutorizaciones,
-                         btnReporteAlumnos, btnReporteRetiros, btnOtros, btnMisAlumnos
+                         btnInicio, btnSalidas, btnAlumnos, btnCursos, btnTutores, btnRetiros, btnAsistencias, btnAutorizaciones,
+                         btnReporteAlumnos, btnReporteRetiros, btnReportesAsistencias, btnOtros, btnMisAlumnos
                      })
             {
                 Tema.BotonMenu(boton);
@@ -103,6 +124,8 @@ namespace GTE.WindowsForms
             btnMisAlumnos.Visible = role == "Tutor";
 
             btnSalidas.Visible = role == "Secretario" || role == "Portero";
+            btnAsistencias.Visible = role == "Secretario" || role == "Portero";
+            btnReportesAsistencias.Visible = role == "Secretario" || role == "Portero";
 
             btnCartelera.Visible = role == "Secretario" || role == "Portero";
 
@@ -126,9 +149,9 @@ namespace GTE.WindowsForms
             var menu = new Control[]
             {
                 btnInicio,
-                lblSeccionDiaADia, btnSalidas, btnRetiros, btnAlumnos, btnOtros, btnMisAlumnos,
+                lblSeccionDiaADia, btnSalidas, btnRetiros, btnAsistencias, btnAlumnos, btnOtros, btnMisAlumnos,
                 lblSeccionAdministracion, btnCursos, btnTutores, btnAutorizaciones,
-                lblSeccionReportes, btnReporteAlumnos, btnReporteRetiros,
+                lblSeccionReportes, btnReporteAlumnos, btnReporteRetiros, btnReportesAsistencias,
                 lblSeccionPantalla, btnCartelera
             };
 
@@ -162,12 +185,12 @@ namespace GTE.WindowsForms
 
         private void AcomodarSecciones()
         {
-            lblSeccionDiaADia.Visible = btnSalidas.Visible || btnRetiros.Visible || btnAlumnos.Visible
+            lblSeccionDiaADia.Visible = btnSalidas.Visible || btnRetiros.Visible || btnAsistencias.Visible || btnAlumnos.Visible
                 || btnOtros.Visible || btnMisAlumnos.Visible;
 
             lblSeccionAdministracion.Visible = btnCursos.Visible || btnTutores.Visible || btnAutorizaciones.Visible;
 
-            lblSeccionReportes.Visible = btnReporteAlumnos.Visible || btnReporteRetiros.Visible;
+            lblSeccionReportes.Visible = btnReporteAlumnos.Visible || btnReporteRetiros.Visible || btnReportesAsistencias.Visible;
 
             lblSeccionPantalla.Visible = btnCartelera.Visible;
         }
@@ -204,6 +227,7 @@ namespace GTE.WindowsForms
 
             Agregar(diaADia, btnSalidas, "Salidas de curso", () => new SalidaDeCursoForm());
             Agregar(diaADia, btnRetiros, "Retiros", () => new RetiroListaForm());
+            Agregar(diaADia, btnAsistencias, "Asistencias", () => new AsistenciaCargaForm());
             Agregar(diaADia, btnAlumnos, "Alumnos", () => new AlumnoListaForm());
             Agregar(diaADia, btnOtros, "Horarios especiales", () => new HorarioEspecialListaForm());
             Agregar(diaADia, btnMisAlumnos, "Mis alumnos", () => new MisAlumnosForm());
@@ -214,6 +238,7 @@ namespace GTE.WindowsForms
 
             Agregar(reportes, btnReporteAlumnos, "Reporte de alumnos", () => new ReporteAlumnosPorCursoForm());
             Agregar(reportes, btnReporteRetiros, "Reporte de retiros", () => new ReporteRetirosForm());
+            Agregar(reportes, btnReportesAsistencias, "Reportes Mi ESCUELA", () => new ReportesMiEscuelaForm());
 
             var secciones = new List<SeccionDelInicio>
             {
@@ -298,12 +323,22 @@ namespace GTE.WindowsForms
             Abrir(btnMisAlumnos, () => new MisAlumnosForm());
         }
 
+        private void btnAsistencias_Click(object? sender, EventArgs e)
+        {
+            Abrir(btnAsistencias, () => new AsistenciaCargaForm());
+        }
+
+        private void btnReportesAsistencias_Click(object? sender, EventArgs e)
+        {
+            Abrir(btnReportesAsistencias, () => new ReportesMiEscuelaForm());
+        }
+
         private void HighlightButton(Button activeBtn)
         {
             foreach (var boton in new[]
                      {
-                         btnInicio, btnSalidas, btnAlumnos, btnCursos, btnTutores, btnRetiros, btnAutorizaciones,
-                         btnReporteAlumnos, btnReporteRetiros, btnOtros, btnMisAlumnos
+                         btnInicio, btnSalidas, btnAlumnos, btnCursos, btnTutores, btnRetiros, btnAsistencias, btnAutorizaciones,
+                         btnReporteAlumnos, btnReporteRetiros, btnReportesAsistencias, btnOtros, btnMisAlumnos
                      })
             {
                 boton.BackColor = Tema.Barra;

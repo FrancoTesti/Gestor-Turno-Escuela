@@ -56,6 +56,8 @@ builder.Services.AddScoped<IReporteService, ReporteService>();
 builder.Services.AddScoped<ITutorService, TutorService>();
 builder.Services.AddScoped<GTE.Data.IHorarioEspecialRepository, GTE.Data.HorarioEspecialRepository>();
 builder.Services.AddScoped<Servicio.IHorarioEspecialService, Servicio.HorarioEspecialService>();
+builder.Services.AddScoped<IAsistenciaRepository, AsistenciaRepository>();
+builder.Services.AddScoped<IAsistenciaService, AsistenciaService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -86,5 +88,6 @@ app.MapSalidaDeCursoEndpoints();
 app.MapReporteEndpoints();
 app.MapHorarioEspecialEndpoints();
 app.MapTutorEndpoints();
+app.MapAsistenciaEndpoints();
 
 app.Run();
