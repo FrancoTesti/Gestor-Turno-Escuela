@@ -137,10 +137,21 @@ namespace GTE.WindowsForms
 
             OcultarColumna("IdHorarioEspecial");
             OcultarColumna("IdAlumno");
+            OcultarColumna("EsRecurrente");
+            OcultarColumna("DiasSemana");
+            OcultarColumna("FechaEspecifica");
 
-            ConfigurarColumna("AlumnoNombreCompleto", "Alumno", 250);
-            ConfigurarColumna("DescripcionActividad", "Descripción de la actividad", 300);
-            ConfigurarColumna("HoraSalidaEspecial", "Hora de salida", 140, @"hh\:mm");
+            ConfigurarColumna("AlumnoNombreCompleto", "Alumno", 180);
+            ConfigurarColumna("Curso", "Curso", 90);
+            ConfigurarColumna("DescripcionActividad", "Descripción de la actividad", 210);
+            ConfigurarColumna("DiasODiasTexto", "Días / Fecha", 160);
+            ConfigurarColumna("HoraSalidaEspecial", "Hora de salida", 100, @"hh\:mm");
+
+            if (dgvHorarios.Columns.Contains("AlumnoNombreCompleto")) dgvHorarios.Columns["AlumnoNombreCompleto"].DisplayIndex = 0;
+            if (dgvHorarios.Columns.Contains("Curso")) dgvHorarios.Columns["Curso"].DisplayIndex = 1;
+            if (dgvHorarios.Columns.Contains("DescripcionActividad")) dgvHorarios.Columns["DescripcionActividad"].DisplayIndex = 2;
+            if (dgvHorarios.Columns.Contains("DiasODiasTexto")) dgvHorarios.Columns["DiasODiasTexto"].DisplayIndex = 3;
+            if (dgvHorarios.Columns.Contains("HoraSalidaEspecial")) dgvHorarios.Columns["HoraSalidaEspecial"].DisplayIndex = 4;
         }
 
         private void OcultarColumna(string nombre)

@@ -59,16 +59,18 @@
                 new("Horarios especiales", "horariosespeciales", "Secretario", "Portero"),
                 new("Mis alumnos", "mis-alumnos", "Tutor")
             }),
-            new("Administración", new List<Acceso>
+            new(string.Equals(rol, "Tutor", StringComparison.OrdinalIgnoreCase) ? "Horarios" : "Administración", new List<Acceso>
             {
-                new("Cursos", "cursos", "Secretario", "Portero", "Tutor"),
+                new("Cursos", "cursos", "Secretario", "Portero"),
+                new("Horarios de mis alumnos", "horarios-mis-alumnos", "Tutor"),
                 new("Tutores", "tutores", "Secretario", "Portero"),
                 new("Autorizaciones", "autorizaciones", "Secretario", "Portero")
             }),
             new("Reportes", new List<Acceso>
             {
                 new("Reporte de alumnos", "reportealumnos", "Secretario"),
-                new("Reporte de retiros", "reporteretiros", "Secretario", "Portero")
+                new("Reporte de retiros", "reporteretiros", "Secretario", "Portero"),
+                new("Reportes Mi ESCUELA", "reportes-asistencias", "Secretario", "Portero")
             })
         }
         .Select(seccion => new Seccion(

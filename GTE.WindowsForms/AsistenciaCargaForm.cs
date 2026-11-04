@@ -9,6 +9,22 @@ using GTE.DTOs;
 
 namespace GTE.WindowsForms
 {
+    public class FilaAsistenciaAlumno
+    {
+        public bool Ausente { get; set; }
+        public int IdAlumno { get; set; }
+        public string Alumno { get; set; } = string.Empty;
+        public string Estado { get; set; } = string.Empty;
+        public string Tipo { get; set; } = string.Empty;
+        public string Codigo { get; set; } = string.Empty;
+        public string Justificada { get; set; } = string.Empty;
+        public string Motivo { get; set; } = string.Empty;
+        public string NoComputa { get; set; } = string.Empty;
+        public string Retiro { get; set; } = string.Empty;
+        public string Observaciones { get; set; } = string.Empty;
+        public AlumnoAsistenciaItemDTO AlumnoItem { get; set; } = null!;
+    }
+
     public class AsistenciaCargaForm : Form
     {
         private readonly IAsistenciaApiClient _asistenciaClient = new AsistenciaApiClient();
@@ -16,6 +32,7 @@ namespace GTE.WindowsForms
 
         private List<CursoEscolarDTO> _cursos = new();
         private PlanillaDiariaDTO? _planilla;
+        private readonly List<string> _sugerenciasAplicadas = new();
 
         // UI Controls
         private Panel pnlHeader = null!;
@@ -27,9 +44,10 @@ namespace GTE.WindowsForms
         private Label lblFecha = null!;
         private DateTimePicker dtpFecha = null!;
         private Button btnCargar = null!;
-        private Button btnSugerir = null!;
         private Button btnGuardar = null!;
         private Button btnModificar = null!;
+        private Panel pnlSugerencias = null!;
+        private Label lblSugerencias = null!;
         private Panel pnlInfo = null!;
         private Label lblPlanillaInfo = null!;
         private Label lblEstadoBadge = null!;
@@ -53,9 +71,10 @@ namespace GTE.WindowsForms
             this.lblFecha = new Label();
             this.dtpFecha = new DateTimePicker();
             this.btnCargar = new Button();
-            this.btnSugerir = new Button();
-            this.btnGuardar = new Button();
             this.btnModificar = new Button();
+            this.btnGuardar = new Button();
+            this.pnlSugerencias = new Panel();
+            this.lblSugerencias = new Label();
             this.pnlInfo = new Panel();
             this.lblPlanillaInfo = new Label();
             this.lblEstadoBadge = new Label();
@@ -65,7 +84,7 @@ namespace GTE.WindowsForms
 
             // Form
             this.Text = "Carga Diaria de Asistencias";
-            this.ClientSize = new Size(950, 580);
+            this.ClientSize = new Size(980, 600);
             this.Load += AsistenciaCargaForm_Load;
 
             // pnlHeader
@@ -77,16 +96,16 @@ namespace GTE.WindowsForms
             this.lblTitle.Location = new Point(15, 8);
             this.lblTitle.Size = new Size(500, 28);
 
-            this.lblSub.Text = "Seleccioná el curso y la fecha para registrar las inasistencias de la jornada.";
-            this.lblSub.Location = new Point(15, 36);
-            this.lblSub.Size = new Size(600, 20);
+            this.lblSub.Text = "Tildá la casilla Ausente para registrar faltas, o presioná Modificar para configurar justificaciones.";
+            this.lblSub.Location = new Point(15, 38);
+            this.lblSub.Size = new Size(700, 20);
 
             this.pnlHeader.Controls.Add(this.lblTitle);
             this.pnlHeader.Controls.Add(this.lblSub);
 
             // pnlFiltros
             this.pnlFiltros.Dock = DockStyle.Top;
-            this.pnlFiltros.Height = 50;
+            this.pnlFiltros.Height = 52;
             this.pnlFiltros.Padding = new Padding(15, 8, 15, 8);
 
             this.lblCurso.Text = "Curso:";
@@ -107,23 +126,18 @@ namespace GTE.WindowsForms
             this.dtpFecha.Value = DateTime.Today;
 
             this.btnCargar.Text = "Cargar Planilla";
-            this.btnCargar.Location = new Point(450, 9);
-            this.btnCargar.Size = new Size(115, 32);
+            this.btnCargar.Location = new Point(455, 9);
+            this.btnCargar.Size = new Size(125, 32);
             this.btnCargar.Click += async (s, e) => await CargarPlanillaAsync();
 
-            this.btnSugerir.Text = "Sugerir Retiros";
-            this.btnSugerir.Location = new Point(575, 9);
-            this.btnSugerir.Size = new Size(125, 32);
-            this.btnSugerir.Click += async (s, e) => await SugerirRetirosAsync();
-
-            this.btnModificar.Text = "Modificar Alumno";
-            this.btnModificar.Location = new Point(710, 9);
+            this.btnModificar.Text = "Modificar Detalle";
+            this.btnModificar.Location = new Point(590, 9);
             this.btnModificar.Size = new Size(130, 32);
             this.btnModificar.Click += BtnModificar_Click;
 
             this.btnGuardar.Text = "Guardar y Confirmar";
-            this.btnGuardar.Location = new Point(850, 9);
-            this.btnGuardar.Size = new Size(150, 32);
+            this.btnGuardar.Location = new Point(730, 9);
+            this.btnGuardar.Size = new Size(160, 32);
             this.btnGuardar.Click += async (s, e) => await GuardarPlanillaAsync();
 
             this.pnlFiltros.Controls.Add(this.lblCurso);
@@ -131,9 +145,22 @@ namespace GTE.WindowsForms
             this.pnlFiltros.Controls.Add(this.lblFecha);
             this.pnlFiltros.Controls.Add(this.dtpFecha);
             this.pnlFiltros.Controls.Add(this.btnCargar);
-            this.pnlFiltros.Controls.Add(this.btnSugerir);
             this.pnlFiltros.Controls.Add(this.btnModificar);
             this.pnlFiltros.Controls.Add(this.btnGuardar);
+
+            // pnlSugerencias
+            this.pnlSugerencias.Dock = DockStyle.Top;
+            this.pnlSugerencias.Height = 44;
+            this.pnlSugerencias.Padding = new Padding(15, 8, 15, 8);
+            this.pnlSugerencias.BackColor = Color.FromArgb(255, 243, 205);
+            this.pnlSugerencias.Visible = false;
+
+            this.lblSugerencias.Dock = DockStyle.Fill;
+            this.lblSugerencias.ForeColor = Color.FromArgb(102, 77, 3);
+            this.lblSugerencias.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            this.lblSugerencias.TextAlign = ContentAlignment.MiddleLeft;
+
+            this.pnlSugerencias.Controls.Add(this.lblSugerencias);
 
             // pnlInfo
             this.pnlInfo.Dock = DockStyle.Top;
@@ -156,10 +183,22 @@ namespace GTE.WindowsForms
 
             // dgvAlumnos
             this.dgvAlumnos.Dock = DockStyle.Fill;
+            this.dgvAlumnos.AllowUserToAddRows = false;
+            this.dgvAlumnos.AllowUserToDeleteRows = false;
             this.dgvAlumnos.CellDoubleClick += (s, e) => BtnModificar_Click(s, e);
+            this.dgvAlumnos.CellContentClick += DgvAlumnos_CellContentClick;
+            this.dgvAlumnos.CellValueChanged += DgvAlumnos_CellValueChanged;
+            this.dgvAlumnos.CurrentCellDirtyStateChanged += (s, e) =>
+            {
+                if (dgvAlumnos.IsCurrentCellDirty && dgvAlumnos.CurrentCell is DataGridViewCheckBoxCell)
+                {
+                    dgvAlumnos.CommitEdit(DataGridViewDataErrorContexts.Commit);
+                }
+            };
 
             this.Controls.Add(this.dgvAlumnos);
             this.Controls.Add(this.pnlInfo);
+            this.Controls.Add(this.pnlSugerencias);
             this.Controls.Add(this.pnlFiltros);
             this.Controls.Add(this.pnlHeader);
 
@@ -172,7 +211,6 @@ namespace GTE.WindowsForms
             Tema.Titulo(lblTitle);
             Tema.Etiqueta(lblSub);
             Tema.BotonPrimario(btnCargar);
-            Tema.BotonSecundario(btnSugerir);
             Tema.BotonSecundario(btnModificar);
             Tema.BotonExito(btnGuardar);
             Tema.Grilla(dgvAlumnos);
@@ -211,9 +249,50 @@ namespace GTE.WindowsForms
             {
                 Cursor = Cursors.WaitCursor;
                 _planilla = await _asistenciaClient.GetPlanillaDiariaAsync(idCurso, dtpFecha.Value.Date);
+                _sugerenciasAplicadas.Clear();
 
                 if (_planilla != null)
                 {
+                    // Si no está confirmada, aplicamos sugerencias automáticamente por retiros reales del día
+                    if (!_planilla.Confirmada)
+                    {
+                        var sugerencias = await _asistenciaClient.SugerirInasistenciasDesdeRetirosAsync(idCurso, dtpFecha.Value.Date);
+                        var sugerenciasReales = (sugerencias ?? new List<AlumnoAsistenciaItemDTO>())
+                            .Where(s => s.TieneRetiroRegistrado && s.IdTipoInasistencia.HasValue && s.IdTipoInasistencia.Value > 0)
+                            .ToList();
+
+                        foreach (var sug in sugerenciasReales)
+                        {
+                            var alu = _planilla.Alumnos.FirstOrDefault(a => a.IdAlumno == sug.IdAlumno);
+                            if (alu != null && (!alu.IdTipoInasistencia.HasValue || alu.IdTipoInasistencia <= 0))
+                            {
+                                alu.IdTipoInasistencia = sug.IdTipoInasistencia;
+                                alu.CodigoOficial = sug.CodigoOficial;
+                                alu.Justificada = sug.Justificada;
+                                alu.Motivo = sug.Motivo;
+                                alu.NoComputa = sug.NoComputa;
+                                alu.Observaciones = sug.Observaciones;
+                                alu.TieneRetiroRegistrado = sug.TieneRetiroRegistrado;
+                                alu.DetalleRetiroInfo = sug.DetalleRetiroInfo;
+                                alu.IdRetiroOrigen = sug.IdRetiroOrigen;
+
+                                var tipo = _planilla.TiposDisponibles?.FirstOrDefault(t => t.IdTipoInasistencia == sug.IdTipoInasistencia);
+                                string nombreTipo = tipo != null ? tipo.Nombre : "Inasistencia";
+                                _sugerenciasAplicadas.Add($"{alu.Apellido}, {alu.Nombre}: {nombreTipo} justificada ({sug.DetalleRetiroInfo ?? sug.Motivo})");
+                            }
+                        }
+                    }
+
+                    if (_sugerenciasAplicadas.Count > 0)
+                    {
+                        pnlSugerencias.Visible = true;
+                        lblSugerencias.Text = "ℹ Sugerencias aplicadas automáticamente por retiros del día: " + string.Join(" | ", _sugerenciasAplicadas);
+                    }
+                    else
+                    {
+                        pnlSugerencias.Visible = false;
+                    }
+
                     lblPlanillaInfo.Text = $"Curso: {_planilla.CursoNombre} ({_planilla.Turno}) | Fecha: {_planilla.Fecha:dd/MM/yyyy} | Alumnos: {_planilla.Alumnos.Count}";
 
                     if (_planilla.Confirmada)
@@ -233,6 +312,7 @@ namespace GTE.WindowsForms
                 {
                     lblPlanillaInfo.Text = "No se pudo obtener la planilla para la fecha seleccionada.";
                     lblEstadoBadge.Text = "";
+                    pnlSugerencias.Visible = false;
                     dgvAlumnos.DataSource = null;
                 }
             }
@@ -250,9 +330,10 @@ namespace GTE.WindowsForms
         {
             if (_planilla == null) return;
 
-            var vista = _planilla.Alumnos.Select(a => new
+            var vista = _planilla.Alumnos.Select(a => new FilaAsistenciaAlumno
             {
-                a.IdAlumno,
+                Ausente = a.IdTipoInasistencia.HasValue && a.IdTipoInasistencia.Value > 0,
+                IdAlumno = a.IdAlumno,
                 Alumno = $"{a.Apellido}, {a.Nombre}",
                 Estado = a.IdTipoInasistencia.HasValue && a.IdTipoInasistencia.Value > 0 ? "Inasistencia" : "Presente",
                 Tipo = a.IdTipoInasistencia.HasValue && a.IdTipoInasistencia.Value > 0
@@ -260,10 +341,10 @@ namespace GTE.WindowsForms
                     : "-",
                 Codigo = a.CodigoOficial,
                 Justificada = a.IdTipoInasistencia.HasValue && a.IdTipoInasistencia.Value > 0 ? (a.Justificada ? "Sí" : "No") : "-",
-                a.Motivo,
+                Motivo = a.Motivo ?? string.Empty,
                 NoComputa = a.NoComputa ? "Sí" : "-",
                 Retiro = a.TieneRetiroRegistrado ? (a.DetalleRetiroInfo ?? "Retiro anticipado") : "-",
-                a.Observaciones,
+                Observaciones = a.Observaciones ?? string.Empty,
                 AlumnoItem = a
             }).ToList();
 
@@ -284,61 +365,130 @@ namespace GTE.WindowsForms
             if (dgvAlumnos.Columns.Contains("AlumnoItem"))
                 dgvAlumnos.Columns["AlumnoItem"].Visible = false;
 
+            if (dgvAlumnos.Columns.Contains("Ausente"))
+            {
+                dgvAlumnos.Columns["Ausente"].HeaderText = "Ausente";
+                dgvAlumnos.Columns["Ausente"].Width = 65;
+                dgvAlumnos.Columns["Ausente"].ReadOnly = false;
+            }
+
+            string[] soloLectura = { "Alumno", "Estado", "Tipo", "Codigo", "Justificada", "Motivo", "NoComputa", "Retiro", "Observaciones" };
+            foreach (var col in soloLectura)
+            {
+                if (dgvAlumnos.Columns.Contains(col))
+                {
+                    dgvAlumnos.Columns[col].ReadOnly = true;
+                }
+            }
+
             if (dgvAlumnos.Columns.Contains("Alumno"))
             {
                 dgvAlumnos.Columns["Alumno"].HeaderText = "Alumno";
-                dgvAlumnos.Columns["Alumno"].Width = 200;
+                dgvAlumnos.Columns["Alumno"].Width = 190;
             }
 
             if (dgvAlumnos.Columns.Contains("Estado"))
             {
                 dgvAlumnos.Columns["Estado"].HeaderText = "Estado";
-                dgvAlumnos.Columns["Estado"].Width = 100;
+                dgvAlumnos.Columns["Estado"].Width = 95;
             }
 
             if (dgvAlumnos.Columns.Contains("Tipo"))
             {
                 dgvAlumnos.Columns["Tipo"].HeaderText = "Tipo Inasistencia";
-                dgvAlumnos.Columns["Tipo"].Width = 140;
+                dgvAlumnos.Columns["Tipo"].Width = 135;
             }
 
             if (dgvAlumnos.Columns.Contains("Codigo"))
             {
                 dgvAlumnos.Columns["Codigo"].HeaderText = "Cód.";
-                dgvAlumnos.Columns["Codigo"].Width = 60;
+                dgvAlumnos.Columns["Codigo"].Width = 55;
                 dgvAlumnos.Columns["Codigo"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             }
 
             if (dgvAlumnos.Columns.Contains("Justificada"))
             {
                 dgvAlumnos.Columns["Justificada"].HeaderText = "Justif.";
-                dgvAlumnos.Columns["Justificada"].Width = 70;
+                dgvAlumnos.Columns["Justificada"].Width = 65;
                 dgvAlumnos.Columns["Justificada"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             }
 
             if (dgvAlumnos.Columns.Contains("Motivo"))
             {
                 dgvAlumnos.Columns["Motivo"].HeaderText = "Motivo";
-                dgvAlumnos.Columns["Motivo"].Width = 140;
+                dgvAlumnos.Columns["Motivo"].Width = 130;
             }
 
             if (dgvAlumnos.Columns.Contains("NoComputa"))
             {
                 dgvAlumnos.Columns["NoComputa"].HeaderText = "No Computa";
-                dgvAlumnos.Columns["NoComputa"].Width = 90;
+                dgvAlumnos.Columns["NoComputa"].Width = 85;
                 dgvAlumnos.Columns["NoComputa"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             }
 
             if (dgvAlumnos.Columns.Contains("Retiro"))
             {
                 dgvAlumnos.Columns["Retiro"].HeaderText = "Retiro Asociado";
-                dgvAlumnos.Columns["Retiro"].Width = 150;
+                dgvAlumnos.Columns["Retiro"].Width = 140;
             }
 
             if (dgvAlumnos.Columns.Contains("Observaciones"))
             {
                 dgvAlumnos.Columns["Observaciones"].HeaderText = "Observaciones";
-                dgvAlumnos.Columns["Observaciones"].Width = 120;
+                dgvAlumnos.Columns["Observaciones"].Width = 110;
+            }
+        }
+
+        private void DgvAlumnos_CellContentClick(object? sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 || _planilla == null) return;
+
+            if (dgvAlumnos.Columns[e.ColumnIndex].Name == "Ausente")
+            {
+                dgvAlumnos.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }
+
+        private void DgvAlumnos_CellValueChanged(object? sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 || _planilla == null) return;
+
+            if (dgvAlumnos.Columns[e.ColumnIndex].Name == "Ausente")
+            {
+                var row = dgvAlumnos.Rows[e.RowIndex];
+                if (row.DataBoundItem is FilaAsistenciaAlumno fila)
+                {
+                    var alu = fila.AlumnoItem;
+                    if (fila.Ausente)
+                    {
+                        var tipoCompleta = _planilla.TiposDisponibles.FirstOrDefault(t => t.CodigoOficial == "A")
+                            ?? _planilla.TiposDisponibles.FirstOrDefault();
+
+                        alu.IdTipoInasistencia = tipoCompleta?.IdTipoInasistencia ?? 1;
+                        alu.CodigoOficial = tipoCompleta?.CodigoOficial ?? "A";
+                        alu.Justificada = false;
+                        alu.Motivo = string.Empty;
+                        alu.NoComputa = false;
+                    }
+                    else
+                    {
+                        alu.IdTipoInasistencia = null;
+                        alu.CodigoOficial = "P";
+                        alu.Justificada = false;
+                        alu.Motivo = string.Empty;
+                        alu.NoComputa = false;
+                    }
+
+                    fila.Estado = alu.IdTipoInasistencia.HasValue && alu.IdTipoInasistencia.Value > 0 ? "Inasistencia" : "Presente";
+                    fila.Tipo = alu.IdTipoInasistencia.HasValue && alu.IdTipoInasistencia.Value > 0
+                        ? (_planilla.TiposDisponibles.FirstOrDefault(t => t.IdTipoInasistencia == alu.IdTipoInasistencia.Value)?.Nombre ?? "Falta")
+                        : "-";
+                    fila.Codigo = alu.CodigoOficial;
+                    fila.Justificada = alu.IdTipoInasistencia.HasValue && alu.IdTipoInasistencia.Value > 0 ? (alu.Justificada ? "Sí" : "No") : "-";
+
+                    dgvAlumnos.InvalidateRow(e.RowIndex);
+                    PintarFilasSegunEstado();
+                }
             }
         }
 
@@ -351,6 +501,11 @@ namespace GTE.WindowsForms
                 {
                     row.DefaultCellStyle.BackColor = Color.FromArgb(255, 235, 238);
                     row.DefaultCellStyle.SelectionBackColor = Color.FromArgb(255, 205, 210);
+                }
+                else
+                {
+                    row.DefaultCellStyle.BackColor = Color.White;
+                    row.DefaultCellStyle.SelectionBackColor = Color.FromArgb(207, 226, 255);
                 }
             }
         }
@@ -370,59 +525,6 @@ namespace GTE.WindowsForms
             if (dialog.ShowDialog(this) == DialogResult.OK)
             {
                 MostrarAlumnosEnGrilla();
-            }
-        }
-
-        private async Task SugerirRetirosAsync()
-        {
-            if (cmbCursos.SelectedValue is not int idCurso || idCurso <= 0 || _planilla == null)
-                return;
-
-            try
-            {
-                Cursor = Cursors.WaitCursor;
-                var sugerencias = await _asistenciaClient.SugerirInasistenciasDesdeRetirosAsync(idCurso, dtpFecha.Value.Date);
-                int count = 0;
-
-                foreach (var sug in sugerencias)
-                {
-                    var alumno = _planilla.Alumnos.FirstOrDefault(a => a.IdAlumno == sug.IdAlumno);
-                    if (alumno != null)
-                    {
-                        alumno.EstadoGeneral = sug.EstadoGeneral;
-                        alumno.IdTipoInasistencia = sug.IdTipoInasistencia;
-                        alumno.CodigoOficial = sug.CodigoOficial;
-                        alumno.Justificada = sug.Justificada;
-                        alumno.Motivo = sug.Motivo;
-                        alumno.NoComputa = sug.NoComputa;
-                        alumno.Observaciones = sug.Observaciones;
-                        alumno.TieneRetiroRegistrado = sug.TieneRetiroRegistrado;
-                        alumno.DetalleRetiroInfo = sug.DetalleRetiroInfo;
-                        alumno.IdRetiroOrigen = sug.IdRetiroOrigen;
-                        count++;
-                    }
-                }
-
-                MostrarAlumnosEnGrilla();
-
-                if (count > 0)
-                {
-                    MessageBox.Show($"Se aplicaron {count} sugerencia(s) de inasistencias por retiros anticipados del día.", "Sugerencias Aplicadas",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("No se detectaron retiros anticipados que requieran sugerencia de inasistencia para esta fecha.", "Información",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al sugerir retiros: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                Cursor = Cursors.Default;
             }
         }
 

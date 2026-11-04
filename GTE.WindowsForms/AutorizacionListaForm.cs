@@ -75,13 +75,12 @@ namespace GTE.WindowsForms
                 cmbTutores.DisplayMember = "Display";
                 cmbTutores.ValueMember = "IdTutor";
                 cmbTutores.DataSource = tutoresDisplay;
+                cmbTutores.SelectedIndex = -1;
 
                 ActualizarComboAlumnosDisponibles();
+                cmbAlumnos.SelectedIndex = -1;
 
-                if (_tutores.Count > 0)
-                {
-                    await CargarAlumnosAutorizados(_tutores[0].IdTutor);
-                }
+                dgvAlumnosAutorizados.DataSource = null;
             }
             catch (Exception ex)
             {
@@ -157,6 +156,7 @@ namespace GTE.WindowsForms
             cmbAlumnos.DisplayMember = "Display";
             cmbAlumnos.ValueMember = "IdAlumno";
             cmbAlumnos.DataSource = disponibles;
+            cmbAlumnos.SelectedIndex = -1;
         }
 
         private void ConfigureColumns()

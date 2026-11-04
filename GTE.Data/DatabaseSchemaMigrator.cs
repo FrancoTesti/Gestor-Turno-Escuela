@@ -152,6 +152,17 @@ BEGIN
 END;");
 
             await context.Database.ExecuteSqlRawAsync(@"
+IF OBJECT_ID('HorariosEspeciales', 'U') IS NOT NULL
+BEGIN
+    IF COL_LENGTH('HorariosEspeciales', 'EsRecurrente') IS NULL
+        EXEC(N'ALTER TABLE HorariosEspeciales ADD EsRecurrente bit NOT NULL CONSTRAINT DF_HorariosEspeciales_EsRecurrente DEFAULT (1)');
+    IF COL_LENGTH('HorariosEspeciales', 'DiasSemana') IS NULL
+        EXEC(N'ALTER TABLE HorariosEspeciales ADD DiasSemana nvarchar(100) NOT NULL CONSTRAINT DF_HorariosEspeciales_DiasSemana DEFAULT ('''')');
+    IF COL_LENGTH('HorariosEspeciales', 'FechaEspecifica') IS NULL
+        EXEC(N'ALTER TABLE HorariosEspeciales ADD FechaEspecifica datetime2 NULL');
+END;");
+
+            await context.Database.ExecuteSqlRawAsync(@"
 IF OBJECT_ID('TiposInasistencia', 'U') IS NULL
 BEGIN
     CREATE TABLE TiposInasistencia (

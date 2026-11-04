@@ -184,6 +184,9 @@ namespace GTE.Data
                 entity.Property(e => e.IdAlumno).IsRequired();
                 entity.Property(e => e.DescripcionActividad).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.HoraSalidaEspecial).IsRequired();
+                entity.Property(e => e.EsRecurrente).IsRequired().HasDefaultValue(true);
+                entity.Property(e => e.DiasSemana).HasMaxLength(100);
+                entity.Property(e => e.FechaEspecifica);
             });
 
             modelBuilder.Entity<SalidaDeCurso>(entity =>
@@ -591,9 +594,9 @@ namespace GTE.Data
             modelBuilder.Entity<DetalleRetiro>().HasData(detallesDeEjemplo);
 
             modelBuilder.Entity<HorarioEspecial>().HasData(
-                new { IdHorarioEspecial = 1, IdAlumno = 13, DescripcionActividad = "Turno médico", HoraSalidaEspecial = new TimeSpan(10, 30, 0) },
-                new { IdHorarioEspecial = 2, IdAlumno = 62, DescripcionActividad = "Ensayo del acto", HoraSalidaEspecial = new TimeSpan(16, 0, 0) },
-                new { IdHorarioEspecial = 3, IdAlumno = 110, DescripcionActividad = "Entrenamiento deportivo", HoraSalidaEspecial = new TimeSpan(18, 30, 0) }
+                new { IdHorarioEspecial = 1, IdAlumno = 13, DescripcionActividad = "Turno médico", HoraSalidaEspecial = new TimeSpan(10, 30, 0), EsRecurrente = false, DiasSemana = "", FechaEspecifica = (DateTime?)new DateTime(2026, 11, 4) },
+                new { IdHorarioEspecial = 2, IdAlumno = 62, DescripcionActividad = "Ensayo del acto", HoraSalidaEspecial = new TimeSpan(16, 0, 0), EsRecurrente = true, DiasSemana = "Lunes,Miércoles", FechaEspecifica = (DateTime?)null },
+                new { IdHorarioEspecial = 3, IdAlumno = 110, DescripcionActividad = "Entrenamiento deportivo", HoraSalidaEspecial = new TimeSpan(18, 30, 0), EsRecurrente = true, DiasSemana = "Martes,Jueves", FechaEspecifica = (DateTime?)null }
             );
 
             modelBuilder.Entity<TipoInasistencia>().HasData(

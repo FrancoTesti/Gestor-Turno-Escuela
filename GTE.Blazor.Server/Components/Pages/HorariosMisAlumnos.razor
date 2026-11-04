@@ -1,0 +1,104 @@
+@page "/horarios-mis-alumnos"
+@attribute [Authorize(Roles = "Tutor")]
+@inherits PaginaConApiBase
+@inject TutorApiClient TutoresClient
+
+<PageTitle>Horarios de mis alumnos</PageTitle>
+
+<div class="d-flex justify-content-between align-items-start mb-3">
+    <div>
+        <h3 class="mb-1">Horarios de mis alumnos</h3>
+        <p class="text-muted mb-0">
+            Horarios de salida de lunes a viernes para cada uno de los alumnos que te corresponden.
+        </p>
+    </div>
+    <button class="btn btn-outline-primary btn-sm" @onclick="CargarAsync" disabled="@cargando">
+        @(cargando ? "Actualizando..." : "Actualizar")
+    </button>
+</div>
+
+@if (!string.IsNullOrEmpty(MensajeError))
+{
+    <div class="alert alert-danger alerta-flotante">@MensajeError</div>
+}
+
+@if (alumnos == null)
+{
+    <p><em>Cargando...</em></p>
+}
+else if (alumnos.Count == 0)
+{
+    <div class="card p-4 text-center text-muted bg-light border-0">
+        <p class="mb-1 fw-semibold">Todavía no tenés alumnos a cargo.</p>
+        <p class="mb-0 small">
+            La secretaría debe autorizarte con tu nombre y DNI para los chicos que retirás.
+        </p>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>Alumno</th>
+                    <th style="width: 110px;">Curso</th>
+                    <th style="width: 100px;">Turno</th>
+                    <th style="width: 100px;" title="Horario correspondiente a hoy">Hoy *</th>
+                    <th style="width: 85px;">Lun</th>
+                    <th style="width: 85px;">Mar</th>
+                    <th style="width: 85px;">Mié</th>
+                    <th style="width: 85px;">Jue</th>
+                    <th style="width: 85px;">Vie</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var a in alumnos.OrderBy(x => x.Apellido).ThenBy(x => x.Nombre))
+                {
+                    <tr>
+                        <td class="fw-semibold">@a.Apellido, @a.Nombre</td>
+                        <td>@a.Grado @a.Curso</td>
+                        <td>@a.Turno</td>
+                        <td>
+                            <span class="badge bg-primary fs-6">
+                                @a.HorarioSalida.ToString(@"hh\:mm")
+                            </span>
+                        </td>
+                        <td>@a.HorarioLunes.ToString(@"hh\:mm")</td>
+                        <td>@a.HorarioMartes.ToString(@"hh\:mm")</td>
+                        <td>@a.HorarioMiercoles.ToString(@"hh\:mm")</td>
+                        <td>@a.HorarioJueves.ToString(@"hh\:mm")</td>
+                        <td>@a.HorarioViernes.ToString(@"hh\:mm")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <p class="small text-muted mt-2">
+        * El horario de <strong>Hoy</strong> refleja el horario de salida programado para el día de la fecha.
+    </p>
+}
+
+@code {
+    private List<AlumnoACargoDTO>? alumnos;
+    private bool cargando;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarAsync();
+    }
+
+    private async Task CargarAsync()
+    {
+        if (cargando) return;
+        cargando = true;
+
+        await EjecutarAsync(async () =>
+        {
+            alumnos = await TutoresClient.GetMisAlumnosAsync();
+        });
+
+        cargando = false;
+    }
+}

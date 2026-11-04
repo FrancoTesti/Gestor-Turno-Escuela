@@ -12,11 +12,29 @@ namespace Servicio
     {
         private readonly IHorarioEspecialRepository _horarioRepo;
         private readonly IAlumnoRepository _alumnoRepo;
+        private readonly ICursoEscolarRepository? _cursoRepo;
 
-        public HorarioEspecialService(IHorarioEspecialRepository horarioRepo, IAlumnoRepository alumnoRepo)
+        public HorarioEspecialService(IHorarioEspecialRepository horarioRepo, IAlumnoRepository alumnoRepo, ICursoEscolarRepository? cursoRepo = null)
         {
             _horarioRepo = horarioRepo;
             _alumnoRepo = alumnoRepo;
+            _cursoRepo = cursoRepo;
+        }
+
+        private async Task<string> ObtenerCursoAlumnoAsync(Alumno? alu)
+        {
+            if (alu == null) return string.Empty;
+            if (alu.CursoEscolar != null)
+                return $"{alu.CursoEscolar.Grado} {alu.CursoEscolar.Curso}".Trim();
+
+            if (_cursoRepo != null && alu.IdCurso > 0)
+            {
+                var c = await _cursoRepo.GetAsync(alu.IdCurso);
+                if (c != null)
+                    return $"{c.Grado} {c.Curso}".Trim();
+            }
+
+            return string.Empty;
         }
 
         public async Task<List<HorarioEspecialDTO>> ObtenerTodosAsync()
@@ -26,13 +44,18 @@ namespace Servicio
             foreach(var h in horarios)
             {
                 var alu = await _alumnoRepo.GetAsync(h.IdAlumno);
+                string cursoStr = await ObtenerCursoAlumnoAsync(alu);
                 dtos.Add(new HorarioEspecialDTO
                 {
                     IdHorarioEspecial = h.IdHorarioEspecial,
                     IdAlumno = h.IdAlumno,
                     AlumnoNombreCompleto = alu != null ? $"{alu.Nombre} {alu.Apellido}" : "",
+                    Curso = cursoStr,
                     DescripcionActividad = h.DescripcionActividad,
-                    HoraSalidaEspecial = h.HoraSalidaEspecial
+                    HoraSalidaEspecial = h.HoraSalidaEspecial,
+                    EsRecurrente = h.EsRecurrente,
+                    DiasSemana = h.DiasSemana,
+                    FechaEspecifica = h.FechaEspecifica
                 });
             }
             return dtos;
@@ -43,13 +66,18 @@ namespace Servicio
             var h = await _horarioRepo.ObtenerPorIdAsync(id);
             if (h == null) return null;
             var alu = await _alumnoRepo.GetAsync(h.IdAlumno);
+            string cursoStr = await ObtenerCursoAlumnoAsync(alu);
             return new HorarioEspecialDTO
             {
                 IdHorarioEspecial = h.IdHorarioEspecial,
                 IdAlumno = h.IdAlumno,
                 AlumnoNombreCompleto = alu != null ? $"{alu.Nombre} {alu.Apellido}" : "",
+                Curso = cursoStr,
                 DescripcionActividad = h.DescripcionActividad,
-                HoraSalidaEspecial = h.HoraSalidaEspecial
+                HoraSalidaEspecial = h.HoraSalidaEspecial,
+                EsRecurrente = h.EsRecurrente,
+                DiasSemana = h.DiasSemana,
+                FechaEspecifica = h.FechaEspecifica
             };
         }
 
@@ -59,7 +87,8 @@ namespace Servicio
             var alu = await _alumnoRepo.GetAsync(dto.IdAlumno);
             if (alu == null) throw new Exception("El alumno especificado no existe.");
 
-            var entity = new HorarioEspecial(0, dto.IdAlumno, dto.DescripcionActividad, dto.HoraSalidaEspecial);
+            var entity = new HorarioEspecial(0, dto.IdAlumno, dto.DescripcionActividad, dto.HoraSalidaEspecial,
+                dto.EsRecurrente, dto.DiasSemana, dto.FechaEspecifica);
             await _horarioRepo.AgregarAsync(entity);
             dto.IdHorarioEspecial = entity.IdHorarioEspecial;
             return dto;
@@ -74,6 +103,9 @@ namespace Servicio
             h.IdAlumno = dto.IdAlumno;
             h.DescripcionActividad = dto.DescripcionActividad;
             h.HoraSalidaEspecial = dto.HoraSalidaEspecial;
+            h.EsRecurrente = dto.EsRecurrente;
+            h.DiasSemana = dto.DiasSemana;
+            h.FechaEspecifica = dto.FechaEspecifica;
 
             await _horarioRepo.ActualizarAsync(h);
         }

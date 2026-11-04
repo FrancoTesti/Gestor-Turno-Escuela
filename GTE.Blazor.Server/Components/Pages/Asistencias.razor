@@ -76,16 +76,32 @@
                     }
                 </div>
             </div>
-            <div class="d-flex gap-2">
-                <button class="btn btn-outline-primary btn-sm" @onclick="SugerirRetirosAsync" disabled="@cargando" title="Compara horarios de retiros con la salida y sugiere faltas">
-                    <span class="bi bi-magic me-1"></span>Sugerir inasistencias por retiros del día
-                </button>
-                <button class="btn btn-success btn-sm" @onclick="GuardarPlanillaAsync" disabled="@guardando">
+            <div>
+                <button class="btn btn-success" @onclick="GuardarPlanillaAsync" disabled="@guardando">
                     @(guardando ? "Guardando..." : "Guardar y Confirmar Planilla")
                 </button>
             </div>
         </div>
     </div>
+
+    @if (sugerenciasAplicadas.Count > 0)
+    {
+        <div class="alert alert-warning py-2 px-3 mb-3 d-flex align-items-start">
+            <span class="bi bi-info-circle-fill fs-5 me-2 text-warning flex-shrink-0 mt-1"></span>
+            <div>
+                <strong>Sugerencias aplicadas automáticamente por retiros del día:</strong>
+                <ul class="mb-0 ps-3 small mt-1">
+                    @foreach (var sug in sugerenciasAplicadas)
+                    {
+                        <li>@sug</li>
+                    }
+                </ul>
+                <div class="small text-muted mt-1">
+                    Verifique si estas sugerencias corresponden a la jornada de hoy. Puede desmarcar la casilla de ausente o presionar <em>Modificar</em> si desea cambiar las condiciones.
+                </div>
+            </div>
+        </div>
+    }
 
     @if (planilla.Alumnos.Count == 0)
     {
@@ -97,26 +113,34 @@
             <table class="table table-striped table-hover align-middle mb-0">
                 <thead class="table-dark">
                     <tr>
+                        <th style="width: 80px;" class="text-center">Ausente</th>
                         <th>Alumno</th>
-                        <th style="width: 130px;">Estado</th>
-                        <th style="width: 170px;">Tipo Inasistencia</th>
-                        <th style="width: 90px;" class="text-center">Código</th>
-                        <th style="width: 110px;" class="text-center">Justificada</th>
+                        <th style="width: 120px;">Estado</th>
+                        <th style="width: 160px;">Tipo Inasistencia</th>
+                        <th style="width: 80px;" class="text-center">Código</th>
+                        <th style="width: 90px;" class="text-center">Justificada</th>
                         <th>Motivo</th>
-                        <th style="width: 110px;" class="text-center">No Computa</th>
+                        <th style="width: 100px;" class="text-center">No Computa</th>
                         <th>Retiro Asociado</th>
-                        <th class="text-center" style="width: 120px;">Acciones</th>
+                        <th class="text-center" style="width: 100px;">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var alu in planilla.Alumnos)
                     {
+                        bool esAusente = alu.IdTipoInasistencia.HasValue && alu.IdTipoInasistencia!.Value > 0;
                         <tr>
+                            <td class="text-center">
+                                <input type="checkbox" class="form-check-input"
+                                       checked="@esAusente"
+                                       @onchange="@(e => ToggleAusente(alu, e))"
+                                       title="Marcar si el alumno faltó hoy" />
+                            </td>
                             <td>
                                 <strong>@alu.Apellido, @alu.Nombre</strong>
                             </td>
                             <td>
-                                @if (alu.IdTipoInasistencia.HasValue && alu.IdTipoInasistencia.Value > 0)
+                                @if (esAusente)
                                 {
                                     <span class="badge bg-danger">Inasistencia</span>
                                 }
@@ -126,9 +150,9 @@
                                 }
                             </td>
                             <td>
-                                @if (alu.IdTipoInasistencia.HasValue && alu.IdTipoInasistencia.Value > 0)
+                                @if (esAusente)
                                 {
-                                    var tipo = planilla.TiposDisponibles.FirstOrDefault(t => t.IdTipoInasistencia == alu.IdTipoInasistencia.Value);
+                                    var tipo = planilla.TiposDisponibles.FirstOrDefault(t => t.IdTipoInasistencia == alu.IdTipoInasistencia!.Value);
                                     <span class="fw-semibold">@(tipo?.Nombre ?? "Inasistencia")</span>
                                 }
                                 else
@@ -142,7 +166,7 @@
                                 </span>
                             </td>
                             <td class="text-center">
-                                @if (alu.IdTipoInasistencia.HasValue && alu.IdTipoInasistencia.Value > 0)
+                                @if (esAusente)
                                 {
                                     @if (alu.Justificada)
                                     {
@@ -274,6 +298,7 @@
     private bool cargando = false;
     private bool guardando = false;
     private string mensajeExito = string.Empty;
+    private List<string> sugerenciasAplicadas = new();
 
     // Modal state
     private bool mostrarModal = false;
@@ -304,58 +329,67 @@
         cargando = true;
         mensajeExito = string.Empty;
         MensajeError = string.Empty;
+        sugerenciasAplicadas.Clear();
 
         await EjecutarAsync(async () =>
         {
             planilla = await AsistenciaClient.GetPlanillaDiariaAsync(idCursoSeleccionado, fechaSeleccionada);
+
+            if (planilla != null && !planilla.Confirmada)
+            {
+                var sugerencias = await AsistenciaClient.SugerirInasistenciasDesdeRetirosAsync(idCursoSeleccionado, fechaSeleccionada);
+                var sugerenciasReales = (sugerencias ?? new List<AlumnoAsistenciaItemDTO>())
+                    .Where(s => s.TieneRetiroRegistrado && s.IdTipoInasistencia.HasValue && s.IdTipoInasistencia.Value > 0)
+                    .ToList();
+
+                foreach (var sug in sugerenciasReales)
+                {
+                    var alumnoEnPlanilla = planilla.Alumnos.FirstOrDefault(a => a.IdAlumno == sug.IdAlumno);
+                    if (alumnoEnPlanilla != null && (!alumnoEnPlanilla.IdTipoInasistencia.HasValue || alumnoEnPlanilla.IdTipoInasistencia <= 0))
+                    {
+                        alumnoEnPlanilla.IdTipoInasistencia = sug.IdTipoInasistencia;
+                        alumnoEnPlanilla.CodigoOficial = sug.CodigoOficial;
+                        alumnoEnPlanilla.Justificada = sug.Justificada;
+                        alumnoEnPlanilla.Motivo = sug.Motivo;
+                        alumnoEnPlanilla.NoComputa = sug.NoComputa;
+                        alumnoEnPlanilla.Observaciones = sug.Observaciones;
+                        alumnoEnPlanilla.TieneRetiroRegistrado = sug.TieneRetiroRegistrado;
+                        alumnoEnPlanilla.DetalleRetiroInfo = sug.DetalleRetiroInfo;
+                        alumnoEnPlanilla.IdRetiroOrigen = sug.IdRetiroOrigen;
+
+                        var tipo = planilla.TiposDisponibles?.FirstOrDefault(t => t.IdTipoInasistencia == sug.IdTipoInasistencia);
+                        string tipoTexto = tipo != null ? tipo.Nombre : "Inasistencia";
+                        sugerenciasAplicadas.Add($"{alumnoEnPlanilla.Apellido}, {alumnoEnPlanilla.Nombre}: {tipoTexto} justificada ({sug.DetalleRetiroInfo ?? sug.Motivo})");
+                    }
+                }
+            }
         });
 
         cargando = false;
     }
 
-    private async Task SugerirRetirosAsync()
+    private void ToggleAusente(AlumnoAsistenciaItemDTO alu, ChangeEventArgs e)
     {
-        if (idCursoSeleccionado <= 0 || planilla == null) return;
-
-        cargando = true;
-        mensajeExito = string.Empty;
-        MensajeError = string.Empty;
-
-        await EjecutarAsync(async () =>
+        bool ausente = e.Value is bool b && b;
+        if (ausente)
         {
-            var sugerencias = await AsistenciaClient.SugerirInasistenciasDesdeRetirosAsync(idCursoSeleccionado, fechaSeleccionada);
-            int aplicadas = 0;
+            var tipoCompleta = planilla?.TiposDisponibles?.FirstOrDefault(t => t.CodigoOficial == "A")
+                ?? planilla?.TiposDisponibles?.FirstOrDefault();
 
-            foreach (var sug in sugerencias)
-            {
-                var alumnoEnPlanilla = planilla.Alumnos.FirstOrDefault(a => a.IdAlumno == sug.IdAlumno);
-                if (alumnoEnPlanilla != null)
-                {
-                    alumnoEnPlanilla.EstadoGeneral = sug.EstadoGeneral;
-                    alumnoEnPlanilla.IdTipoInasistencia = sug.IdTipoInasistencia;
-                    alumnoEnPlanilla.CodigoOficial = sug.CodigoOficial;
-                    alumnoEnPlanilla.Justificada = sug.Justificada;
-                    alumnoEnPlanilla.Motivo = sug.Motivo;
-                    alumnoEnPlanilla.NoComputa = sug.NoComputa;
-                    alumnoEnPlanilla.Observaciones = sug.Observaciones;
-                    alumnoEnPlanilla.TieneRetiroRegistrado = sug.TieneRetiroRegistrado;
-                    alumnoEnPlanilla.DetalleRetiroInfo = sug.DetalleRetiroInfo;
-                    alumnoEnPlanilla.IdRetiroOrigen = sug.IdRetiroOrigen;
-                    aplicadas++;
-                }
-            }
-
-            if (aplicadas > 0)
-            {
-                mensajeExito = $"Se aplicaron {aplicadas} sugerencia(s) de inasistencias por retiros anticipados del día.";
-            }
-            else
-            {
-                mensajeExito = "No se detectaron retiros anticipados que requieran sugerencia de inasistencia.";
-            }
-        });
-
-        cargando = false;
+            alu.IdTipoInasistencia = tipoCompleta?.IdTipoInasistencia ?? 1;
+            alu.CodigoOficial = tipoCompleta?.CodigoOficial ?? "A";
+            alu.Justificada = false;
+            alu.Motivo = string.Empty;
+            alu.NoComputa = false;
+        }
+        else
+        {
+            alu.IdTipoInasistencia = null;
+            alu.CodigoOficial = "P";
+            alu.Justificada = false;
+            alu.Motivo = string.Empty;
+            alu.NoComputa = false;
+        }
     }
 
     private void AbrirModalModificar(AlumnoAsistenciaItemDTO alu)
@@ -377,35 +411,40 @@
 
     private void GuardarModal()
     {
-        if (alumnoEditando == null || planilla == null) return;
+        if (alumnoEditando == null) return;
 
-        if (modalIdTipoInasistencia == 0)
+        if (modalIdTipoInasistencia > 0)
         {
-            alumnoEditando.EstadoGeneral = "Presente";
+            alumnoEditando.IdTipoInasistencia = modalIdTipoInasistencia;
+            alumnoEditando.Justificada = modalJustificada;
+            alumnoEditando.Motivo = modalMotivo;
+            alumnoEditando.NoComputa = modalNoComputa;
+            alumnoEditando.Observaciones = modalObservaciones;
+
+            var tipo = planilla?.TiposDisponibles?.FirstOrDefault(t => t.IdTipoInasistencia == modalIdTipoInasistencia);
+            if (tipo != null)
+            {
+                if (tipo.ValorDecimal == 1.00m)
+                    alumnoEditando.CodigoOficial = modalJustificada ? "J" : "I";
+                else
+                    alumnoEditando.CodigoOficial = tipo.CodigoOficial;
+            }
+            else
+            {
+                alumnoEditando.CodigoOficial = "A";
+            }
+        }
+        else
+        {
             alumnoEditando.IdTipoInasistencia = null;
             alumnoEditando.CodigoOficial = "P";
             alumnoEditando.Justificada = false;
             alumnoEditando.Motivo = string.Empty;
             alumnoEditando.NoComputa = false;
-            alumnoEditando.Observaciones = modalObservaciones;
-            alumnoEditando.TieneRetiroRegistrado = false;
-            alumnoEditando.DetalleRetiroInfo = null;
-            alumnoEditando.IdRetiroOrigen = null;
-        }
-        else
-        {
-            var tipo = planilla.TiposDisponibles.FirstOrDefault(t => t.IdTipoInasistencia == modalIdTipoInasistencia);
-            alumnoEditando.EstadoGeneral = "Inasistencia";
-            alumnoEditando.IdTipoInasistencia = modalIdTipoInasistencia;
-            alumnoEditando.CodigoOficial = tipo?.CodigoOficial ?? "A";
-            alumnoEditando.Justificada = modalJustificada;
-            alumnoEditando.Motivo = modalMotivo;
-            alumnoEditando.NoComputa = modalNoComputa;
-            alumnoEditando.Observaciones = modalObservaciones;
+            alumnoEditando.Observaciones = string.Empty;
         }
 
-        mostrarModal = false;
-        alumnoEditando = null;
+        CerrarModal();
     }
 
     private async Task GuardarPlanillaAsync()
@@ -416,36 +455,30 @@
         mensajeExito = string.Empty;
         MensajeError = string.Empty;
 
-        var request = new GuardarPlanillaAsistenciaRequestDTO
-        {
-            IdCurso = idCursoSeleccionado,
-            Fecha = fechaSeleccionada.Date,
-            Inasistencias = planilla.Alumnos
-                .Where(a => a.IdTipoInasistencia.HasValue && a.IdTipoInasistencia.Value > 0)
-                .Select(a => new InasistenciaInputDTO
-                {
-                    IdAlumno = a.IdAlumno,
-                    IdTipoInasistencia = a.IdTipoInasistencia!.Value,
-                    Justificada = a.Justificada,
-                    Motivo = a.Motivo ?? string.Empty,
-                    NoComputa = a.NoComputa,
-                    Observaciones = a.Observaciones ?? string.Empty,
-                    IdRetiroOrigen = a.IdRetiroOrigen
-                }).ToList()
-        };
-
         await EjecutarAsync(async () =>
         {
-            bool ok = await AsistenciaClient.GuardarPlanillaDiariaAsync(request);
-            if (ok)
+            var request = new GuardarPlanillaAsistenciaRequestDTO
             {
-                mensajeExito = "Planilla de asistencia guardada y confirmada exitosamente.";
-                await CargarPlanillaAsync();
-            }
-            else
-            {
-                MensajeError = "No se pudo guardar la planilla de asistencia.";
-            }
+                IdCurso = idCursoSeleccionado,
+                Fecha = fechaSeleccionada.Date,
+                Inasistencias = planilla.Alumnos
+                    .Where(a => a.IdTipoInasistencia.HasValue && a.IdTipoInasistencia.Value > 0)
+                    .Select(a => new InasistenciaInputDTO
+                    {
+                        IdAlumno = a.IdAlumno,
+                        IdTipoInasistencia = a.IdTipoInasistencia!.Value,
+                        Justificada = a.Justificada,
+                        Motivo = a.Motivo ?? string.Empty,
+                        NoComputa = a.NoComputa,
+                        Observaciones = a.Observaciones ?? string.Empty,
+                        IdRetiroOrigen = a.IdRetiroOrigen
+                    })
+                    .ToList()
+            };
+
+            await AsistenciaClient.GuardarPlanillaDiariaAsync(request);
+            mensajeExito = "Planilla guardada y confirmada exitosamente.";
+            await CargarPlanillaAsync();
         });
 
         guardando = false;

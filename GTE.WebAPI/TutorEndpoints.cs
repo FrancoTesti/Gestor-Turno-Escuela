@@ -40,6 +40,11 @@ namespace GTE.WebAPI
                     Curso = alumno.CursoEscolar?.Curso ?? string.Empty,
                     Turno = alumno.CursoEscolar?.Turno ?? string.Empty,
                     HorarioSalida = alumno.CursoEscolar?.ObtenerHorarioSalida(DateTime.Today.DayOfWeek) ?? TimeSpan.Zero,
+                    HorarioLunes = alumno.CursoEscolar?.HorarioLunes ?? TimeSpan.Zero,
+                    HorarioMartes = alumno.CursoEscolar?.HorarioMartes ?? TimeSpan.Zero,
+                    HorarioMiercoles = alumno.CursoEscolar?.HorarioMiercoles ?? TimeSpan.Zero,
+                    HorarioJueves = alumno.CursoEscolar?.HorarioJueves ?? TimeSpan.Zero,
+                    HorarioViernes = alumno.CursoEscolar?.HorarioViernes ?? TimeSpan.Zero,
                     Estado = alumno.Estado,
                     EstaSaliendo = cursosSaliendo.Contains(alumno.IdCurso)
                 }).ToList();

@@ -29,14 +29,35 @@ namespace GTE.WindowsForms
 
         private void InitializeCustomComponents()
         {
-            btnVerHistorial.Text = "Ver Historial Asistencia";
-            btnVerHistorial.Location = new Point(470, 26);
-            btnVerHistorial.Size = new Size(170, 32);
-            btnVerHistorial.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnVerHistorial.Text = "Ver Asistencias";
             btnVerHistorial.Click += btnVerHistorial_Click;
             this.Controls.Add(btnVerHistorial);
 
+            AcomodarBotonesSuperiores();
+
             dgvAlumnos.CellDoubleClick += (s, e) => AbrirHistorialSeleccionado();
+        }
+
+        private void AcomodarBotonesSuperiores()
+        {
+            const int margenDerecho = 20;
+            const int espacio = 10;
+            const int y = 26;
+
+            btnActualizar.Anchor = AnchorStyles.None;
+            btnVerHistorial.Anchor = AnchorStyles.None;
+
+            btnActualizar.Size = new Size(110, Tema.AltoDeBoton);
+            btnVerHistorial.Size = new Size(150, Tema.AltoDeBoton);
+
+            btnActualizar.Location = new Point(ClientSize.Width - margenDerecho - btnActualizar.Width, y);
+            btnVerHistorial.Location = new Point(btnActualizar.Left - espacio - btnVerHistorial.Width, y);
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            AcomodarBotonesSuperiores();
         }
 
         private void ApplyStyles()
@@ -53,6 +74,7 @@ namespace GTE.WindowsForms
 
         private async void MisAlumnosForm_Load(object sender, EventArgs e)
         {
+            AcomodarBotonesSuperiores();
             await CargarAsync(true);
             _refresco.Start();
         }

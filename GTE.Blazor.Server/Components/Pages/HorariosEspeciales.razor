@@ -24,7 +24,11 @@ else
     <table class="table table-striped align-middle">
         <thead class="table-dark">
             <tr>
-                <th>Alumno</th><th>Descripción</th><th>Hora Salida</th>
+                <th>Alumno</th>
+                <th>Curso</th>
+                <th>Descripción</th>
+                <th>Días / Fecha</th>
+                <th>Hora Salida</th>
                 <AuthorizeView Roles="Secretario, Portero">
                     <Authorized><th class="text-center" style="width: 180px;">Acciones</th></Authorized>
                 </AuthorizeView>
@@ -34,7 +38,11 @@ else
             @foreach (var h in horarios)
             {
                 <tr>
-                    <td>@h.AlumnoNombreCompleto</td><td>@h.DescripcionActividad</td><td>@h.HoraSalidaEspecial</td>
+                    <td class="fw-semibold">@h.AlumnoNombreCompleto</td>
+                    <td>@(string.IsNullOrWhiteSpace(h.Curso) ? "-" : h.Curso)</td>
+                    <td>@h.DescripcionActividad</td>
+                    <td><span class="badge bg-secondary">@h.DiasODiasTexto</span></td>
+                    <td>@h.HoraSalidaEspecial.ToString(@"hh\:mm")</td>
                     <AuthorizeView Roles="Secretario, Portero">
                         <Authorized>
                             <td class="text-center text-nowrap">
@@ -61,7 +69,7 @@ else
                 <div class="modal-body">
                     <EditForm Model="horarioEditando" OnValidSubmit="Guardar">
                         <div class="mb-3">
-                            <label>Alumno</label>
+                            <label class="form-label">Alumno</label>
                             <InputSelect @bind-Value="horarioEditando.IdAlumno" class="form-control">
                                 <option value="0">-- Seleccione Alumno --</option>
                                 @if (alumnos != null)
@@ -74,13 +82,62 @@ else
                             </InputSelect>
                         </div>
                         <div class="mb-3">
-                            <label>Descripción</label>
+                            <label class="form-label">Descripción</label>
                             <InputText @bind-Value="horarioEditando.DescripcionActividad" class="form-control" />
                         </div>
                         <div class="mb-3">
-                            <label>Horario Salida</label>
+                            <label class="form-label">Horario Salida</label>
                             <input type="time" class="form-control" value="@HorarioSalidaString" @onchange="@(e => HorarioSalidaString = e.Value?.ToString() ?? "")" />
                         </div>
+
+                        <div class="mb-3">
+                            <label class="form-label d-block">Tipo de Aplicación</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="tipoHorario" id="tipoSemanal" checked="@horarioEditando.EsRecurrente" @onchange="@(() => horarioEditando.EsRecurrente = true)" />
+                                <label class="form-check-label" for="tipoSemanal">Días de semana</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="tipoHorario" id="tipoPuntual" checked="@(!horarioEditando.EsRecurrente)" @onchange="@(() => horarioEditando.EsRecurrente = false)" />
+                                <label class="form-check-label" for="tipoPuntual">Fecha puntual</label>
+                            </div>
+                        </div>
+
+                        @if (horarioEditando.EsRecurrente)
+                        {
+                            <div class="mb-3 p-2 border rounded bg-light">
+                                <label class="form-label fw-semibold small mb-2">Marque los días que aplica:</label>
+                                <div class="d-flex gap-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="chkLun" @bind="diaLun" />
+                                        <label class="form-check-label" for="chkLun">Lun</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="chkMar" @bind="diaMar" />
+                                        <label class="form-check-label" for="chkMar">Mar</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="chkMie" @bind="diaMie" />
+                                        <label class="form-check-label" for="chkMie">Mié</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="chkJue" @bind="diaJue" />
+                                        <label class="form-check-label" for="chkJue">Jue</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="chkVie" @bind="diaVie" />
+                                        <label class="form-check-label" for="chkVie">Vie</label>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="mb-3 p-2 border rounded bg-light">
+                                <label class="form-label fw-semibold small mb-1">Fecha específica:</label>
+                                <input type="date" class="form-control" value="@(fechaPuntual?.ToString("yyyy-MM-dd"))" @onchange="OnFechaPuntualChanged" />
+                            </div>
+                        }
+
                         <div class="mt-4 text-end">
                             <button type="button" class="btn btn-secondary me-2" @onclick="CerrarModal">Cancelar</button>
                             <button type="submit" class="btn btn-primary">Guardar</button>
@@ -98,10 +155,25 @@ else
     private HorarioEspecialDTO horarioEditando = new();
     private bool mostrarModal;
 
+    private bool diaLun;
+    private bool diaMar;
+    private bool diaMie;
+    private bool diaJue;
+    private bool diaVie;
+    private DateTime? fechaPuntual = DateTime.Today;
+
     private string HorarioSalidaString
     {
         get => horarioEditando.HoraSalidaEspecial.ToString(@"hh\:mm");
         set { if (TimeSpan.TryParse(value, out var ts)) horarioEditando.HoraSalidaEspecial = ts; }
+    }
+
+    private void OnFechaPuntualChanged(ChangeEventArgs e)
+    {
+        if (DateTime.TryParse(e.Value?.ToString(), out var dt))
+        {
+            fechaPuntual = dt;
+        }
     }
 
     protected override async Task OnInitializedAsync()
@@ -116,7 +188,13 @@ else
 
     private void AbrirModalNuevo()
     {
-        horarioEditando = new HorarioEspecialDTO { HoraSalidaEspecial = new TimeSpan(12, 0, 0) };
+        horarioEditando = new HorarioEspecialDTO
+        {
+            HoraSalidaEspecial = new TimeSpan(12, 0, 0),
+            EsRecurrente = true
+        };
+        diaLun = diaMar = diaMie = diaJue = diaVie = false;
+        fechaPuntual = DateTime.Today;
         mostrarModal = true;
     }
 
@@ -127,8 +205,21 @@ else
             IdHorarioEspecial = h.IdHorarioEspecial,
             IdAlumno = h.IdAlumno,
             DescripcionActividad = h.DescripcionActividad,
-            HoraSalidaEspecial = h.HoraSalidaEspecial
+            HoraSalidaEspecial = h.HoraSalidaEspecial,
+            EsRecurrente = h.EsRecurrente,
+            DiasSemana = h.DiasSemana,
+            FechaEspecifica = h.FechaEspecifica
         };
+
+        string dias = h.DiasSemana ?? string.Empty;
+        diaLun = dias.Contains("Lunes", StringComparison.OrdinalIgnoreCase);
+        diaMar = dias.Contains("Martes", StringComparison.OrdinalIgnoreCase);
+        diaMie = dias.Contains("Miércoles", StringComparison.OrdinalIgnoreCase) || dias.Contains("Miercoles", StringComparison.OrdinalIgnoreCase);
+        diaJue = dias.Contains("Jueves", StringComparison.OrdinalIgnoreCase);
+        diaVie = dias.Contains("Viernes", StringComparison.OrdinalIgnoreCase);
+
+        fechaPuntual = h.FechaEspecifica ?? DateTime.Today;
+
         mostrarModal = true;
     }
 
@@ -140,6 +231,24 @@ else
         {
             MensajeError = "Seleccione un alumno";
             return;
+        }
+
+        if (horarioEditando.EsRecurrente)
+        {
+            var dias = new List<string>();
+            if (diaLun) dias.Add("Lunes");
+            if (diaMar) dias.Add("Martes");
+            if (diaMie) dias.Add("Miércoles");
+            if (diaJue) dias.Add("Jueves");
+            if (diaVie) dias.Add("Viernes");
+
+            horarioEditando.DiasSemana = string.Join(",", dias);
+            horarioEditando.FechaEspecifica = null;
+        }
+        else
+        {
+            horarioEditando.DiasSemana = string.Empty;
+            horarioEditando.FechaEspecifica = fechaPuntual?.Date;
         }
 
         await EjecutarAsync(async () =>

@@ -92,6 +92,7 @@ namespace GTE.WindowsForms
             {
                 btnAlumnos.Visible = true;
                 btnCursos.Visible = true;
+                btnCursos.Text = "Cursos";
                 btnRetiros.Visible = true;
                 btnTutores.Visible = true;
                 btnAutorizaciones.Visible = true;
@@ -102,6 +103,7 @@ namespace GTE.WindowsForms
             {
                 btnAlumnos.Visible = true;
                 btnCursos.Visible = true;
+                btnCursos.Text = "Cursos";
                 btnRetiros.Visible = true;
                 btnTutores.Visible = true;
                 btnAutorizaciones.Visible = true;
@@ -112,6 +114,7 @@ namespace GTE.WindowsForms
             {
                 btnAlumnos.Visible = false;
                 btnCursos.Visible = true;
+                btnCursos.Text = "Horarios alumnos";
                 btnRetiros.Visible = false;
                 btnTutores.Visible = false;
                 btnAutorizaciones.Visible = false;
@@ -128,7 +131,6 @@ namespace GTE.WindowsForms
             btnReportesAsistencias.Visible = role == "Secretario" || role == "Portero";
 
             btnCartelera.Visible = role == "Secretario" || role == "Portero";
-
         }
 
         protected override void OnShown(EventArgs e)
@@ -189,6 +191,7 @@ namespace GTE.WindowsForms
                 || btnOtros.Visible || btnMisAlumnos.Visible;
 
             lblSeccionAdministracion.Visible = btnCursos.Visible || btnTutores.Visible || btnAutorizaciones.Visible;
+            lblSeccionAdministracion.Text = rolMostrado == "Tutor" ? "HORARIOS" : "ADMINISTRACIÓN";
 
             lblSeccionReportes.Visible = btnReporteAlumnos.Visible || btnReporteRetiros.Visible || btnReportesAsistencias.Visible;
 
@@ -232,7 +235,15 @@ namespace GTE.WindowsForms
             Agregar(diaADia, btnOtros, "Horarios especiales", () => new HorarioEspecialListaForm());
             Agregar(diaADia, btnMisAlumnos, "Mis alumnos", () => new MisAlumnosForm());
 
-            Agregar(administracion, btnCursos, "Cursos", () => new CursoEscolarListaForm());
+            if (rolMostrado == "Tutor")
+            {
+                Agregar(administracion, btnCursos, "Horarios de mis alumnos", () => new HorariosMisAlumnosForm());
+            }
+            else
+            {
+                Agregar(administracion, btnCursos, "Cursos", () => new CursoEscolarListaForm());
+            }
+
             Agregar(administracion, btnTutores, "Tutores", () => new TutorListaForm());
             Agregar(administracion, btnAutorizaciones, "Autorizaciones", () => new AutorizacionListaForm());
 
@@ -243,7 +254,7 @@ namespace GTE.WindowsForms
             var secciones = new List<SeccionDelInicio>
             {
                 new("Día a día", diaADia),
-                new("Administración", administracion),
+                new(rolMostrado == "Tutor" ? "Horarios" : "Administración", administracion),
                 new("Reportes", reportes)
             };
 
@@ -285,7 +296,10 @@ namespace GTE.WindowsForms
 
         private void btnCursos_Click(object sender, EventArgs e)
         {
-            Abrir(btnCursos, () => new CursoEscolarListaForm());
+            if (rolMostrado == "Tutor")
+                Abrir(btnCursos, () => new HorariosMisAlumnosForm());
+            else
+                Abrir(btnCursos, () => new CursoEscolarListaForm());
         }
 
         private void btnRetiros_Click(object sender, EventArgs e)
@@ -360,6 +374,3 @@ namespace GTE.WindowsForms
         }
     }
 }
-
-
-
